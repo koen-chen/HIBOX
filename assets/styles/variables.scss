@@ -1,7 +1,11 @@
+$primary: #2daf6f;
 $primaryHover: #e1f0e6;
 $primaryActive: #1d8a57;
 $containerBg: #ffffff;
-$textColor: rgba(0, 0, 0, 0.88);
+$text: rgba(0, 0, 0, 0.88);
+$textSecondary: rgba(0, 0, 0, 0.45);
+$border: #d9d9d9;
+$mask: rgba(200, 200, 200, 0.1);
 
 $-colors: (
   'primary': ('base': #2daf6f),

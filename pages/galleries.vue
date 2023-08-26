@@ -70,7 +70,7 @@ const handleBack = () => {
   font-family: 'Radikal-Regular';
   font-size: 1rem;
   font-weight: 500;
-  color: #292b2b;
+  color: $text;
   margin-top: 1.143rem;
   line-clamp: 2;
   word-break: break-all;
@@ -79,7 +79,7 @@ const handleBack = () => {
 .cardDesc {
   font-family: "Radikal-Regular";
   font-size: 0.857rem;
-  color: #7a8182;
+  color: $textSecondary;
   line-clamp: 2;
   word-break: break-all;
 }
@@ -89,8 +89,8 @@ const handleBack = () => {
   height: 12rem;
   margin-bottom: 1.143rem;
   border-radius: 4px;
-  border: solid 1px #dbe3e4;
-  background-color: #fff;
+  border: 1px solid $border;
+  background-color: $mask;
   cursor: pointer;
 
   @apply flex items-center flex-col justify-center content-center
@@ -102,8 +102,8 @@ const handleBack = () => {
   margin-bottom: 1.143rem;
   padding: 1rem;
   border-radius: 4px;
-  border: solid 1px #dbe3e4;
-  background-color: rgba(230,230,230,0.2);
+  border: 1px solid $border;
+  background-color: $mask;
   cursor: pointer;
   overflow: hidden;
 
@@ -113,4 +113,4 @@ const handleBack = () => {
     font-size: 1rem;
   }
 }
-</style>stores/templates
+</style>

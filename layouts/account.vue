@@ -35,8 +35,6 @@
   .logo {
     display: block;
     max-height: 100%;
-
-
   }
 }
 </style>
