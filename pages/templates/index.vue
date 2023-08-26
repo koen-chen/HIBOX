@@ -55,7 +55,7 @@ const handleNewClick = () => {
 
 .active {
   color: #292b2b;
-  background-color: #ccebee;
+  background-color: $primaryHover
 }
 </style>
 

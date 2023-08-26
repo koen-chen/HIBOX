@@ -30,8 +30,7 @@ const logout = async () => {
 .header {
   color: #fff;
   height: 64px;
-  background-color: rgb(0, 59, 73);
-  border-color: rgb(0, 59, 73);
+  background-color: var(--el-color-primary);
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
 
   @apply flex justify-between items-center p-8;
