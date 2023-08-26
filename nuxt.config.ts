@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxtjs/google-fonts',
+    'nuxt-icon',
   ],
   elementPlus: {
     importStyle: 'scss'
