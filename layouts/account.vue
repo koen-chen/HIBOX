@@ -2,9 +2,7 @@
   <el-container class="h-full">
     <el-header height="64px" class="customize-header">
       <div class="logo-wrapper">
-        <div class="logo">
-          <Icon name="mdi:card-account-details-star-outline" size="3rem" color="#0099a8" />
-        </div>
+        <img class="logo" src="/haibox_logo.png" />
       </div>
     </el-header>
     <el-container>
@@ -37,6 +35,8 @@
   .logo {
     display: block;
     max-height: 100%;
+
+
   }
 }
 </style>
