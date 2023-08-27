@@ -4,7 +4,7 @@
       <Header />
     </el-header>
     <el-main>
-      <div class="w-f">
+      <div class="w-3/4 m-auto">
         <slot />
       </div>
     </el-main>
