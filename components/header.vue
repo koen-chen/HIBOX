@@ -2,16 +2,52 @@
   <div class="header">
     <img class="logo" src="/logo-w.png" />
 
-    <div>
-      <el-button @click="logout" dark>logout</el-button>
+    <div class="flex items-center justify-between">
+      <el-dropdown class="mr-4" @command="(command) => locale = command">
+          <span class="outline-none">
+             <Icon class="text-white" name="mdi:translate" size="24px" />
+             <Icon class="text-white" name="mdi:chevron-down" size="24px" />
+          </span>
+
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item  command="zh">简体中文</el-dropdown-item>
+              <el-dropdown-item  command="en">English</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
+      <el-dropdown @command="handleAccountCommand">
+        <span class="outline-none">
+           <Icon class="text-white" name="mdi:account-circle" size="32px" />
+        </span>
+
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item  command="logout">logout</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useAccountStore } from '@/stores/account'
+const { locale } = useI18n()
 
 const accountStore = useAccountStore()
+
+const handleAccountCommand = (command) => {
+  switch (command) {
+    case 'logout':
+      logout()
+      break;
+      
+    default:
+      break;
+  }
+}
 
 const logout = async () => {
   const { error } = await accountStore.logout()
@@ -40,4 +76,5 @@ const logout = async () => {
   display: inline-block;
   height: 80%;
 }
+
 </style>

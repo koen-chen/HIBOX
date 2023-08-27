@@ -8,6 +8,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   if (session && (to.path == '/login')) {
-    return navigateTo('/')
+    return navigateTo('/templates')
   }
 })

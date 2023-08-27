@@ -1,61 +1,111 @@
 <template>
-  <div class="flex justify-between p-4">
-    <div class="flex ">
-      <div v-for="tab in tabs" :key="tab.key" class="tab" :class="{ active: activeKey === tab.key }"
-        @click="() => handleTabClick(tab.key)">
-        {{ tab.label.toUpperCase() }}({{ tab.count }})
-      </div>
-    </div>
+  <div class="p-4">
+    <el-page-header :icon="null" @back="handleBack">
+      <template #title>
+        <div class="text-center font-black py-4 text-2xl">TEMPLATE GALLERY</div>
+      </template>
+    </el-page-header>
 
-    <div>
-      <el-button type="primary" size="large" @click="handleNewClick">New Template</el-button>
-    </div>
+    <el-divider></el-divider>
+
+    <el-space wrap class="mt-8">
+      <div class="cardCover" @click="createBlankTemplate" v-loading="createLoading">
+        <Icon name="mdi:plus-circle" size="2.6rem" />
+        <span class="cardTitle">Blank</span>
+        <span class="cardDesc">Start a new form.</span>
+      </div>
+
+      <div v-for="item in galleries" @click="previewTemplate(item)">
+        <div class="cardCover2">
+          <div class="cardTitle">{{ item.name }}</div>
+          <div class="cardDesc">{{ item.description }}</div>
+        </div>
+      </div>
+    </el-space>
   </div>
 </template>
 
 <script setup>
 const store = useTemplatesStore()
-const { templates } = storeToRefs(store)
+const createLoading = ref(false)
+const { currentTemplate, galleries } = storeToRefs(store)
 
 onMounted(() => {
   store.fetchTemplates()
 })
 
-const activeKey = ref('all')
+const createBlankTemplate = async () => {
+  createLoading.value = true
 
-const tabs = ref([
-  { label: 'all', key: 'all', count: 0 },
-  { label: 'active', key: 'active', count: 0 },
-  { label: 'draft', key: 'draft', count: 0 },
-  { label: 'trash', key: 'trash', count: 0 },
-])
+  const data = await store.createTemplate({
+    name: 'Untitled Template'
+  })
 
-const handleTabClick = (key) => {
-  console.log(key)
-  activeKey.value = key
+  createLoading.value = false
+
+  if (data) {
+    navigateTo(`/templates/${data.id}`)
+  } else {
+    ElMessage({
+      showClose: true,
+      message: 'Oops, create template failure!',
+      type: 'error',
+    })
+  }
 }
 
-const handleNewClick = () => {
-  return navigateTo('/galleries')
+const handleBack = () => {
+  navigateTo('/')
 }
 </script>
 
 <style lang="scss" scoped>
-.tab {
-  padding: 0 1.714rem;
-  height: 3.143rem;
-  line-height: 3.143rem;
-  border-radius: 3.143rem;
-  text-align: center;
-  color: $textSecondaryColor;
-  cursor: pointer;
-
-  @apply transition-all;
+.cardTitle {
+  font-family: 'Radikal-Regular';
+  font-size: 1rem;
+  font-weight: 500;
+  color: $textColor;
+  margin-top: 1.143rem;
+  line-clamp: 2;
+  word-break: break-all;
 }
 
-.active {
-  color: $textColor;
-  background-color: $primaryHoverColor;
+.cardDesc {
+  font-family: "Radikal-Regular";
+  font-size: 0.857rem;
+  color: $textSecondaryColor;
+  line-clamp: 2;
+  word-break: break-all;
+}
+
+.cardCover {
+  width: 17.214rem;
+  height: 12rem;
+  margin-bottom: 1.143rem;
+  border-radius: 4px;
+  border: 1px solid $borderColor;
+  background-color: $maskColor;
+  cursor: pointer;
+
+  @apply flex items-center flex-col justify-center content-center
+}
+
+.cardCover2 {
+  width: 17.214rem;
+  height: 12rem;
+  margin-bottom: 1.143rem;
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid $borderColor;
+  background-color: $maskColor;
+  cursor: pointer;
+  overflow: hidden;
+
+  .cardTitle {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
 }
 </style>
 

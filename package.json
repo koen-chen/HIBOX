@@ -12,6 +12,7 @@
     "@element-plus/nuxt": "^1.0.5",
     "@nuxt/devtools": "latest",
     "@nuxtjs/google-fonts": "^3.0.2",
+    "@nuxtjs/i18n": "8.0.0-rc.3",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "cz-conventional-changelog": "^3.3.0",
     "element-plus": "^2.3.10",

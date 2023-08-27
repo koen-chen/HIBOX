@@ -43,7 +43,7 @@ const signIn = async () => {
     console.log(error)
   } else {
     loginLoading.value = false
-    navigateTo('/')
+    navigateTo('/templates')
   }
 }
 </script>

@@ -1,4 +1,6 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import path from 'path'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
@@ -15,10 +17,26 @@ export default defineNuxtConfig({
   modules: [
     '@element-plus/nuxt',
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@nuxtjs/google-fonts',
     'nuxt-icon',
   ],
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        file: 'en.yaml'
+      },
+      {
+        code: 'zh',
+        file: 'zh.yaml'
+      }
+    ],
+    langDir: 'locales',
+    defaultLocale: 'en'
+  },
+
   elementPlus: {
     importStyle: 'scss'
   },
