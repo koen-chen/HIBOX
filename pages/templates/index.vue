@@ -2,7 +2,7 @@
   <div class="p-4">
     <el-page-header :icon="null" @back="handleBack">
       <template #title>
-        <div class="text-center font-black py-4 text-2xl">TEMPLATE GALLERY</div>
+        <div class="text-center font-black py-4 text-2xl">{{ $t('TEMPLATE GALLERY') }}</div>
       </template>
     </el-page-header>
 
@@ -11,8 +11,8 @@
     <el-space wrap class="mt-8">
       <div class="cardCover" @click="createBlankTemplate" v-loading="createLoading">
         <Icon name="mdi:plus-circle" size="2.6rem" />
-        <span class="cardTitle">Blank</span>
-        <span class="cardDesc">Start a new form.</span>
+        <span class="cardTitle">{{ $t('Blank') }}</span>
+        <span class="cardDesc">{{ $t('Start a new template') }}</span>
       </div>
 
       <div v-for="item in galleries" @click="previewTemplate(item)">

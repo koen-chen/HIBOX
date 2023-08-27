@@ -11,8 +11,8 @@
 
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item  command="zh">简体中文</el-dropdown-item>
-              <el-dropdown-item  command="en">English</el-dropdown-item>
+              <el-dropdown-item :style="{ color: locale == 'zh' ? '#000' : '#999' }" command="zh">简体中文</el-dropdown-item>
+              <el-dropdown-item :style="{ color: locale == 'en' ? '#000' : '#999' }" command="en">English</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -24,7 +24,7 @@
 
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item  command="logout">logout</el-dropdown-item>
+            <el-dropdown-item  command="logout">{{ $t('Logout') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -43,13 +43,19 @@ const handleAccountCommand = (command) => {
     case 'logout':
       logout()
       break;
-      
+
     default:
       break;
   }
 }
 
 const logout = async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+
   const { error } = await accountStore.logout()
 
   if (error) {
@@ -57,6 +63,8 @@ const logout = async () => {
   } else {
     navigateTo('/login')
   }
+
+  loading.close()
 }
 </script>
 

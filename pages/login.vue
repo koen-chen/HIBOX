@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center h-full">
     <el-form label-position="top" label-width="100px" :model="formModal" class="w-96">
-      <el-text type="primary" class="form-title" tag="div">Login</el-text>
+      <el-text type="primary" class="form-title" tag="div">{{ $t('Login') }}</el-text>
 
       <el-form-item label="Email">
         <el-input v-model="formModal.email" disabled />
@@ -11,7 +11,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="signIn" :loading="loginLoading">Login</el-button>
+        <el-button type="primary" @click="signIn" :loading="loginLoading">{{ $t('Login') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -42,9 +42,10 @@ const signIn = async () => {
   if (error) {
     console.log(error)
   } else {
-    loginLoading.value = false
     navigateTo('/templates')
   }
+
+   loginLoading.value = false
 }
 </script>
 
