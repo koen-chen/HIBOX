@@ -47,15 +47,15 @@ const handleNewClick = () => {
   line-height: 3.143rem;
   border-radius: 3.143rem;
   text-align: center;
-  color: $textSecondary;
+  color: $textSecondaryColor;
   cursor: pointer;
 
   @apply transition-all;
 }
 
 .active {
-  color: $text;
-  background-color: $primaryHover;
+  color: $textColor;
+  background-color: $primaryHoverColor;
 }
 </style>
 

@@ -4,7 +4,9 @@
       <Header />
     </el-header>
     <el-main>
-      <slot />
+      <div class="w-f">
+        <slot />
+      </div>
     </el-main>
   </el-container>
 </template>

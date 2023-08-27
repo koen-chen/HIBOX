@@ -70,7 +70,7 @@ const handleBack = () => {
   font-family: 'Radikal-Regular';
   font-size: 1rem;
   font-weight: 500;
-  color: $text;
+  color: $textColor;
   margin-top: 1.143rem;
   line-clamp: 2;
   word-break: break-all;
@@ -79,7 +79,7 @@ const handleBack = () => {
 .cardDesc {
   font-family: "Radikal-Regular";
   font-size: 0.857rem;
-  color: $textSecondary;
+  color: $textSecondaryColor;
   line-clamp: 2;
   word-break: break-all;
 }
@@ -89,8 +89,8 @@ const handleBack = () => {
   height: 12rem;
   margin-bottom: 1.143rem;
   border-radius: 4px;
-  border: 1px solid $border;
-  background-color: $mask;
+  border: 1px solid $borderColor;
+  background-color: $maskColor;
   cursor: pointer;
 
   @apply flex items-center flex-col justify-center content-center
@@ -102,8 +102,8 @@ const handleBack = () => {
   margin-bottom: 1.143rem;
   padding: 1rem;
   border-radius: 4px;
-  border: 1px solid $border;
-  background-color: $mask;
+  border: 1px solid $borderColor;
+  background-color: $maskColor;
   cursor: pointer;
   overflow: hidden;
 
