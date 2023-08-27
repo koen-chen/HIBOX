@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <el-button type="primary" size="large" @click="handleNewClick">New KYC Profile</el-button>
+      <el-button type="primary" size="large" @click="handleNewClick">New Template</el-button>
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ const handleNewClick = () => {
   text-align: center;
   color: $textSecondary;
   cursor: pointer;
-  
+
   @apply transition-all;
 }
 

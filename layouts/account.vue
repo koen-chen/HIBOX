@@ -2,7 +2,7 @@
   <el-container class="h-full">
     <el-header height="64px" class="customize-header">
       <div class="logo-wrapper">
-        <img class="logo" src="/haibox_logo.png" />
+        <img class="logo" src="/logo.png" />
       </div>
     </el-header>
     <el-container>
