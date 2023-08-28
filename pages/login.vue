@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-full">
+  <div class="flex justify-center items-center h-full p-10">
     <el-form label-position="top" label-width="100px" :model="formModal" class="w-96">
       <el-text type="primary" class="form-title" tag="div">{{ $t('Login') }}</el-text>
 
@@ -18,10 +18,6 @@
 </template>
 
 <script setup>
-definePageMeta({
-  layout: 'account'
-})
-
 const accountStore = useAccountStore()
 
 const formModal = ref({

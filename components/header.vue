@@ -1,18 +1,17 @@
 <template>
-  <div class="header">
-    <Logo src="/logo-w.png" />
-
-    <div class="flex items-center justify-between">
+  <div class="header p-2">
+    <div class="h-full flex items-center">
+      <Logo src="/logo-w.png" class="mr-4" />
       <Translate dark />
-
-      <Account dark />
     </div>
+
+    <Account dark v-if="account !== null" />
   </div>
 </template>
 
 <script setup>
-
-
+const accountStore = useAccountStore()
+const { account } = storeToRefs(accountStore)
 </script>
 
 <style lang="scss" scoped>
@@ -26,10 +25,4 @@
 
   @apply flex justify-between items-center px-8;
 }
-
-.logo {
-  display: inline-block;
-  height: 80%;
-}
-
 </style>

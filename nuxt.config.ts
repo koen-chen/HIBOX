@@ -4,6 +4,9 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n'
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
   runtimeConfig: {
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,

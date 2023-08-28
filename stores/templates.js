@@ -1,62 +1,67 @@
 import { defineStore } from 'pinia'
 
-const supabase = useSupabase().value
 
-export const useTemplatesStore = defineStore('templates', {
-  state: () => ({
-    templates: [],
-    currentTemplate: null
-  }),
-  getters: {
-    galleries() {
-      return this.templates.filter(item => item.public == true);
+export const useTemplatesStore = defineStore('templates', () => {
+  const supabase = useSupabase().value
+
+  const templates = ref([])
+  const currentTemplate = ref(null)
+
+  const galleries = computed(() => templates.value.filter(item => item.public == true))
+
+  const fetchTemplates = async () => {
+    const { data, error } = await supabase
+      .from('templates')
+      .select()
+
+    if (!error) {
+      templates.value = data
     }
-  },
-  actions: {
-    async fetchTemplates() {
-      const { data, error } =  await supabase
-                                      .from('templates')
-                                      .select()
+  }
 
-      if (!error) {
-        this.templates = data
-      }
-    },
+  const fetchTemplate = async (id) => {
+    const { data, error } = await supabase
+      .from('templates')
+      .select()
+      .eq('id', id)
 
-    async fetchTemplate(id) {
-      const { data, error } = await supabase
-        .from('templates')
-        .select()
-        .eq('id', id)
-
-      if (!error) {
-        this.currentTemplate = data[0]
-      }
-    },
-
-    async updateTemplate(id, name) {
-      const { data, error } = await supabase
-        .from('templates')
-        .update({ name: name })
-        .eq('id', id)
-        .select()
-
-      if (!error) {
-        this.currentTemplate = data[0]
-      }
-    },
-
-    async createTemplate(info) {
-      const { data, error } = await supabase
-              .from('templates')
-              .insert({ name: info.name, description: info.description })
-              .select()
-
-      if (!error) {
-        this.currentTemplate = data[0]
-      }
-
-      return data[0]
+    if (!error) {
+      currentTemplate.value = data[0]
     }
+  }
+
+  const updateTemplate = async (id, name) => {
+    const { data, error } = await supabase
+      .from('templates')
+      .update({ name: name })
+      .eq('id', id)
+      .select()
+
+    if (!error) {
+      currentTemplate.value = data[0]
+    }
+  }
+
+  const createTemplate = async (info) => {
+    const { data, error } = await supabase
+      .from('templates')
+      .insert({ name: info.name, description: info.description })
+      .select()
+
+    if (!error) {
+      currentTemplate.value = data[0]
+    }
+
+    return data[0]
+  }
+
+  return {
+    templates,
+    currentTemplate,
+    galleries,
+    fetchTemplates,
+    fetchTemplate,
+    createTemplate,
+    updateTemplate
   }
 })

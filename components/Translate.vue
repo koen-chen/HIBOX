@@ -1,8 +1,8 @@
 <template>
-  <el-dropdown class="mr-4" @command="(command) => locale = command">
+  <el-dropdown @command="(command) => locale = command">
     <span class="outline-none">
-      <Icon :class="{ 'text-white' : dark }" name="mdi:translate" size="24px" />
-      <Icon :class="{ 'text-white': dark }" name="mdi:chevron-down" size="24px" />
+      <Icon :class="{ 'text-white' : dark }" name="mdi:translate" size="20px" />
+      <Icon :class="{ 'text-white': dark }" name="mdi:chevron-down" size="20px" />
     </span>
 
     <template #dropdown>

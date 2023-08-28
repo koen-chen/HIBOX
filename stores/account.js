@@ -1,21 +1,32 @@
 import { defineStore } from 'pinia'
 
-const supabase = useSupabase().value
+export const useAccountStore = defineStore('account', () => {
+  const supabase = useSupabase().value
 
-export const useAccountStore = defineStore('account', {
-  state: () => ({
-    account: null
-  }),
-  actions: {
-    login(info) {
-      return supabase.auth.signInWithPassword({
-        email: info.email,
-        password: info.password,
-      })
-    },
+  const account = ref(null)
 
-    logout() {
-      return supabase.auth.signOut()
+  const login = async (info) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: info.email,
+      password: info.password,
+    })
+
+    if (!error) {
+      account.value = data.user
     }
+
+    return { error }
   }
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut()
+
+    if (!error) {
+      account.value = null
+    }
+
+    return { error }
+  }
+
+  return { account, login, logout }
 })

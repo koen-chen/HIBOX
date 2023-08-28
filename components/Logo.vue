@@ -15,14 +15,11 @@ defineProps({
 
 <style lang="scss">
 .logo-wrapper {
-  padding: 5px 2rem;
   height: 100%;
-  display: flex;
-  align-items: center;
 }
 
 .logo {
   display: block;
-  max-height: 100%;
+  height: 100%;
 }
 </style>
