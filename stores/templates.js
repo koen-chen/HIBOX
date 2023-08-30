@@ -1,11 +1,18 @@
 import { defineStore } from 'pinia'
 
-
 export const useTemplatesStore = defineStore('templates', () => {
   const supabase = useSupabase().value
 
   const templates = ref([])
-  const currentTemplate = ref(null)
+  const currentTemplate = ref({
+    id: null,
+    name: null,
+    description: null,
+    sections_order: [],
+    sections: []
+  })
+
+  const orderSections = ref([])
 
   const galleries = computed(() => templates.value.filter(item => item.public == true))
 
@@ -19,21 +26,41 @@ export const useTemplatesStore = defineStore('templates', () => {
     }
   }
 
-  const fetchTemplate = async (id) => {
+  const getTemplate = async (id) => {
     const { data, error } = await supabase
       .from('templates')
-      .select()
+      .select(`
+        id,
+        name,
+        description,
+        sections_order,
+        sections (
+          id,
+          name,
+          description,
+          elements_order,
+          elements (*)
+        )
+      `)
       .eq('id', id)
 
     if (!error) {
       currentTemplate.value = data[0]
+
+      const { sections, sections_order: order } = data[0]
+
+      order.forEach(id => {
+        orderSections.value.push(sections.find(item => item.id == id))
+      })
+
+      return currentTemplate
     }
   }
 
-  const updateTemplate = async (id, name) => {
+  const updateTemplate = async (id, info) => {
     const { data, error } = await supabase
       .from('templates')
-      .update({ name: name })
+      .update(info)
       .eq('id', id)
       .select()
 
@@ -51,16 +78,15 @@ export const useTemplatesStore = defineStore('templates', () => {
     if (!error) {
       currentTemplate.value = data[0]
     }
-
-    return data[0]
   }
 
   return {
     templates,
     currentTemplate,
     galleries,
+    orderSections,
     fetchTemplates,
-    fetchTemplate,
+    getTemplate,
     createTemplate,
     updateTemplate
   }

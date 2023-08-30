@@ -3,47 +3,76 @@
     <el-page-header @back="handleBack">
       <template #content>
         <div class="w-full text-center text-large font-600 py-4">
-          <el-input v-model="name" class="no-border w-96" @change="saveName">
-            <template #suffix>
-              <Icon name="mdi:edit" size="20" />
-            </template>
-          </el-input>
         </div>
       </template>
     </el-page-header>
 
     <el-divider></el-divider>
 
-    <el-space wrap class="mt-8">
+    <div class="mt-8">
       <el-row :gutter="24">
-        <el-col :span="12">
-          BASIC INFO.
+        <el-col :span="6" class="label">
+          {{ $t('Basic Info') }}
         </el-col>
-        <el-col :span="12">
-
+        <el-col :span="18">
+          <el-form label-position="top" :model="currentTemplate">
+            <el-form-item prop="name" :label="$t('Name').toUpperCase()" :rules="[{ required: true, message: $t('Please input name') }]">
+              <el-input v-model="currentTemplate.name" @blur="() => updateBasicInfo('name')" size="large" />
+            </el-form-item>
+            <el-form-item prop="description" :label="$t('Description').toUpperCase()" class="mt-8">
+              <el-input v-model="currentTemplate.description" @blur="() => updateBasicInfo('description')" type="textarea" rows="4" />
+            </el-form-item>
+          </el-form>
         </el-col>
       </el-row>
-    </el-space>
+
+      <el-divider class="py-5"></el-divider>
+
+      <div class="affix-container">
+        <el-row :gutter="24">
+          <el-col :span="6" class="label">
+            {{ $t('Edit Sections') }}
+          </el-col>
+          <el-col :span="18">
+            <SectionList
+              :sections="orderSections"
+              :templateId="route.params.id"
+              @collapse="hanldeSectionCollapse"
+            />
+          </el-col>
+        </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 const route = useRoute()
-const store = useTemplatesStore()
-const { currentTemplate } = storeToRefs(store)
+const templatesStore = useTemplatesStore()
 
-const name = ref('')
+const { currentTemplate, orderSections } = storeToRefs(templatesStore)
 
-watch(currentTemplate, () => {
-  if (currentTemplate.value != null) {
-    name.value = currentTemplate.value.name
-  } else {
-    store.fetchTemplate(route.params.id)
+onMounted(() => {
+  if (currentTemplate.value.id === null) {
+    templatesStore.getTemplate(route.params.id)
   }
-}, { immediate: true })
+})
 
-const saveName = () => {
-  store.updateTemplate(route.params.id, name.value)
+const updateBasicInfo = (key) => {
+  templatesStore.updateTemplate(route.params.id, {
+    [key]: basicInfo.value[key]
+  })
+}
+
+const hanldeSectionCollapse = (sectionId) => {
+  templatesStore.$patch({
+    orderSections: orderSections.value.map(item => {
+      if (item.id == sectionId) {
+        item.collapse = !Boolean(item.collapse)
+      }
+      return item
+    })
+  })
 }
 
 const handleBack = () => {
@@ -52,10 +81,17 @@ const handleBack = () => {
 </script>
 
 <style lang="scss">
-.no-border {
-  div {
-    box-shadow: none;
-  }
+.label {
+  font-family: 'Montserrat';
+  font-weight: 800;
+  font-size: 1.714rem;
+  line-height: 1.33;
+  letter-spacing: .2px;
+  color: $textColor;
+  display: flex;
+}
 
+.affix-container {
+  height: 3000px;
 }
 </style>

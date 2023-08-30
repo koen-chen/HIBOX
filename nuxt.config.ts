@@ -1,19 +1,13 @@
-import path from 'path'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n'
-
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
-  },
   runtimeConfig: {
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY
     }
   },
-  css: ['~/assets/styles/main.scss'],
+  css: ['animate.css/animate.min.css', '~/assets/styles/main.scss'],
   imports: {
     dirs: ['stores']
   },
@@ -24,6 +18,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/google-fonts',
     'nuxt-icon',
+    '@vueuse/nuxt',
+    '@vueuse/motion/nuxt'
   ],
   i18n: {
     locales: [
@@ -45,8 +41,9 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      "Roboto+Mono": true,
-      "Playfair+Display": true
+      "Roboto+Mono": [400, 500],
+      "Playfair+Display": [400, 900],
+      "Montserrat": [600, 800, 900]
     }
   },
   pinia: {

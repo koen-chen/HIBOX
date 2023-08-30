@@ -26,25 +26,25 @@
 </template>
 
 <script setup>
-const store = useTemplatesStore()
+const templateStore = useTemplatesStore()
 const createLoading = ref(false)
-const { currentTemplate, galleries } = storeToRefs(store)
+const { currentTemplate, galleries } = storeToRefs(templateStore)
 
 onMounted(() => {
-  store.fetchTemplates()
+  templateStore.fetchTemplates()
 })
 
 const createBlankTemplate = async () => {
   createLoading.value = true
 
-  const data = await store.createTemplate({
+  await templateStore.createTemplate({
     name: 'Untitled Template'
   })
 
   createLoading.value = false
 
-  if (data) {
-    navigateTo(`/templates/${data.id}`)
+  if (currentTemplate.value.id) {
+    navigateTo(`/templates/${currentTemplate.value.id}`)
   } else {
     ElMessage({
       showClose: true,

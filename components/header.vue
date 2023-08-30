@@ -1,5 +1,5 @@
 <template>
-  <div class="header p-2">
+  <div class="header">
     <div class="h-full flex items-center">
       <Logo src="/logo-w.png" class="mr-4" />
       <Translate dark />
@@ -23,6 +23,6 @@ const { account } = storeToRefs(accountStore)
   0 4px 5px 0 rgba(0, 0, 0, .14),
   0 1px 10px 0 rgba(0, 0, 0, .12);
 
-  @apply flex justify-between items-center px-8;
+  @apply flex justify-between items-center px-8 z-50 relative;
 }
 </style>

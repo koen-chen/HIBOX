@@ -1,11 +1,11 @@
 $primaryColor: #2daf6f;
 $primaryHoverColor: #e1f0e6;
-$primaryActiveColor: #1d8a57;
+$primaryActiveColor: #9fd6b5;
 $containerBgColor: #ffffff;
-$textColor: rgba(0, 0, 0, 0.88);
+$textColor: rgba(0, 0, 0, 0.75);
 $textSecondaryColor: rgba(0, 0, 0, 0.45);
 $borderColor: #d9d9d9;
-$maskColor: rgba(200, 200, 200, 0.1);
+$maskColor: rgba(220, 220, 220, 0.2);
 
 @forward 'element-plus/theme-chalk/src/common/var.scss' with ($colors: ('primary': ('base': #2daf6f),
     'success': ('base': #52c41a),
