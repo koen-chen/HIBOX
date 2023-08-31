@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown @command="(command) => locale = command">
+  <el-dropdown @command="(command: string) => locale = command">
     <span class="outline-none">
       <Icon :class="{ 'text-white' : dark }" name="mdi:translate" size="20px" />
       <Icon :class="{ 'text-white': dark }" name="mdi:chevron-down" size="20px" />
@@ -14,10 +14,10 @@
   </el-dropdown>
 </template>
 
-<script setup>
-defineProps({
-  dark:  Boolean
-})
+<script setup lang="ts">
+defineProps<{
+  dark: boolean
+}>()
 
 const { locale } = useI18n()
 </script>

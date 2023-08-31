@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
-import { Element } from "./types"
+import { Element } from "@/types"
 
 export const useElementsStore = defineStore('elements', () => {
   const supabase = useSupabase().value
 
   const orderElements = ref<Element[]>([])
-  const currentElement = ref<Element | null>(null)
+  const currentElement = ref<Element>({})
 
-  const fetchElements = async (sectionId: number) => {
+  const fetchElements = async (sectionId: string) => {
     const { data, error } = await supabase
       .from('sections')
       .select(`
@@ -41,7 +41,7 @@ export const useElementsStore = defineStore('elements', () => {
     }
   }
 
-  const updateElement = async (id: number, info: Element) => {
+  const updateElement = async (id: string, info: Element) => {
     const { data, error } = await supabase
       .from('elements')
       .update(info)
@@ -59,7 +59,7 @@ export const useElementsStore = defineStore('elements', () => {
     }
   }
 
-  const updateOrder = async (sectionId: number, info: Element) => {
+  const updateOrder = async (sectionId: string, info: Element) => {
     const { data, error } = await supabase
       .from('sections')
       .update({ 'elements_order': info })

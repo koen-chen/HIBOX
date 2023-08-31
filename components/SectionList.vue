@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="section-list" ref="container" v-loading="loading" >
+    <div class="section-list" ref="container" v-loading="props.loading">
       <TransitionGroup name="list">
         <div v-for="(item, index) in props.sections" :key="item.id" class="section-box relative overflow-hidden">
           <div class="section-head relative z-50">
@@ -46,36 +46,36 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Section } from '@/types'
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
-defineEmits(['collapse'])
+interface Props {
+  templateId: string,
+  loading?: boolean,
+  sections: Section[] | []
+}
 
-const props = defineProps({
-  templateId: String,
-  sections: {
-    type: Array,
-    default: null
-  }
-})
+defineEmits<{
+  collapse: [sectionId: string]
+}>()
 
+const props = defineProps<Props>()
 const sectionsStore = useSectionsStore()
-const container = ref(null)
-const loading = ref(true)
-
-
-watch(props.sections, () => {
-  loading.value = false
-})
+const container = ref<HTMLElement | null>(null)
 
 useSortable(container, props.sections, {
   animation: 150,
   handle: '.drag-handler',
-  onUpdate: (e) => {
+  onUpdate: (e: { oldIndex: number; newIndex: number; }) => {
     moveArrayElement(props.sections, e.oldIndex, e.newIndex)
 
     nextTick(() => {
-      sectionsStore.updateOrder(props.templateId, props.sections.map(item => item.id))
+      const orders = props.sections.map(item => {
+        return item.id || ''
+      })
+
+      sectionsStore.updateOrder(props.templateId, orders)
     })
   }
 })

@@ -12,16 +12,16 @@
   </el-dropdown>
 </template>
 
-<script setup>
-defineProps({
-  dark: Boolean
-})
-
+<script setup lang="ts">
 import { useAccountStore } from '@/stores/account'
+
+defineProps<{
+  dark: boolean
+}>()
 
 const accountStore = useAccountStore()
 
-const handleAccountCommand = (command) => {
+const handleAccountCommand = (command: string) => {
   switch (command) {
     case 'logout':
       logout()

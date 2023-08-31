@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Account } from './types'
+import { Account } from '@/types'
 
 export const useAccountStore = defineStore('account', () => {
   const supabase = useSupabase().value

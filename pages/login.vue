@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const accountStore = useAccountStore()
 
 const formModal = ref({

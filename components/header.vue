@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const accountStore = useAccountStore()
 const { account } = storeToRefs(accountStore)
 </script>

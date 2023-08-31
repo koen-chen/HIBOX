@@ -4,16 +4,15 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  src: {
-    type: String,
-    default: '/logo.png'
-  }
+<script setup lang="ts">
+withDefaults(defineProps<{
+  src: string
+}>(), {
+  src: '/logo.png'
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .logo-wrapper {
   height: 100%;
 }

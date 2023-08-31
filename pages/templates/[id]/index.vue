@@ -37,6 +37,7 @@
             <SectionList
               :sections="orderSections"
               :templateId="route.params.id"
+              :loading="loading"
               @collapse="hanldeSectionCollapse"
             />
           </el-col>
@@ -46,25 +47,27 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const route = useRoute()
 const templatesStore = useTemplatesStore()
-
+const loading = ref(false)
 const { currentTemplate, orderSections } = storeToRefs(templatesStore)
 
-onMounted(() => {
-  if (currentTemplate.value.id === null) {
-    templatesStore.getTemplate(route.params.id)
+onMounted(async () => {
+  if (!currentTemplate.value?.id) {
+    loading.value = true
+    await templatesStore.getTemplate(route.params.id.toString())
+    loading.value = false
   }
 })
 
-const updateBasicInfo = (key) => {
-  templatesStore.updateTemplate(route.params.id, {
-    [key]: basicInfo.value[key]
+const updateBasicInfo = (key: 'name' | 'description') => {
+  templatesStore.updateTemplate(route.params.id.toString(), {
+    [key]: currentTemplate.value[key]
   })
 }
 
-const hanldeSectionCollapse = (sectionId) => {
+const hanldeSectionCollapse = (sectionId: string) => {
   templatesStore.$patch({
     orderSections: orderSections.value.map(item => {
       if (item.id == sectionId) {

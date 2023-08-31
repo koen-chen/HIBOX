@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const templateStore = useTemplatesStore()
 const createLoading = ref(false)
 const { currentTemplate, galleries } = storeToRefs(templateStore)
@@ -43,7 +43,7 @@ const createBlankTemplate = async () => {
 
   createLoading.value = false
 
-  if (currentTemplate.value.id) {
+  if (currentTemplate.value?.id) {
     navigateTo(`/templates/${currentTemplate.value.id}`)
   } else {
     ElMessage({
