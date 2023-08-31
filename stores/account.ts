@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia'
+import { Account } from './types'
 
 export const useAccountStore = defineStore('account', () => {
   const supabase = useSupabase().value
 
-  const account = ref(null)
+  const account = ref<Account | null>(null)
 
-  const login = async (info) => {
+  const login = async ({ email, password }: { email: string, password: string }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: info.email,
-      password: info.password,
+      email: email,
+      password: password,
     })
 
     if (!error) {

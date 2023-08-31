@@ -1,12 +1,13 @@
 import { defineStore } from "pinia"
+import { Element } from "./types"
 
 export const useElementsStore = defineStore('elements', () => {
   const supabase = useSupabase().value
 
-  const orderElements = ref([])
-  const currentElement = ref(null)
+  const orderElements = ref<Element[]>([])
+  const currentElement = ref<Element | null>(null)
 
-  const fetchElements = async (sectionId) => {
+  const fetchElements = async (sectionId: number) => {
     const { data, error } = await supabase
       .from('sections')
       .select(`
@@ -17,18 +18,18 @@ export const useElementsStore = defineStore('elements', () => {
       `)
       .eq('id', sectionId)
 
-    const { elements, elements_order: order } = data[0]
-
-    const tempElements = order.map(id => {
-      return elements.find(item => item.id == id)
-    })
-
     if (!error) {
+      const { elements, elements_order: order } = data[0]
+
+      const tempElements = order.map((id: number) => {
+        return elements.find(item => item.id == id)
+      })
+
       orderElements.value = tempElements
     }
   }
 
-  const addElement = async (info) => {
+  const addElement = async (info: Element) => {
     const { data, error } = await supabase
       .from('elements')
       .insert(info)
@@ -36,11 +37,11 @@ export const useElementsStore = defineStore('elements', () => {
 
     if (!error) {
       currentElement.value = data[0]
-      orderElements.value.push(currentElement.value)
+      //orderElements.value.push(currentElement.value)
     }
   }
 
-  const updateElement = async (id, info) => {
+  const updateElement = async (id: number, info: Element) => {
     const { data, error } = await supabase
       .from('elements')
       .update(info)
@@ -49,16 +50,16 @@ export const useElementsStore = defineStore('elements', () => {
 
     if (!error) {
       currentElement.value = data[0]
-      currentElement.value.map(item, () => {
-        if (item.id == currentElement.value.id) {
-          return currentElement.value
-        }
-        return item
-      })
+      // currentElement.value.map(item, () => {
+      //   if (item.id == currentElement.value.id) {
+      //     return currentElement.value
+      //   }
+      //   return item
+      // })
     }
   }
 
-  const updateOrder = async (sectionId, info) => {
+  const updateOrder = async (sectionId: number, info: Element) => {
     const { data, error } = await supabase
       .from('sections')
       .update({ 'elements_order': info })

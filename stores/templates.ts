@@ -1,18 +1,15 @@
 import { defineStore } from 'pinia'
+import { useSectionsStore } from './sections'
+import { Template, Section } from './types'
 
 export const useTemplatesStore = defineStore('templates', () => {
   const supabase = useSupabase().value
+  const sectionsStore = useSectionsStore()
 
-  const templates = ref([])
-  const currentTemplate = ref({
-    id: null,
-    name: null,
-    description: null,
-    sections_order: [],
-    sections: []
-  })
+  const templates = ref<Template[]>([])
+  const currentTemplate = ref<Template>()
 
-  const orderSections = ref([])
+  const orderSections = ref<Section[]>([])
 
   const galleries = computed(() => templates.value.filter(item => item.public == true))
 
@@ -26,18 +23,20 @@ export const useTemplatesStore = defineStore('templates', () => {
     }
   }
 
-  const getTemplate = async (id) => {
+  const getTemplate = async (id: number) => {
     const { data, error } = await supabase
       .from('templates')
       .select(`
         id,
         name,
         description,
+        public,
         sections_order,
         sections (
           id,
           name,
           description,
+          template_id,
           elements_order,
           elements (*)
         )
@@ -49,15 +48,18 @@ export const useTemplatesStore = defineStore('templates', () => {
 
       const { sections, sections_order: order } = data[0]
 
-      order.forEach(id => {
-        orderSections.value.push(sections.find(item => item.id == id))
+      order.forEach((id: number) => {
+        const item = sections.find(item => item.id == id)
+        if (item) {
+          orderSections.value.push(item)
+        }
       })
 
       return currentTemplate
     }
   }
 
-  const updateTemplate = async (id, info) => {
+  const updateTemplate = async (id: number, info: Template) => {
     const { data, error } = await supabase
       .from('templates')
       .update(info)
@@ -69,7 +71,7 @@ export const useTemplatesStore = defineStore('templates', () => {
     }
   }
 
-  const createTemplate = async (info) => {
+  const createTemplate = async (info: Template) => {
     const { data, error } = await supabase
       .from('templates')
       .insert({ name: info.name, description: info.description })

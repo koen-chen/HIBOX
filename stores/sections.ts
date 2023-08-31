@@ -1,11 +1,12 @@
 import { defineStore } from "pinia"
+import { Section } from "./types"
 
 export const useSectionsStore = defineStore('sections', () => {
   const supabase = useSupabase().value
 
-  const currentSection = ref(null)
+  const currentSection = ref<Section | null>(null)
 
-  const addSection = async (info) => {
+  const addSection = async (info: Section): Promise<Section | null> => {
     const { data, error } = await supabase
       .from('sections')
       .insert(info)
@@ -13,11 +14,12 @@ export const useSectionsStore = defineStore('sections', () => {
 
     if (!error) {
       currentSection.value = data[0]
-      sections.value.push(currentSection.value)
     }
+
+    return currentSection.value
   }
 
-  const updateSection = async (id, info) => {
+  const updateSection = async (id: number, info: Section): Promise<Section | null> => {
     const { data, error } = await supabase
       .from('sections')
       .update(info)
@@ -27,9 +29,11 @@ export const useSectionsStore = defineStore('sections', () => {
     if (!error) {
       currentSection.value = data[0]
     }
+
+    return currentSection.value
   }
 
-  const updateOrder = async (templateId, info) => {
+  const updateOrder = async (templateId: number, info: number[]): Promise<void> => {
     const { data, error } = await supabase
       .from('templates')
       .update({ 'sections_order': info })
