@@ -30,13 +30,13 @@ const loginLoading = ref(false)
 const signIn = async () => {
   loginLoading.value = true
 
-  const { error } = await accountStore.login({
+  const data = await accountStore.login({
     email: formModal.value.email,
     password: formModal.value.password,
   })
 
-  if (error) {
-    console.log(error)
+  if (!data) {
+    console.log(data)
   } else {
     navigateTo('/templates')
   }

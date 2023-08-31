@@ -39,13 +39,8 @@ const logout = async () => {
     background: 'rgba(0, 0, 0, 0.7)',
   })
 
-  const { error } = await accountStore.logout()
-
-  if (error) {
-    console.log(error)
-  } else {
-    navigateTo('/login')
-  }
+  await accountStore.logout()
+  navigateTo('/login')
 
   loading.close()
 }

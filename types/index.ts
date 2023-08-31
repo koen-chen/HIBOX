@@ -1,33 +1,41 @@
-export interface Account {
+import { MergeDeep } from 'type-fest'
+import { Database as DatabaseGenerated } from "./supabase"
+
+export type Json = number[]
+
+export type Database = MergeDeep<DatabaseGenerated, {
+  public: {
+    Tables: {
+      section: {
+        Row: {
+          element_order: Json
+          collapse?: boolean
+        }
+        Insert: {
+          element_order?: Json
+          collapse?: boolean
+        }
+      }
+      template: {
+        Row: {
+          section_order: Json
+        }
+        Insert: {
+          section_order?: Json
+        }
+      }
+    }
+  }
+}>
+
+export type Account = {
   email?: string,
 }
 
-export interface Template {
-  id?: string,
-  name?: string,
-  description?: string,
-  public?: boolean,
-  sections_order?: string[],
-  sections?: Section[],
-}
+export type Template = Database['public']['Tables']['template']['Row']
+export type Section = Database['public']['Tables']['section']['Row']
+export type Element = Database['public']['Tables']['element']['Row']
 
-export interface Section {
-  id?: string,
-  name?: string,
-  description?: string,
-  template_id?: string,
-  elements_order?: string[],
-  elements?: Element[],
-  collapse?: boolean
-}
-
-export interface Element {
-  id?: string,
-  label?: string,
-  type?: string,
-  required?: boolean,
-  attribute?: string,
-  associate?: boolean,
-  section_id?: string,
-  template_id?: string
-}
+export type TemplateUpdate = Database['public']['Tables']['template']['Insert']
+export type SectionUpdate = Database['public']['Tables']['section']['Insert']
+export type ElementUpdate = Database['public']['Tables']['element']['Insert']

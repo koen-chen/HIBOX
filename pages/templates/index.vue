@@ -15,7 +15,7 @@
         <span class="cardDesc">{{ $t('Start a new template') }}</span>
       </div>
 
-      <div v-for="item in galleries" @click="previewTemplate(item)">
+      <div v-for="item in publicTemplates" @click="previewTemplate(item)">
         <div class="cardCover2">
           <div class="cardTitle">{{ item.name }}</div>
           <div class="cardDesc">{{ item.description }}</div>
@@ -26,9 +26,10 @@
 </template>
 
 <script setup lang="ts">
-const templateStore = useTemplatesStore()
+const templateStore = useTemplateStore()
+const sectionStore = useSectionStore()
 const createLoading = ref(false)
-const { currentTemplate, galleries } = storeToRefs(templateStore)
+const { publicTemplates } = storeToRefs(templateStore)
 
 onMounted(() => {
   templateStore.fetchTemplates()
@@ -37,21 +38,26 @@ onMounted(() => {
 const createBlankTemplate = async () => {
   createLoading.value = true
 
-  await templateStore.createTemplate({
+  const template = await templateStore.createTemplate({
     name: 'Untitled Template'
   })
 
-  createLoading.value = false
+  if (template) {
+    await sectionStore.addSection({
+      name: 'Untitled Section',
+      template_id: template.id
+    })
 
-  if (currentTemplate.value?.id) {
-    navigateTo(`/templates/${currentTemplate.value.id}`)
+    navigateTo(`/templates/${template.id}`)
   } else {
-    ElMessage({
+     ElMessage({
       showClose: true,
       message: 'Oops, create template failure!',
       type: 'error',
     })
   }
+
+  createLoading.value = false
 }
 
 const handleBack = () => {

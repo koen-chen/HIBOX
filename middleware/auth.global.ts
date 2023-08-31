@@ -1,6 +1,6 @@
 import { useAccountStore } from "@/stores/account"
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const supabase = useSupabase().value
   const accountStore = useAccountStore()
   const { account } = storeToRefs(accountStore)

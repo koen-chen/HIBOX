@@ -6,28 +6,31 @@ export const useAccountStore = defineStore('account', () => {
 
   const account = ref<Account | null>(null)
 
-  const login = async ({ email, password }: { email: string, password: string }) => {
+  const login = async (info: { email: string, password: string }): Promise<Account | null> => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email: info.email,
+      password: info.password,
     })
 
     if (!error) {
       account.value = data.user
+      return account.value
     }
 
-    return { error }
+    return null
   }
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     const { error } = await supabase.auth.signOut()
 
     if (!error) {
       account.value = null
     }
-
-    return { error }
   }
 
-  return { account, login, logout }
+  return {
+    account,
+    login,
+    logout
+  }
 })
