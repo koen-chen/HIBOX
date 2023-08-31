@@ -1,18 +1,20 @@
- // const order = templateData[0]['section_order']
+export function useOrder<Type extends { id: number }>(order: number[], data: Array<Type>) {
+  const orderData = []
 
-      // const data = await sectionsStore.fetchSections(currentTemplate.value.id)
+  if (order.length > 0 && data.length > 0) {
+    order.forEach((id: number) => {
+      const temp = data.find((item) => {
+        if (item.id == id) {
+          return item
+        }
+      })
 
-      // if (!data) {
-      //   return
-      // }
+      if (temp) {
+        orderData.push(temp)
+      }
 
-      // if (order.length > 0) {
-      //   order.forEach((id: number) => {
-      //     const item = data.find((item: Section) => item?.id == id)
-      //     if (item) {
-      //       orderSections.value.push(item)
-      //     }
-      //   })
-      // } else {
-      //   orderSections.value.push(...data)
-      // }
+    })
+  } else {
+    return data
+  }
+}
