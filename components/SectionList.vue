@@ -34,14 +34,14 @@
             </div>
           </div>
         </div>
-      </TransitionGroup>
-    </div>
 
-    <div class="mt-9">
-      <el-button type="primary" size="large" @click="addSection">
-        <Icon name="mdi:plus-circle" />
-        <span class="pl-2">{{ $t('Add Section') }}</span>
-      </el-button>
+         <div class="mt-9" key="addSectionBtn">
+          <el-button type="primary" size="large" @click="addSection">
+            <Icon name="mdi:plus-circle" />
+            <span class="pl-2">{{ $t('Add Section') }}</span>
+          </el-button>
+        </div>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -90,13 +90,13 @@ const addSection = () => {
 .list-move,
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.5s ease;
+  transition: transform 0.5s ease;
 }
 
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateY(-100%);
+  transform: translateY(10px);
 }
 
 .list-leave-active {
@@ -107,8 +107,20 @@ const addSection = () => {
   min-height: 100px;
 }
 
-.section-box:nth-child(n + 2) {
-  @apply mt-8
+.section-box {
+  &:nth-child(n + 2) {
+    @apply mt-8
+  }
+
+  &:focus {
+    .section-head {
+      background-color: $primaryActiveColor;
+    }
+
+    .section-content {
+      border: 1px solid $primaryActiveColor;
+    }
+  }
 }
 
 .section-head {
@@ -142,16 +154,6 @@ const addSection = () => {
     background-color: transparent;
     box-shadow: none;
     resize: none;
-  }
-}
-
-.section-box:focus {
-  .section-head {
-    background-color: $primaryActiveColor;
-  }
-
-  .section-content {
-    border: 1px solid $primaryActiveColor;
   }
 }
 

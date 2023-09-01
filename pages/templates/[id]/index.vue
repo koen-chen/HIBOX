@@ -36,7 +36,7 @@
           <el-col :span="18">
             <SectionList
               :sections="orderSections"
-              :templateId="route.params.id"
+              :templateId="Number(route.params.id)"
               :loading="loading"
               @collapse="hanldeSectionCollapse"
             />
@@ -48,10 +48,15 @@
 </template>
 
 <script setup lang="ts">
+import { Section } from '~/types';
+
 const route = useRoute()
 const templateStore = useTemplateStore()
+const sectionStore = useSectionStore()
 const loading = ref(false)
 const { currentTemplate } = storeToRefs(templateStore)
+const { sections } = storeToRefs(sectionStore)
+const orderSections = ref<Section[]>([])
 
 const formModal = ref({
   name: currentTemplate.value?.name,
@@ -61,7 +66,10 @@ const formModal = ref({
 onMounted(async () => {
   if (!currentTemplate.value?.id) {
     loading.value = true
-    await templateStore.getTemplate(Number(route.params.id))
+    const templateId = Number(route.params.id)
+    await templateStore.getTemplate(templateId)
+    await sectionStore.fetchSections(templateId)
+    orderSections.value = useOrder(currentTemplate.value?.section_order, sections.value)
     loading.value = false
   }
 })
@@ -72,14 +80,12 @@ const updateBasicInfo = (key: 'name' | 'description') => {
   })
 }
 
-const hanldeSectionCollapse = (sectionId: string) => {
-  templateStore.$patch({
-    // orderSections: orderSections.value.map(item => {
-    //   if (item.id == sectionId) {
-    //     item.collapse = !Boolean(item.collapse)
-    //   }
-    //   return item
-    // })
+const hanldeSectionCollapse = (sectionId: number) => {
+  orderSections.value = orderSections.value.map(item => {
+    if (item.id == sectionId) {
+      item.collapse = !Boolean(item.collapse)
+    }
+    return item
   })
 }
 
