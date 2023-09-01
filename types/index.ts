@@ -16,7 +16,7 @@ export type Database = MergeDeep<DatabaseGenerated, {
           collapse?: boolean
         }
       }
-      template: {
+      form: {
         Row: {
           section_order: Json
         }
@@ -32,10 +32,10 @@ export type Account = {
   email?: string,
 }
 
-export type Template = Database['public']['Tables']['template']['Row']
+export type Form = Database['public']['Tables']['form']['Row']
 export type Section = Database['public']['Tables']['section']['Row']
 export type Element = Database['public']['Tables']['element']['Row']
 
-export type TemplateUpdate = Database['public']['Tables']['template']['Insert']
+export type FormUpdate = Database['public']['Tables']['form']['Insert']
 export type SectionUpdate = Database['public']['Tables']['section']['Insert']
 export type ElementUpdate = Database['public']['Tables']['element']['Insert']

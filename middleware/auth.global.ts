@@ -22,6 +22,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   if (session && (to.path == '/login')) {
-    return navigateTo('/templates')
+    return navigateTo('/forms')
   }
 })

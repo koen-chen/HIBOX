@@ -38,7 +38,7 @@ const signIn = async () => {
   if (!data) {
     console.log(data)
   } else {
-    navigateTo('/templates')
+    navigateTo('/forms')
   }
 
    loginLoading.value = false

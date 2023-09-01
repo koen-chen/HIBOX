@@ -7,11 +7,11 @@ export const useSectionStore = defineStore('section', () => {
   const sections = ref<Section[]>([])
   const currentSection = ref<Section | null>(null)
 
-  const fetchSections = async (templateId: number): Promise<Section[] | null> => {
+  const fetchSections = async (formId: number): Promise<Section[] | null> => {
     const { data, error } = await supabase
       .from('section')
       .select()
-      .eq('template_id', templateId)
+      .eq('form_id', formId)
 
     if (!error) {
       sections.value = data
@@ -57,11 +57,11 @@ export const useSectionStore = defineStore('section', () => {
       .eq('id', id)
   }
 
-  const updateOrder = async (templateId: number, info: number[]): Promise<void> => {
+  const updateOrder = async (formId: number, info: number[]): Promise<void> => {
     const { data, error } = await supabase
-      .from('template')
+      .from('form')
       .update({ 'section_order': info })
-      .eq('id', templateId)
+      .eq('id', formId)
       .select()
   }
 

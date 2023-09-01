@@ -2,57 +2,63 @@
   <div class="p-4">
     <el-page-header :icon="null" @back="handleBack">
       <template #title>
-        <div class="text-center font-black py-4 text-2xl">{{ $t('TEMPLATE GALLERY') }}</div>
+        <div class="text-center font-black py-4 text-2xl">{{ $t('Forms') }}</div>
+      </template>
+
+      <template #extra>
+        <el-button @click="createBlankForm">New Form</el-button>
       </template>
     </el-page-header>
 
     <el-divider></el-divider>
 
-    <el-space wrap class="mt-8">
-      <div class="cardCover" @click="createBlankTemplate" v-loading="createLoading">
-        <Icon name="mdi:plus-circle" size="2.6rem" />
-        <span class="cardTitle">{{ $t('Blank') }}</span>
-        <span class="cardDesc">{{ $t('Start a new template') }}</span>
-      </div>
-
-      <div v-for="item in publicTemplates" @click="previewTemplate(item)">
+    <div class="mt-8" v-loading="loading">
+      <div v-for="item in forms">
         <div class="cardCover2">
           <div class="cardTitle">{{ item.name }}</div>
           <div class="cardDesc">{{ item.description }}</div>
         </div>
       </div>
-    </el-space>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const templateStore = useTemplateStore()
+const formStore = useFormStore()
 const sectionStore = useSectionStore()
 const createLoading = ref(false)
-const { publicTemplates } = storeToRefs(templateStore)
+const { forms } = storeToRefs(formStore)
+const loading = ref(false)
 
 onMounted(() => {
-  templateStore.fetchTemplates()
+  loading.value = true
+  console.log('dddd')
+  setTimeout(async () => {
+    await formStore.fetchForms()
+    loading.value = false
+  }, 3000)
+
+  console.log(loading.value)
 })
 
-const createBlankTemplate = async () => {
+const createBlankForm = async () => {
   createLoading.value = true
 
-  const template = await templateStore.createTemplate({
-    name: 'Untitled Template'
+  const form = await formStore.createForm({
+    name: 'Untitled Form'
   })
 
-  if (template) {
+  if (form) {
     await sectionStore.addSection({
       name: 'Untitled Section',
-      template_id: template.id
+      form_id: form.id
     })
 
-    navigateTo(`/templates/${template.id}`)
+    navigateTo(`/forms/${form.id}`)
   } else {
-     ElMessage({
+    ElMessage({
       showClose: true,
-      message: 'Oops, create template failure!',
+      message: 'Oops, create form failure!',
       type: 'error',
     })
   }

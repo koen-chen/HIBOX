@@ -36,7 +36,7 @@
           <el-col :span="18">
             <SectionList
               :sections="orderSections"
-              :templateId="Number(route.params.id)"
+              :formId="Number(route.params.id)"
               :loading="loading"
               @collapse="hanldeSectionCollapse"
             />
@@ -51,32 +51,32 @@
 import { Section } from '~/types';
 
 const route = useRoute()
-const templateStore = useTemplateStore()
+const formStore = useFormStore()
 const sectionStore = useSectionStore()
 const loading = ref(false)
-const { currentTemplate } = storeToRefs(templateStore)
+const { currentForm } = storeToRefs(formStore)
 const { sections } = storeToRefs(sectionStore)
 const orderSections = ref<Section[]>([])
 
 const formModal = ref({
-  name: currentTemplate.value?.name,
-  description: currentTemplate.value?.description
+  name: currentForm.value?.name,
+  description: currentForm.value?.description
 })
 
 onMounted(async () => {
-  if (!currentTemplate.value?.id) {
+  if (!currentForm.value?.id) {
     loading.value = true
-    const templateId = Number(route.params.id)
-    await templateStore.getTemplate(templateId)
-    await sectionStore.fetchSections(templateId)
-    orderSections.value = useOrder(currentTemplate.value?.section_order, sections.value)
+    const formId = Number(route.params.id)
+    await formStore.getForm(formId)
+    await sectionStore.fetchSections(formId)
+    orderSections.value = useOrder(currentForm.value?.section_order, sections.value)
     loading.value = false
   }
 })
 
 const updateBasicInfo = (key: 'name' | 'description') => {
-  templateStore.updateTemplate(Number(route.params.id), {
-    [key]: currentTemplate.value ? currentTemplate.value[key] : ''
+  formStore.updateForm(Number(route.params.id), {
+    [key]: currentForm.value ? currentForm.value[key] : ''
   })
 }
 
@@ -90,7 +90,7 @@ const hanldeSectionCollapse = (sectionId: number) => {
 }
 
 const handleBack = () => {
-  navigateTo('/templates')
+  navigateTo('/forms')
 }
 </script>
 

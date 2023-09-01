@@ -51,7 +51,7 @@ import { Section } from '@/types'
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
 interface Props {
-  templateId: number,
+  formId: number,
   loading?: boolean,
   sections: Section[] | []
 }
@@ -73,7 +73,7 @@ useSortable(container, props.sections, {
     nextTick(() => {
       const orders = props.sections.map(item => item.id)
 
-      sectionStore.updateOrder(props.templateId, orders)
+      sectionStore.updateOrder(props.formId, orders)
     })
   }
 })
@@ -81,7 +81,7 @@ useSortable(container, props.sections, {
 const addSection = () => {
   sectionStore.addSection({
     name: 'Untitled Section',
-    template_id: props.templateId
+    form_id: props.formId
   })
 }
 </script>
