@@ -63,6 +63,18 @@ export const useTemplateStore = defineStore('template', () => {
     return null
   }
 
+  const deleteTemplate = async (id: number): Promise<void> => {
+    const { data, error } = await supabase
+      .from('template')
+      .delete()
+      .eq('id', id)
+
+    if (!error) {
+      currentTemplate.value = null
+      templates.value = templates.value.filter(item => item.id !== id)
+    }
+  }
+
   return {
     templates,
     currentTemplate,
@@ -70,6 +82,7 @@ export const useTemplateStore = defineStore('template', () => {
     fetchTemplates,
     getTemplate,
     createTemplate,
-    updateTemplate
+    updateTemplate,
+    deleteTemplate
   }
 })

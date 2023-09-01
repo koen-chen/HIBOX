@@ -50,11 +50,19 @@ export const useElementStore = defineStore('element', () => {
     return null
   }
 
+  const deleteElement = async (id: number): Promise<void> => {
+    const { data, error } = await supabase
+      .from('element')
+      .delete()
+      .eq('id', id)
+  }
+
   return {
     elements,
     currentElement,
     fetchElements,
     addElement,
     updateElement,
+    deleteElement
   }
 })

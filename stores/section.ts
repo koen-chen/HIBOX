@@ -50,6 +50,13 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
+  const deleteSection = async (id: number): Promise<void> => {
+    const { data, error } = await supabase
+      .from('section')
+      .delete()
+      .eq('id', id)
+  }
+
   const updateOrder = async (templateId: number, info: number[]): Promise<void> => {
     const { data, error } = await supabase
       .from('template')
@@ -64,6 +71,7 @@ export const useSectionStore = defineStore('section', () => {
     fetchSections,
     addSection,
     updateSection,
+    deleteSection,
     updateOrder
   }
 })
