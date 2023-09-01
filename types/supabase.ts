@@ -19,6 +19,7 @@ export interface Database {
           label: string
           required: boolean
           section_id: number
+          state: string
           type: string
         }
         Insert: {
@@ -30,6 +31,7 @@ export interface Database {
           label?: string
           required?: boolean
           section_id: number
+          state?: string
           type?: string
         }
         Update: {
@@ -41,6 +43,7 @@ export interface Database {
           label?: string
           required?: boolean
           section_id?: number
+          state?: string
           type?: string
         }
         Relationships: [
@@ -66,6 +69,7 @@ export interface Database {
           name: string
           public: boolean
           section_order: Json
+          state: string
         }
         Insert: {
           created_at?: string
@@ -74,6 +78,7 @@ export interface Database {
           name?: string
           public?: boolean
           section_order?: Json
+          state?: string
         }
         Update: {
           created_at?: string
@@ -82,6 +87,7 @@ export interface Database {
           name?: string
           public?: boolean
           section_order?: Json
+          state?: string
         }
         Relationships: []
       }
@@ -93,6 +99,7 @@ export interface Database {
           form_id: number
           id: number
           name: string
+          state: string
         }
         Insert: {
           created_at?: string
@@ -101,6 +108,7 @@ export interface Database {
           form_id: number
           id?: number
           name?: string
+          state?: string
         }
         Update: {
           created_at?: string
@@ -109,6 +117,7 @@ export interface Database {
           form_id?: number
           id?: number
           name?: string
+          state?: string
         }
         Relationships: [
           {

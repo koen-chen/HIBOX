@@ -4,14 +4,16 @@ import { Form, FormUpdate } from '@/types'
 export const useFormStore = defineStore('form', () => {
   const supabase = useSupabase().value
 
-  const forms = ref<Form[]>([])
+  const forms = ref<Form[] | null>(null)
   const currentForm = ref<Form | null>(null)
-  const publicForms = computed(() => forms.value.filter(item => item?.public == true))
+  const publicForms = computed(() => forms.value?.filter(item => item?.public == true))
 
   const fetchForms = async (): Promise<Form[] | []> => {
     const { data, error } = await supabase
       .from('form')
       .select()
+      .neq('state', 'Delete')
+      .order('id', { ascending: false })
 
     if (!error) {
       forms.value = data
@@ -34,7 +36,7 @@ export const useFormStore = defineStore('form', () => {
     return null
   }
 
-  const createForm = async (info: FormUpdate): Promise<Form | null> => {
+  const addForm = async (info: FormUpdate): Promise<Form | null> => {
     const { data, error } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
@@ -66,12 +68,12 @@ export const useFormStore = defineStore('form', () => {
   const deleteForm = async (id: number): Promise<void> => {
     const { data, error } = await supabase
       .from('form')
-      .delete()
+      .update({ state: 'Delete' })
       .eq('id', id)
 
     if (!error) {
       currentForm.value = null
-      forms.value = forms.value.filter(item => item.id !== id)
+      forms.value = forms.value && forms.value.filter(item => item.id !== id)
     }
   }
 
@@ -81,7 +83,7 @@ export const useFormStore = defineStore('form', () => {
     publicForms,
     fetchForms,
     getForm,
-    createForm,
+    addForm,
     updateForm,
     deleteForm
   }

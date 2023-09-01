@@ -4,7 +4,7 @@ import { Section, SectionUpdate } from "@/types"
 export const useSectionStore = defineStore('section', () => {
   const supabase = useSupabase().value
 
-  const sections = ref<Section[]>([])
+  const sections = ref<Section[] | null>(null)
   const currentSection = ref<Section | null>(null)
 
   const fetchSections = async (formId: number): Promise<Section[] | null> => {
@@ -12,6 +12,7 @@ export const useSectionStore = defineStore('section', () => {
       .from('section')
       .select()
       .eq('form_id', formId)
+      .neq('state', 'Delete')
 
     if (!error) {
       sections.value = data
@@ -53,7 +54,7 @@ export const useSectionStore = defineStore('section', () => {
   const deleteSection = async (id: number): Promise<void> => {
     const { data, error } = await supabase
       .from('section')
-      .delete()
+      .update({ state: 'Delete' })
       .eq('id', id)
   }
 

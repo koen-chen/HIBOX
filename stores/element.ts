@@ -4,7 +4,7 @@ import { Element, ElementUpdate } from "@/types"
 export const useElementStore = defineStore('element', () => {
   const supabase = useSupabase().value
 
-  const elements = ref<Element[]>([])
+  const elements = ref<Element[] | null>(null)
   const currentElement = ref<Element | null>(null)
 
   const fetchElements = async (sectionId: number): Promise<Element[] | []> => {
@@ -12,6 +12,7 @@ export const useElementStore = defineStore('element', () => {
       .from('element')
       .select()
       .eq('id', sectionId)
+      .neq('state', 'Delete')
 
     if (!error) {
       elements.value = data
@@ -53,7 +54,7 @@ export const useElementStore = defineStore('element', () => {
   const deleteElement = async (id: number): Promise<void> => {
     const { data, error } = await supabase
       .from('element')
-      .delete()
+      .update({ state: 'Delete' })
       .eq('id', id)
   }
 

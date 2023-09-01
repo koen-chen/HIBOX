@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-page-header @back="handleBack">
+    <el-page-header @back="() => navigateTo('/forms')">
       <template #content>
         <div class="w-full text-center text-large font-600 py-4">
         </div>
@@ -53,30 +53,34 @@ import { Section } from '~/types';
 const route = useRoute()
 const formStore = useFormStore()
 const sectionStore = useSectionStore()
-const loading = ref(false)
+
 const { currentForm } = storeToRefs(formStore)
 const { sections } = storeToRefs(sectionStore)
-const orderSections = ref<Section[]>([])
 
+const loading = ref(false)
+const orderSections = ref<Section[]>([])
 const formModal = ref({
   name: currentForm.value?.name,
   description: currentForm.value?.description
 })
 
-onMounted(async () => {
-  if (!currentForm.value?.id) {
-    loading.value = true
-    const formId = Number(route.params.id)
-    await formStore.getForm(formId)
-    await sectionStore.fetchSections(formId)
+useWatchNull(currentForm, loading, async () => {
+  const formId = Number(route.params.id)
+  const form = await formStore.getForm(formId)
+  if (form) {
+    formModal.value.name = form.name
+    formModal.value.description = form.description
+  }
+
+  await sectionStore.fetchSections(formId)
+  if (sections.value) {
     orderSections.value = useOrder(currentForm.value?.section_order, sections.value)
-    loading.value = false
   }
 })
 
 const updateBasicInfo = (key: 'name' | 'description') => {
   formStore.updateForm(Number(route.params.id), {
-    [key]: currentForm.value ? currentForm.value[key] : ''
+    [key]: formModal.value[key]
   })
 }
 
@@ -87,10 +91,6 @@ const hanldeSectionCollapse = (sectionId: number) => {
     }
     return item
   })
-}
-
-const handleBack = () => {
-  navigateTo('/forms')
 }
 </script>
 
