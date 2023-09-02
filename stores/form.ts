@@ -44,6 +44,7 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = data[0]
+      
       return currentForm.value
     }
 

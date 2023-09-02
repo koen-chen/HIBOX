@@ -3,7 +3,7 @@
     <div class="section-list" ref="container" v-loading="props.loading">
       <TransitionGroup name="list">
         <div v-for="(item, index) in props.sections" :key="item.id" class="section-box relative overflow-hidden">
-          <div class="section-head relative z-50">
+          <div class="section-head relative z-30">
             <div class="flex-grow flex items-center">
               <div class="drag-handler">
                 <Icon name="mdi:drag-horizontal" />
@@ -34,13 +34,6 @@
             </div>
           </div>
         </div>
-
-         <div class="mt-9" key="addSectionBtn">
-          <el-button type="primary" size="large" @click="addSection">
-            <Icon name="mdi:plus-circle" />
-            <span class="pl-2">{{ $t('Add Section') }}</span>
-          </el-button>
-        </div>
       </TransitionGroup>
     </div>
   </div>
@@ -64,6 +57,7 @@ const props = defineProps<Props>()
 const sectionStore = useSectionStore()
 const container = ref<HTMLElement | null>(null)
 
+
 useSortable(container, props.sections, {
   animation: 150,
   handle: '.drag-handler',
@@ -77,32 +71,9 @@ useSortable(container, props.sections, {
     })
   }
 })
-
-const addSection = () => {
-  sectionStore.addSection({
-    name: 'Untitled Section',
-    form_id: props.formId
-  })
-}
 </script>
 
 <style lang="scss">
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: transform 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.list-leave-active {
-  position: absolute;
-}
-
 .section-list {
   min-height: 100px;
 }

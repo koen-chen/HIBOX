@@ -30,6 +30,9 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       currentSection.value = data[0]
+      if (sections.value !== null) {
+        sections.value.push(data[0])
+      }
       return currentSection.value
     } else {
       return null
