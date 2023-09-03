@@ -30,7 +30,7 @@
 
           <SectionNode
             v-show="item.collapse !== true"
-            :item="item"
+            :sectionItem="item"
             :formId="form.id"
             :choosedSectionId="choosedSectionId"
           />

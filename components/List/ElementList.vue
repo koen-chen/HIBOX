@@ -1,33 +1,30 @@
 <template>
   <div>
     <div v-for="item in orderElements" :key="item.id">
-      {{  item.label }}
+      element id: {{  item.id }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Section } from '~/types'
+import { Section, Element } from '~/types'
 
 interface Props {
   formId: number,
-  section: Section,
+  sectionItem: Section,
+  elements: Element[] | []
 }
 
 const props = defineProps<Props>()
 const elementStore = useElementStore()
-const { elements } = storeToRefs(elementStore)
 
 const orderElements = computed(() => {
-  if (elements.value !== null && props.section !== null) {
-    const ownElements = elements.value.filter(item => item.section_id == props.section.id)
-    return useOrder(props.section.element_order, ownElements)
+  if (props.sectionItem !== null) {
+    return useOrder(props.sectionItem.element_order, props.elements)
   } else {
     return []
   }
 })
-
-console.log('orderElements', elements)
 </script>
 
 <style lang="scss">
