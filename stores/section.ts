@@ -7,6 +7,10 @@ export const useSectionStore = defineStore('section', () => {
   const sections = ref<Section[] | null>(null)
   const currentSection = ref<Section | null>(null)
 
+  function $reset() {
+    sections.value = null
+  }
+
   const fetchSections = async (formId: number): Promise<Section[] | null> => {
     const { data, error } = await supabase
       .from('section')
@@ -70,6 +74,7 @@ export const useSectionStore = defineStore('section', () => {
   }
 
   return {
+    $reset,
     sections,
     currentSection,
     fetchSections,

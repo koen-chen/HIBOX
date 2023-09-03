@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
 import { Form, FormUpdate } from '@/types'
+import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
   const supabase = useSupabase().value
+  const sectionStore = useSectionStore()
 
   const forms = ref<Form[] | null>(null)
   const currentForm = ref<Form | null>(null)
@@ -44,7 +46,10 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = data[0]
-      
+      if (forms.value !== null) {
+        forms.value.unshift(data[0])
+      }
+      sectionStore.$reset()
       return currentForm.value
     }
 

@@ -1,16 +1,28 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   ssr: false,
+
   runtimeConfig: {
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY
     }
   },
-  css: ['animate.css/animate.min.css', '~/assets/styles/main.scss'],
+
+  css: [
+    'animate.css/animate.min.css',
+    '~/assets/styles/main.scss'
+  ],
+
   imports: {
     dirs: ['stores']
   },
+
+  components: [
+    { path: '~/components', pathPrefix: false }
+  ],
+
   modules: [
     '@element-plus/nuxt',
     '@nuxtjs/tailwindcss',
@@ -21,6 +33,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt'
   ],
+
   i18n: {
     locales: [
       {
@@ -39,6 +52,7 @@ export default defineNuxtConfig({
   elementPlus: {
     importStyle: 'scss'
   },
+
   googleFonts: {
     families: {
       "Roboto+Mono": [400, 500],
@@ -46,19 +60,30 @@ export default defineNuxtConfig({
       "Montserrat": [600, 800, 900]
     }
   },
+
   pinia: {
     autoImports: [
       "defineStore",
       "storeToRefs",
     ],
   },
+
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/styles/variables.scss" as *; @use "@/assets/styles/minix.scss" as *;`,
+          additionalData: `@use "~/assets/styles/variables.scss" as *; @use "~/assets/styles/minix.scss" as *;`,
         },
       },
     },
   },
+
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        strictNullChecks: true,
+        esModuleInterop: true
+      }
+    }
+  }
 })

@@ -7,11 +7,11 @@ export const useElementStore = defineStore('element', () => {
   const elements = ref<Element[] | null>(null)
   const currentElement = ref<Element | null>(null)
 
-  const fetchElements = async (sectionId: number): Promise<Element[] | []> => {
+  const fetchElements = async (form_id: number): Promise<Element[] | []> => {
     const { data, error } = await supabase
       .from('element')
       .select()
-      .eq('id', sectionId)
+      .eq('form_id', form_id)
       .neq('state', 'Delete')
 
     if (!error) {
@@ -30,6 +30,9 @@ export const useElementStore = defineStore('element', () => {
 
     if (!error) {
       currentElement.value = data[0]
+      if (elements.value !== null) {
+        elements.value.push(data[0])
+      }
       return currentElement.value
     }
 

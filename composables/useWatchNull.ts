@@ -1,9 +1,9 @@
-export const useWatchNull = (data: Ref<any>, loading: Ref<Boolean>, callback: Function) => {
+export const useWatchNull = (data: Ref<any>, loading: Ref<Boolean> | null, callback: Function) => {
   watch (data, async () => {
     if (data.value == null) {
-      loading.value = true
+      loading && (loading.value = true)
       await callback()
-      loading.value = false
+      loading && (loading.value = false)
     }
   }, { immediate: true })
 }

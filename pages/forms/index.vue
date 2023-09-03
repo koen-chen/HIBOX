@@ -1,12 +1,12 @@
 <template>
   <div class="p-4">
-    <PageHeader :back="false">
+    <Header :back="false">
       {{ $t('Forms') }}
 
       <template #actions>
         <el-button @click="createForm" :loading="createLoading">New Form</el-button>
       </template>
-    </PageHeader>
+    </Header>
 
     <el-divider></el-divider>
 
@@ -99,17 +99,11 @@ const createForm = async () => {
   })
 
   if (formData) {
-    await sectionStore.addSection({
-      name: 'Untitled Section',
-      form_id: formData.id
-    })
-
     navigateTo(`/forms/${formData.id}`)
 
-    formStore.$patch((state) => {
-      if (state.forms) {
-        state.forms.unshift(formData)
-      }
+    sectionStore.addSection({
+      name: 'Untitled Section',
+      form_id: formData.id
     })
   } else {
     ElMessage({

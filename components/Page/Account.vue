@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAccountStore } from '@/stores/account'
+import { useAccountStore } from '~/stores/account'
 
 defineProps<{
   dark: boolean
