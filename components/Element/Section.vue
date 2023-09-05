@@ -8,6 +8,7 @@
       </div>
       <div>
         {{ sectionItem.id }}
+
         <QuestionList
           v-if="filterQuestionList"
           :formId="props.formId"
@@ -24,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { Section } from '~/types'
+import { SectionType } from '~/types'
 
 interface Props {
-  sectionItem: Section,
+  sectionItem: SectionType,
   formId: number,
   choosedSectionId?: number
 }

@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia'
-import { Form, FormUpdate } from '@/types'
+import { FormType, FormUpdateType } from '~/types'
 import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
   const supabase = useSupabase().value
   const sectionStore = useSectionStore()
 
-  const formList = ref<Form[] | null>(null)
-  const currentForm = ref<Form | null>(null)
+  const formList = ref<FormType[] | null>(null)
+  const currentForm = ref<FormType | null>(null)
   const publicFormList = computed(() => formList.value?.filter(item => item?.public == true))
 
-  const listForm = async (): Promise<Form[] | []> => {
+  const listForm = async (): Promise<FormType[] | []> => {
     const { data, error } = await supabase
       .from('form')
       .select()
@@ -25,7 +25,7 @@ export const useFormStore = defineStore('form', () => {
     return []
   }
 
-  const getForm = async (id: number): Promise<Form | null> => {
+  const getForm = async (id: number): Promise<FormType | null> => {
     const { data: formData, error } = await supabase
       .from('form')
       .select()
@@ -38,7 +38,7 @@ export const useFormStore = defineStore('form', () => {
     return null
   }
 
-  const addForm = async (info: FormUpdate): Promise<Form | null> => {
+  const addForm = async (info: FormUpdateType): Promise<FormType | null> => {
     const { data, error } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
@@ -56,7 +56,7 @@ export const useFormStore = defineStore('form', () => {
     return null
   }
 
-  const updateForm = async (id: number, info: FormUpdate): Promise<Form | null> => {
+  const updateForm = async (id: number, info: FormUpdateType): Promise<FormType | null> => {
     const { data, error } = await supabase
       .from('form')
       .update(info)

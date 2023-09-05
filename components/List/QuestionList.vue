@@ -2,17 +2,19 @@
   <div>
     <div v-for="item in orderQuestionList" :key="item.id">
       question id: {{  item.id }}
+
+      <Question />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Section, Question } from '~/types'
+import { SectionType, QuestionType } from '~/types'
 
 interface Props {
   formId: number,
-  sectionItem: Section,
-  questionList: Question[] | []
+  sectionItem: SectionType,
+  questionList: QuestionType[] | []
 }
 
 const props = defineProps<Props>()

@@ -1,9 +1,9 @@
 import { MergeDeep } from 'type-fest'
 import { Database as DatabaseGenerated } from "./supabase"
 
-export type Json = number[]
+type Json = number[]
 
-export type Database = MergeDeep<DatabaseGenerated, {
+type Database = MergeDeep<DatabaseGenerated, {
   public: {
     Tables: {
       section: {
@@ -28,14 +28,14 @@ export type Database = MergeDeep<DatabaseGenerated, {
   }
 }>
 
-export type Form = Database['public']['Tables']['form']['Row']
-export type Section = Database['public']['Tables']['section']['Row']
-export type Question = Database['public']['Tables']['question']['Row']
+export type FormType = Database['public']['Tables']['form']['Row']
+export type SectionType = Database['public']['Tables']['section']['Row']
+export type QuestionType = Database['public']['Tables']['question']['Row']
 
-export type FormUpdate = Database['public']['Tables']['form']['Insert']
-export type SectionUpdate = Database['public']['Tables']['section']['Insert']
-export type QuestionUpdate = Database['public']['Tables']['question']['Insert']
+export type FormUpdateType = Database['public']['Tables']['form']['Insert']
+export type SectionUpdateType = Database['public']['Tables']['section']['Insert']
+export type QuestionUpdateType = Database['public']['Tables']['question']['Insert']
 
-export type Account = {
+export type AccountType = {
   email?: string,
 }

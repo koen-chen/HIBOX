@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
-import { Question, QuestionUpdate } from "@/types"
+import { QuestionType, QuestionUpdateType } from "~/types"
 
 export const useQuestionStore = defineStore('question', () => {
   const supabase = useSupabase().value
 
-  const questionList = ref<Question[] | null>(null)
-  const currentQuestion = ref<Question | null>(null)
+  const questionList = ref<QuestionType[] | null>(null)
+  const currentQuestion = ref<QuestionType | null>(null)
 
-  const listQuestion = async (form_id: number): Promise<Question[] | []> => {
+  const listQuestion = async (form_id: number): Promise<QuestionType[] | []> => {
     const { data, error } = await supabase
       .from('question')
       .select()
@@ -22,7 +22,7 @@ export const useQuestionStore = defineStore('question', () => {
     return []
   }
 
-  const addQuestion = async (info: QuestionUpdate): Promise<Question | null> => {
+  const addQuestion = async (info: QuestionUpdateType): Promise<QuestionType | null> => {
     const { data, error } = await supabase
       .from('question')
       .insert(info)
@@ -39,7 +39,7 @@ export const useQuestionStore = defineStore('question', () => {
     return null
   }
 
-  const updateQuestion = async (id: number, info: QuestionUpdate): Promise<Question | null> => {
+  const updateQuestion = async (id: number, info: QuestionUpdateType): Promise<QuestionType | null> => {
     const { data, error } = await supabase
       .from('question')
       .update(info)

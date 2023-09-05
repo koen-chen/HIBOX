@@ -41,10 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { Form } from '~/types'
+import { FormType } from '~/types'
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
-const props = defineProps<{ form: Form }>()
+const props = defineProps<{ form: FormType }>()
 const sectionStore = useSectionStore()
 const { sectionList } = storeToRefs(sectionStore)
 const questionStore = useQuestionStore()

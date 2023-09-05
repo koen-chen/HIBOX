@@ -1,5 +1,5 @@
 <template>
-  <div =>
+  <div>
     <el-row>
       <el-col className="element-move text-center mb-5 cursor-pointer">
         <Icon name="mdi:drag-horizontal" />
@@ -45,7 +45,7 @@
         <span className="mr-2">
           {{ $t('Required') }}
         </span>
-        <el-switch v-model="required"/>
+        <el-switch v-model="required" />
       </el-col>
 
       <el-col>

@@ -1,17 +1,17 @@
 import { defineStore } from "pinia"
-import { Section, SectionUpdate } from "@/types"
+import { SectionType, SectionUpdateType } from "~/types"
 
 export const useSectionStore = defineStore('section', () => {
   const supabase = useSupabase().value
 
-  const sectionList = ref<Section[] | null>(null)
-  const currentSection = ref<Section | null>(null)
+  const sectionList = ref<SectionType[] | null>(null)
+  const currentSection = ref<SectionType | null>(null)
 
   function $reset() {
     sectionList.value = null
   }
 
-  const listSection = async (formId: number): Promise<Section[] | null> => {
+  const listSection = async (formId: number): Promise<SectionType[] | null> => {
     const { data, error } = await supabase
       .from('section')
       .select()
@@ -26,7 +26,7 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
-  const addSection = async (info: SectionUpdate): Promise<Section | null> => {
+  const addSection = async (info: SectionUpdateType): Promise<SectionType | null> => {
     const { data, error } = await supabase
       .from('section')
       .insert(info)
@@ -43,7 +43,7 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
-  const updateSection = async (id: number, info: SectionUpdate): Promise<Section | null> => {
+  const updateSection = async (id: number, info: SectionUpdateType): Promise<SectionType | null> => {
     const { data, error } = await supabase
       .from('section')
       .update(info)
