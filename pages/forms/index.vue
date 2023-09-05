@@ -4,7 +4,7 @@
       {{ $t('Forms') }}
 
       <template #actions>
-        <el-button @click="createForm" :loading="createLoading">New Form</el-button>
+        <el-button @click="addForm" :loading="addLoading">New Form</el-button>
       </template>
     </Header>
 
@@ -18,13 +18,13 @@
         <div v-if="forms?.length == 0">
           <i18n-t keypath="Click {link} to start a blank form" scope="global">
             <template #link>
-              <el-button type="primary" :loading="createLoading" @click="createForm" link :style="{ 'vertical-align': 'text-bottom', 'text-decoration': 'underline' }">{{ $t('New Form') }}</el-button>
+              <el-button type="primary" :loading="addLoading" @click="addForm" link :style="{ 'vertical-align': 'text-bottom', 'text-decoration': 'underline' }">{{ $t('New Form') }}</el-button>
             </template>
           </i18n-t>
         </div>
         <template v-else>
           <el-card
-            v-for="item in forms"
+            v-for="item in formList"
             :key="item.id"
             class="form-item"
             body-class="form-item-body"
@@ -69,14 +69,14 @@
 const formStore = useFormStore()
 const sectionStore = useSectionStore()
 
-const { forms } = storeToRefs(formStore)
+const { formList } = storeToRefs(formStore)
 
-const createLoading = ref(false)
+const addLoading = ref(false)
 const listLoading = ref(false)
 const itemLoading = ref(false)
 
-useWatchNull(forms, listLoading, async () => {
-  await formStore.fetchForms()
+useWatchNull(formList, listLoading, async () => {
+  await formStore.listForm()
 })
 
 const handleCommand = (cmd: string, id: number) => {
@@ -91,8 +91,8 @@ const handleCommand = (cmd: string, id: number) => {
   }
 }
 
-const createForm = async () => {
-  createLoading.value = true
+const addForm = async () => {
+  addLoading.value = true
 
   const formData = await formStore.addForm({
     name: 'Untitled Form'
@@ -113,7 +113,7 @@ const createForm = async () => {
     })
   }
 
-  createLoading.value = false
+  addLoading.value = false
 }
 
 const deleteForm = async (id: number) => {

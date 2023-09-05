@@ -2,7 +2,7 @@
   <div>
     <div class="section-list" ref="sortableBoxRef" v-loading="listLoading">
       <TransitionGroup name="list">
-        <div v-for="(item, index) in orderSections"
+        <div v-for="(item, index) in orderSectionList"
           :key="item.id"
           class="section-box relative overflow-hidden"
           :class="{ 'focus': choosedSectionId === item.id }"
@@ -13,7 +13,7 @@
               <div class="drag-handler">
                 <Icon name="mdi:drag-horizontal" />
               </div>
-              <div class="section-order">Section {{ index + 1 }} of {{ orderSections.length }}</div>
+              <div class="section-order">Section {{ index + 1 }} of {{ orderSectionList.length }}</div>
             </div>
 
             <div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <SectionNode
+          <Section
             v-show="item.collapse !== true"
             :sectionItem="item"
             :formId="form.id"
@@ -46,45 +46,45 @@ import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
 const props = defineProps<{ form: Form }>()
 const sectionStore = useSectionStore()
-const { sections } = storeToRefs(sectionStore)
-const elementStore = useElementStore()
+const { sectionList } = storeToRefs(sectionStore)
+const questionStore = useQuestionStore()
 
 const sortableBoxRef = ref<HTMLElement | null>(null)
 const choosedSectionId = ref<number | null>(null)
 
 const listLoading = ref(false)
 
-const orderSections = computed(() => {
-  if (sections.value !== null && props.form !== null) {
-    return useOrder(props.form.section_order, sections.value)
+const orderSectionList = computed(() => {
+  if (sectionList.value !== null && props.form !== null) {
+    return useOrder(props.form.section_order, sectionList.value)
   } else {
     return []
   }
 })
 
-useWatchNull(sections, listLoading, async () => {
-  await sectionStore.fetchSections(props.form.id)
-  await elementStore.fetchElements(props.form.id)
+useWatchNull(sectionList, listLoading, async () => {
+  await sectionStore.listSection(props.form.id)
+  await questionStore.listQuestion(props.form.id)
 })
 
 onClickOutside(sortableBoxRef, () => choosedSectionId.value = null)
 
-useSortable(sortableBoxRef, orderSections.value,  {
+useSortable(sortableBoxRef, orderSectionList.value,  {
     animation: 150,
     handle: '.drag-handler',
     onUpdate: (e: any) => {
-      moveArrayElement(orderSections.value, e.oldIndex, e.newIndex)
+      moveArrayElement(orderSectionList.value, e.oldIndex, e.newIndex)
 
       nextTick(() => {
-        const orders = orderSections.value.map(item => item.id)
+        const orders = orderSectionList.value.map(item => item.id)
         sectionStore.updateOrder(props.form.id, orders)
       })
     }
   })
 
 const hanldeSectionCollapse = (sectionId: number) => {
-  if (sections.value) {
-    sections.value = sections.value.map(item => {
+  if (sectionList.value) {
+    sectionList.value = sectionList.value.map(item => {
       if (item.id == sectionId) {
         item.collapse = !Boolean(item.collapse)
       }

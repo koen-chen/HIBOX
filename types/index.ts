@@ -8,12 +8,12 @@ export type Database = MergeDeep<DatabaseGenerated, {
     Tables: {
       section: {
         Row: {
-          element_order: Json
+          question_order: Json
           collapse?: boolean
           focused?: boolean
         }
         Insert: {
-          element_order?: Json
+          question_order?: Json
         }
       }
       form: {
@@ -30,11 +30,11 @@ export type Database = MergeDeep<DatabaseGenerated, {
 
 export type Form = Database['public']['Tables']['form']['Row']
 export type Section = Database['public']['Tables']['section']['Row']
-export type Element = Database['public']['Tables']['element']['Row']
+export type Question = Database['public']['Tables']['question']['Row']
 
 export type FormUpdate = Database['public']['Tables']['form']['Insert']
 export type SectionUpdate = Database['public']['Tables']['section']['Insert']
-export type ElementUpdate = Database['public']['Tables']['element']['Insert']
+export type QuestionUpdate = Database['public']['Tables']['question']['Insert']
 
 export type Account = {
   email?: string,

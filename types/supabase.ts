@@ -9,7 +9,37 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      element: {
+      form: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          name: string
+          public: boolean
+          section_order: Json
+          state: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: number
+          name?: string
+          public?: boolean
+          section_order?: Json
+          state?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          name?: string
+          public?: boolean
+          section_order?: Json
+          state?: string
+        }
+        Relationships: []
+      }
+      question: {
         Row: {
           associate: boolean
           attribute: string
@@ -48,75 +78,45 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "element_form_id_fkey"
+            foreignKeyName: "question_form_id_fkey"
             columns: ["form_id"]
             referencedRelation: "form"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "element_section_id_fkey"
+            foreignKeyName: "question_section_id_fkey"
             columns: ["section_id"]
             referencedRelation: "section"
             referencedColumns: ["id"]
           }
         ]
       }
-      form: {
-        Row: {
-          created_at: string
-          description: string
-          id: number
-          name: string
-          public: boolean
-          section_order: Json
-          state: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string
-          id?: number
-          name?: string
-          public?: boolean
-          section_order?: Json
-          state?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          id?: number
-          name?: string
-          public?: boolean
-          section_order?: Json
-          state?: string
-        }
-        Relationships: []
-      }
       section: {
         Row: {
           created_at: string
           description: string
-          element_order: Json
           form_id: number
           id: number
           name: string
+          question_order: Json
           state: string
         }
         Insert: {
           created_at?: string
           description?: string
-          element_order?: Json
           form_id: number
           id?: number
           name?: string
+          question_order?: Json
           state?: string
         }
         Update: {
           created_at?: string
           description?: string
-          element_order?: Json
           form_id?: number
           id?: number
           name?: string
+          question_order?: Json
           state?: string
         }
         Relationships: [

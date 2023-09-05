@@ -8,17 +8,17 @@
       </div>
       <div>
         {{ sectionItem.id }}
-        <ElementList
-          v-if="filterElements"
+        <QuestionList
+          v-if="filterQuestionList"
           :formId="props.formId"
           :sectionItem="sectionItem"
-          :elements="filterElements"
+          :questionList="filterQuestionList"
         />
       </div>
     </div>
 
     <div v-if="choosedSectionId == sectionItem.id">
-      <el-button @click="() => addElement(sectionItem.id)">add question</el-button>
+      <el-button @click="() => addQuestion(sectionItem.id)">add question</el-button>
     </div>
   </div>
 </template>
@@ -33,18 +33,18 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const elementStore = useElementStore()
-const { elements } = storeToRefs(elementStore)
+const questionStore = useQuestionStore()
+const { questionList } = storeToRefs(questionStore)
 
-const filterElements = computed(() => {
-  return elements.value?.filter(item => item.section_id == props.sectionItem.id)
+const filterQuestionList = computed(() => {
+  return questionList.value?.filter(item => item.section_id == props.sectionItem.id)
 })
 
 const addLoading = ref(false)
-const addElement = async (sectionId: number) => {
+const addQuestion = async (sectionId: number) => {
   addLoading.value = true
 
-  await elementStore.addElement({
+  await questionStore.addQuestion({
     label: '',
     type: '',
     section_id: sectionId,

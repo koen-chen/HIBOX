@@ -77,7 +77,7 @@ onMounted(async () => {
 })
 
 const updateBasicInfo = (key: 'name' | 'description') => {
-  formStore.updateForm(Number(route.params.id), {
+  formStore.updateForm(formId, {
     [key]: formModal.value[key]
   })
 }

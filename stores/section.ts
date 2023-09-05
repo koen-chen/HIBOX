@@ -4,14 +4,14 @@ import { Section, SectionUpdate } from "@/types"
 export const useSectionStore = defineStore('section', () => {
   const supabase = useSupabase().value
 
-  const sections = ref<Section[] | null>(null)
+  const sectionList = ref<Section[] | null>(null)
   const currentSection = ref<Section | null>(null)
 
   function $reset() {
-    sections.value = null
+    sectionList.value = null
   }
 
-  const fetchSections = async (formId: number): Promise<Section[] | null> => {
+  const listSection = async (formId: number): Promise<Section[] | null> => {
     const { data, error } = await supabase
       .from('section')
       .select()
@@ -19,8 +19,8 @@ export const useSectionStore = defineStore('section', () => {
       .neq('state', 'Delete')
 
     if (!error) {
-      sections.value = data
-      return sections.value
+      sectionList.value = data
+      return sectionList.value
     } else {
       return null
     }
@@ -34,8 +34,8 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       currentSection.value = data[0]
-      if (sections.value !== null) {
-        sections.value.push(data[0])
+      if (sectionList.value !== null) {
+        sectionList.value.push(data[0])
       }
       return currentSection.value
     } else {
@@ -75,9 +75,9 @@ export const useSectionStore = defineStore('section', () => {
 
   return {
     $reset,
-    sections,
+    sectionList,
     currentSection,
-    fetchSections,
+    listSection,
     addSection,
     updateSection,
     deleteSection,

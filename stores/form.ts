@@ -6,11 +6,11 @@ export const useFormStore = defineStore('form', () => {
   const supabase = useSupabase().value
   const sectionStore = useSectionStore()
 
-  const forms = ref<Form[] | null>(null)
+  const formList = ref<Form[] | null>(null)
   const currentForm = ref<Form | null>(null)
-  const publicForms = computed(() => forms.value?.filter(item => item?.public == true))
+  const publicFormList = computed(() => formList.value?.filter(item => item?.public == true))
 
-  const fetchForms = async (): Promise<Form[] | []> => {
+  const listForm = async (): Promise<Form[] | []> => {
     const { data, error } = await supabase
       .from('form')
       .select()
@@ -18,8 +18,8 @@ export const useFormStore = defineStore('form', () => {
       .order('id', { ascending: false })
 
     if (!error) {
-      forms.value = data
-      return forms.value
+      formList.value = data
+      return formList.value
     }
 
     return []
@@ -46,8 +46,8 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = data[0]
-      if (forms.value !== null) {
-        forms.value.unshift(data[0])
+      if (formList.value !== null) {
+        formList.value.unshift(data[0])
       }
       sectionStore.$reset()
       return currentForm.value
@@ -79,15 +79,15 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = null
-      forms.value = forms.value && forms.value.filter(item => item.id !== id)
+      formList.value = formList.value && formList.value.filter(item => item.id !== id)
     }
   }
 
   return {
-    forms,
+    formList,
+    publicFormList,
     currentForm,
-    publicForms,
-    fetchForms,
+    listForm,
     getForm,
     addForm,
     updateForm,
