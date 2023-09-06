@@ -43,7 +43,6 @@
 
     <el-row>
        <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
-       {{ nodeValue }}
     </el-row>
 
     <el-divider class="mt-10" />
@@ -53,24 +52,40 @@
         <span class="mr-2">
           {{ $t('Required') }}
         </span>
-        <el-switch v-model="required" />
+        <el-switch
+          v-model="required"
+          size="large"
+          inline-prompt
+          :active-icon="Check"
+          :inactive-icon="Close"
+          @change="(val: boolean) => required = val"
+          />
       </div>
 
-      <div>
-       actions
+      <div class="flex items-center">
+        <el-divider direction="vertical" :style="{ margin: '0 30px', height: '1.9em' }" />
+
+        <div>
+          <Icon
+            class="action-icon"
+            name="mdi:trash-can"
+            @click="handleDelete"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { InputNode, CheckboxNode, RadioNode, DropdownNode, DateNode, UploadNode } from '#components'
+import { Check, Close } from '@element-plus/icons-vue'
+import { InputNode, DropdownNode, DateNode, UploadNode } from '#components'
 
 const NodeList = {
   'Input': InputNode,
   'Textarea': InputNode,
-  'Radio': RadioNode,
-  'Checkbox': CheckboxNode,
+  'Radio': DropdownNode,
+  'Checkbox': DropdownNode,
   'Dropdown': DropdownNode,
   'FileUpload': UploadNode,
   'Date': DateNode,
@@ -85,8 +100,8 @@ const BasicTypeList = [
   { type: "Textarea", name: "Title & Description", icon: "mdi:format-size", textarea: true, readonly: true, autosize: true  },
   { type: "Input", name: "Short text", icon: "mdi:text-short" },
   { type: "Textarea", name: "Paragraph", icon: "mdi:text", textarea: true, autosize: true },
-  { type: "Radio", name: "Radio", icon: "mdi:radiobox-marked" },
-  { type: "Checkbox", name: "Checkbox", icon: "mdi:checkbox-marked" },
+  { type: "Radio", name: "Radio", icon: "mdi:radiobox-marked", needOtherOption: true, optionIcon: 'mdi:radiobox-blank' },
+  { type: "Checkbox", name: "Checkbox", icon: "mdi:checkbox-marked", needOtherOption: true, optionIcon: 'mdi:checkbox-blank-outline'  },
   { type: "Dropdown", name: "Dropdown", icon: "mdi:arrow-down-drop-circle" },
   { type: "FileUpload", name: "File upload", icon: "mdi:cloud-upload" },
   { type: "Date", name: "Date", icon: "mdi:calendar" }
@@ -108,13 +123,19 @@ const required = ref(false)
 const chooseType = (item: { key: number, type: keyof typeof NodeList, name: string }) => {
   node.value = NodeList[item.type]
 }
+
+const handleDelete = () => {
+  console.log('delete question')
+};
 </script>
 
-<style lang="scss">
-.input {
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #dbe3e4;
-  background-color: #fff;
+<style lang="scss" scoped>
+
+
+.action-icon {
+  margin: 0 15px;
+  size: 1.4rem;
+  color: #7a8182;
+  cursor: pointer;
 }
 </style>

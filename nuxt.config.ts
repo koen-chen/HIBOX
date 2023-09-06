@@ -55,7 +55,6 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      "Roboto+Mono": [400, 500],
       "Playfair+Display": [400, 900],
       "Montserrat": [600, 800, 900]
     }

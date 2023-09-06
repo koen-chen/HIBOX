@@ -30,6 +30,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-balloon": "^39.0.1",
     "@ckeditor/ckeditor5-vue": "^5.1.0",
+    "@element-plus/icons-vue": "^2.1.0",
     "@pinia/nuxt": "^0.4.11",
     "@supabase/supabase-js": "^2.33.1",
     "@vueuse/components": "^10.4.1",

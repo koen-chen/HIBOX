@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  font-family: "Roboto Mono", Menlo, Monaco;
+@font-face {
+  font-family: "Radikal-Regular";
+  src: url(./fonts/Radikal-Regular.otf);
+}
+
+@font-face {
+  font-family: "Radikal-Bold";
+  src: url(./fonts/Radikal-Bold.otf);
+}
+
+@font-face {
+  font-family: "Radikal-Light";
+  src: url(./fonts/Radikal-Light.otf);
+}
+
+html,
+body {
+  font-size: 14px;
+  font-family: "Radikal-Regular", sans-serif !important;
+  background-color: #fff;
 }
 
 html,
@@ -38,4 +56,11 @@ body,
 
 .ck-powered-by {
   display: none !important;
+}
+
+.input {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #dbe3e4;
+  background-color: #fff;
 }

@@ -3,6 +3,9 @@
     <div class="w-full mb-2">
       <NodeWrapper v-for="op in optionList" :key="op.id">
         <div class="flex items-center">
+          <div v-if="props.optionIcon" class="flex-none  w-4 mr-1">
+            <Icon :name="props.optionIcon" color="#7a8182" />
+          </div>
           <div class="flex-grow break-words">
             <NodeEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
           </div>
@@ -17,13 +20,16 @@
 
       <NodeWrapper v-if="otherOption">
         <div class="flex items-center">
+          <div v-if="props.optionIcon" class="flex-none  w-4 mr-1">
+            <Icon :name="props.optionIcon" color="#7a8182" />
+          </div>
           <div class="flex-grow break-words">
             <el-input value="Other..." readOnly bordered={false} :style="{ color: '#b8c2c2' }" />
           </div>
 
           <div class="flex-none w-14">
             <el-button  link @click="removeOtherOption">
-              <Icon name="mdi:close" />
+              <Icon name="mdi:close" color="#7a8182" />
             </el-button>
           </div>
         </div>
@@ -38,7 +44,7 @@
       <div v-if="!otherOption && needOtherOption">
         <span>{{ $t('or') }}</span>
 
-        <el-button link @click="addOtherOption" :style="{ textDecoration: 'underline' }">
+        <el-button text @click="addOtherOption" :style="{ textDecoration: 'underline' }">
           {{ $t("Add Other") }}
         </el-button>
       </div>
@@ -49,13 +55,26 @@
 <script setup lang="ts">
 import { nanoid } from 'nanoid'
 
+const emit = defineEmits<{
+  'update:modelValue': [value: string | number]
+}>()
+
+const props = withDefaults(defineProps<{
+  modelValue: string | number | undefined
+  optionIcon?: string,
+  needOtherOption?: boolean
+}>(), {
+  optionIcon: '',
+  needOtherOption: false
+})
+
 type Option = {
   label: string,
   id: string
 }
 
-const needOtherOption = ref(false)
-const otherOption = ref(true)
+const needOtherOption = ref(props.needOtherOption)
+const otherOption = ref(false)
 const optionList = ref<Option[]>([
   { label: "Option 1", id: nanoid(5) },
   { label: "Option 2", id: nanoid(5) },
