@@ -1,14 +1,14 @@
 <template>
   <div class="section-node">
     <div class="section-content">
-      <div>
+      <div class="w-full">
+        {{ sectionItem.id }}
         <el-input v-model="sectionItem.name" class="border-input" />
         <el-input v-model="sectionItem.description" placeholder="Description (optional)" class="border-input" type="textarea"
           autosize />
       </div>
-      <div>
-        {{ sectionItem.id }}
 
+      <div class="w-full">
         <QuestionList
           v-if="filterQuestionList"
           :formId="props.formId"

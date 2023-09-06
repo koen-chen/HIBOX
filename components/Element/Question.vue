@@ -1,32 +1,39 @@
 <template>
-  <div>
+  <div class="w-full">
     <el-row>
-      <el-col className="element-move text-center mb-5 cursor-pointer">
+      <el-col class="element-move text-center mb-5 cursor-pointer">
         <Icon name="mdi:drag-horizontal" />
       </el-col>
-    </el-row>>
+    </el-row>
 
-    <el-row>
-      <el-col >
-        <el-input :placeholder="$t('Enter question label')"></el-input>
+    <el-row :gutter="16">
+      <el-col :span="16">
+        <el-input class="input" size="large" :placeholder="$t('Enter question label')"></el-input>
       </el-col>
 
-      <el-col >
-        <el-select v-model="type" :placeholder="$t('Choose question type')">
+      <el-col :span="8">
+        <el-select
+          class="input"
+          :placeholder="$t('Choose question type')"
+          size="large"
+          v-model="typeInfo"
+          value-key="name"
+          @change="chooseType"
+        >
           <el-option-group key="basic" :label="$t('Basic')">
-            <el-option v-for="item in BasicTypeList" :key="item.type" :label="item.type" :value="item.type">
-              <div>
+            <el-option v-for="item in BasicTypeList" :key="item.type" :label="item.name" :value="item">
+              <div class="flex items-center py-2">
                 <Icon :name="item.icon" />
-                <div className="ml-5">{{ item.name }}</div>
+                <div class="ml-5">{{ item.name }}</div>
               </div>
             </el-option>
           </el-option-group>
 
           <el-option-group key="modules" :label="$t('Modules')">
-            <el-option v-for="item in ModulesTypeList" :key="item.type" :label="item.type" :value="item.type">
-              <div>
+            <el-option v-for="item in ModulesTypeList" :key="item.type" :label="item.name" :value="item">
+              <div class="flex items-center  py-2">
                 <Icon :name="item.icon" />
-                <div className="ml-5">{{ item.name }}</div>
+                <div class="ml-5">{{ item.name }}</div>
               </div>
             </el-option>
           </el-option-group>
@@ -35,52 +42,79 @@
     </el-row>
 
     <el-row>
-       type node
+       <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
+       {{ nodeValue }}
     </el-row>
 
-    <el-divider></el-divider>
+    <el-divider class="mt-10" />
 
-    <el-row>
-      <el-col>
-        <span className="mr-2">
+    <div class="flex items-center justify-end">
+      <div>
+        <span class="mr-2">
           {{ $t('Required') }}
         </span>
         <el-switch v-model="required" />
-      </el-col>
+      </div>
 
-      <el-col>
+      <div>
        actions
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { InputNode, CheckboxNode, RadioNode, DropdownNode, DateNode, UploadNode } from '#components'
+
+const NodeList = {
+  'Input': InputNode,
+  'Textarea': InputNode,
+  'Radio': RadioNode,
+  'Checkbox': CheckboxNode,
+  'Dropdown': DropdownNode,
+  'FileUpload': UploadNode,
+  'Date': DateNode,
+  'CodePhone': InputNode,
+  'PassportID': InputNode,
+  'Country': DropdownNode,
+  'Email': InputNode,
+  'DateOfBirth': DateNode
+}
+
 const BasicTypeList = [
-  { type: "DescriptionBox", name: "Title & Description", icon: "mdi:format-size" },
-  { type: "InputBox", name: "Short text", icon: "mdi:text-short" },
-  { type: "TextareaBox", name: "Paragraph", icon: "mdi:text" },
-  { type: "RadioBox", name: "Radio", icon: "mdi:radiobox-marked" },
-  { type: "CheckboxBox", name: "Checkbox", icon: "mdi:checkbox-marked" },
-  { type: "DropdownBox", name: "Dropdown", icon: "mdi:arrow-down-drop-circle" },
-  { type: "FileUploadBox", name: "File upload", icon: "mdi:cloud-upload" },
-  { type: "DateBox", name: "Date", icon: "mdi:calendar" },
+  { type: "Textarea", name: "Title & Description", icon: "mdi:format-size", textarea: true, readonly: true, autosize: true  },
+  { type: "Input", name: "Short text", icon: "mdi:text-short" },
+  { type: "Textarea", name: "Paragraph", icon: "mdi:text", textarea: true, autosize: true },
+  { type: "Radio", name: "Radio", icon: "mdi:radiobox-marked" },
+  { type: "Checkbox", name: "Checkbox", icon: "mdi:checkbox-marked" },
+  { type: "Dropdown", name: "Dropdown", icon: "mdi:arrow-down-drop-circle" },
+  { type: "FileUpload", name: "File upload", icon: "mdi:cloud-upload" },
+  { type: "Date", name: "Date", icon: "mdi:calendar" }
 ]
 
 const ModulesTypeList = [
-  { type: "CodePhoneBox", name: "+ Code & Phone", icon: "mdi:cellphone" },
-  { type: "CompanyNameBox", name: "Company Name", icon: "mdi:text-short" },
-  { type: "FullNameBox", name: "Full Name", icon: "mdi:text-short" },
-  { type: "PassportIDBox", name: "Passport/ID Number", icon: "mdi:text-short" },
-  { type: "PostalCodeBox", name: "Postal Code", icon: "mdi:text-short" },
-  { type: "ResidentialAddressBox", name: "Residential Address", icon: "mdi:text-short" },
-  { type: "CountryBox", name: "Country", icon: "mdi:arrow-down-drop-circle" },
-  { type: "EmailBox", name: "Email", icon: "mdi:email" },
-  { type: "DateOfBirthBox", name: "Date of Birth", icon: "mdi:calendar" },
+  { type: "CodePhone", name: "+ Code & Phone", icon: "mdi:cellphone" },
+  { type: "PassportID", name: "Passport/ID Number", icon: "mdi:text-short" },
+  { type: "Country", name: "Country", icon: "mdi:arrow-down-drop-circle" },
+  { type: "Email", name: "Email", icon: "mdi:email" },
+  { type: "DateOfBirth", name: "Date of Birth", icon: "mdi:calendar" }
 ]
 
-const type = ref(null)
-const label = ref(null)
+const typeInfo = ref()
+const node = shallowRef()
+const nodeValue = ref('')
 const required = ref(false)
-const associate = ref(false)
+
+const chooseType = (item: { key: number, type: keyof typeof NodeList, name: string }) => {
+  node.value = NodeList[item.type]
+}
 </script>
+
+<style lang="scss">
+.input {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #dbe3e4;
+  background-color: #fff;
+}
+</style>
