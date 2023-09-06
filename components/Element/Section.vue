@@ -1,7 +1,7 @@
 <template>
   <div class="section-node">
     <div class="section-content">
-      <div class="w-full">
+      <div class="w-full no-el-border">
         <el-input v-model="sectionItem.name" class="border-input" />
         <el-input v-model="sectionItem.description" placeholder="Description (optional)" class="border-input" type="textarea"
           autosize />
@@ -57,7 +57,7 @@ const addQuestion = async (sectionId: number) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .section-node {
   &.focus {
     .section-head,
@@ -82,13 +82,6 @@ const addQuestion = async (sectionId: number) => {
     border-bottom: 1px solid $borderColor;
 
     @apply mb-3;
-  }
-
-  .el-input__wrapper,
-  .el-textarea__inner {
-    background-color: transparent;
-    box-shadow: none;
-    resize: none;
   }
 }
 </style>

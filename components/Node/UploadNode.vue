@@ -2,7 +2,7 @@
   <div class="flex w-full mt-10">
     <div class="w-full">
       <div class="input">
-        <NodeEditor :data="labelValue" @change="(data: string) => labelValue = data" :style="{ 'min-height': '9rem' }" />
+        <TextEditor :data="labelValue" @change="(data: string) => labelValue = data" style="min-height: 9rem" />
       </div>
 
       <div class="mb-4 mt-8">
@@ -38,7 +38,7 @@
       <el-row class="w-6/12 mb-4 mt-8" justify="space-between" align="middle">
         <el-col>{{ $t('Maximum number of files') }}</el-col>
         <el-col>
-          <el-select v-model="fileCount" class="input">
+          <el-select v-model="fileCount" >
             <el-option :value="1" label="1"></el-option>
           </el-select>
         </el-col>
@@ -49,7 +49,7 @@
           {{ $t('Maximum file size') }}
         </el-col>
         <el-col>
-          <el-select v-model="fileSize" class="input">
+          <el-select v-model="fileSize" >
             <el-option :value="30000000" label="30 MB"></el-option>
             <el-option :value="20000000" label="20 MB"></el-option>
             <el-option :value="10000000" label="10 MB"></el-option>

@@ -64,3 +64,12 @@ body,
   border: 1px solid #dbe3e4;
   background-color: #fff;
 }
+
+.no-el-border {
+  .el-input__wrapper,
+  .el-textarea__inner {
+    background-color: transparent;
+    box-shadow: none;
+    resize: none;
+  }
+}

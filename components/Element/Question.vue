@@ -8,12 +8,11 @@
 
     <el-row :gutter="16">
       <el-col :span="16">
-        <el-input class="input" size="large" :placeholder="$t('Enter question label')"></el-input>
+        <el-input size="large" :placeholder="$t('Enter question label')"></el-input>
       </el-col>
 
       <el-col :span="8">
         <el-select
-          class="input"
           :placeholder="$t('Choose question type')"
           size="large"
           v-model="typeInfo"
@@ -65,7 +64,7 @@
       </div>
 
       <div class="flex items-center">
-        <el-divider direction="vertical" :style="{ margin: '0 30px', height: '1.9em' }" />
+        <el-divider direction="vertical" style="margin: 0 30px; height: 1.9em" />
 
         <div>
           <Icon
@@ -80,8 +79,9 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { Check, Close } from '@element-plus/icons-vue'
-import { InputNode, DropdownNode, DateNode, UploadNode } from '#components'
+import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode } from '#components'
 
 const NodeList = {
   'Input': InputNode,
@@ -91,9 +91,8 @@ const NodeList = {
   'Dropdown': DropdownNode,
   'FileUpload': UploadNode,
   'Date': DateNode,
-  'CodePhone': InputNode,
-  'PassportID': InputNode,
-  'Country': DropdownNode,
+  'Phone': PhoneNode,
+  'Country': CountryNode,
   'Email': InputNode,
   'DateOfBirth': DateNode
 }
@@ -110,11 +109,23 @@ const BasicTypeList = [
 ]
 
 const ModulesTypeList = [
-  { type: "CodePhone", name: "+ Code & Phone", icon: "mdi:cellphone" },
-  { type: "PassportID", name: "Passport/ID Number", icon: "mdi:text-short" },
+  { type: "Phone", name: "Phone", icon: "mdi:cellphone" },
   { type: "Country", name: "Country", icon: "mdi:arrow-down-drop-circle" },
-  { type: "Email", name: "Email", icon: "mdi:email" },
-  { type: "DateOfBirth", name: "Date of Birth", icon: "mdi:calendar" }
+  { type: "Email", name: "Email", icon: "mdi:email",
+    rules: [
+      (val: string) => {
+        const pattern = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
+        return pattern.test(val)
+      }
+    ]
+  },
+  { type: "DateOfBirth", name: "Date of Birth", icon: "mdi:calendar",
+    rules: [
+      (val: string) => {
+        return dayjs(val).isBefore(dayjs(), 'year')
+      }
+    ]
+  }
 ]
 
 const typeInfo = ref()

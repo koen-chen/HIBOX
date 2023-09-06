@@ -7,7 +7,7 @@
             <Icon :name="props.optionIcon" color="#7a8182" />
           </div>
           <div class="flex-grow break-words">
-            <NodeEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
+            <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
           </div>
 
           <div class="flex-none w-14" v-if="optionList.length != 1">
@@ -24,7 +24,7 @@
             <Icon :name="props.optionIcon" color="#7a8182" />
           </div>
           <div class="flex-grow break-words">
-            <el-input value="Other..." readOnly bordered={false} :style="{ color: '#b8c2c2' }" />
+            <el-input value="Other..." readOnly bordered={false} style="color: #b8c2c2" />
           </div>
 
           <div class="flex-none w-14">
@@ -37,14 +37,14 @@
     </div>
 
     <div class="add-option-wrapper">
-      <el-button text @click="addOption" :style="{ color: '#7a8182' }">
+      <el-button text @click="addOption" style="color: #7a8182">
         {{ $t('Add option') }}
       </el-button>
 
       <div v-if="!otherOption && needOtherOption">
         <span>{{ $t('or') }}</span>
 
-        <el-button text @click="addOtherOption" :style="{ textDecoration: 'underline' }">
+        <el-button text @click="addOtherOption" style="textDecoration: underline">
           {{ $t("Add Other") }}
         </el-button>
       </div>

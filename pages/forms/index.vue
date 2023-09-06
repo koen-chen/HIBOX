@@ -18,7 +18,7 @@
         <div v-if="forms?.length == 0">
           <i18n-t keypath="Click {link} to start a blank form" scope="global">
             <template #link>
-              <el-button type="primary" :loading="addLoading" @click="addForm" link :style="{ 'vertical-align': 'text-bottom', 'text-decoration': 'underline' }">{{ $t('New Form') }}</el-button>
+              <el-button type="primary" :loading="addLoading" @click="addForm" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
             </template>
           </i18n-t>
         </div>

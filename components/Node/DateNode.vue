@@ -2,6 +2,7 @@
   <div class="w-full">
     <NodeWrapper>
       <el-date-picker
+        class="no-el-border"
         v-model="value"
         type="date"
         :placeholder="props.placeholder"

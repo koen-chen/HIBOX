@@ -32,6 +32,15 @@ dependencies:
   animate.css:
     specifier: ^4.1.1
     version: 4.1.1
+  awesome-phonenumber:
+    specifier: ^5.10.0
+    version: 5.10.0
+  country-code-lookup:
+    specifier: ^0.1.0
+    version: 0.1.0
+  dayjs:
+    specifier: ^1.11.9
+    version: 1.11.9
   nanoid:
     specifier: ^4.0.2
     version: 4.0.2
@@ -3296,6 +3305,11 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /awesome-phonenumber@5.10.0:
+    resolution: {integrity: sha512-O/j+lUcJu0AIO3PJU3Fff+poeSO1JQ4o70Y3efxNTdyXTrkKUbCHFuUOiQpEeHFDE8rK2Pq7Cy3mTkjZNSfSfw==}
+    engines: {node: '>=14'}
+    dev: false
+
   /axios@0.27.2:
     resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
     dependencies:
@@ -3920,6 +3934,10 @@ packages:
     dev: true
     optional: true
 
+  /country-code-lookup@0.1.0:
+    resolution: {integrity: sha512-IOI66HEG+8bXfWPy+sTzuN7161vmDZOHg1wgIPFf3WfD73FeLajnn6C+fnxOIa9RL1WRBDMXQQWW/FOaOYaQ3w==}
+    dev: false
+
   /crc-32@1.2.2:
     resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
     engines: {node: '>=0.8'}
@@ -4123,7 +4141,6 @@ packages:
 
   /dayjs@1.11.9:
     resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
-    dev: true
 
   /debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
