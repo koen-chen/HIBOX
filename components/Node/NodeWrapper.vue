@@ -1,6 +1,6 @@
 <template>
-   <div class="nodeWrapper">
-      <div class="iconBox move cursor-pointer">
+   <div class="node-wrapper">
+      <div class="icon-box move cursor-pointer">
           <Icon name="mdi:drag-horizontal" />
       </div>
       <div class="content">
@@ -10,15 +10,14 @@
 </template>
 
 <style lang="scss" scoped>
-.nodeWrapper {
+.node-wrapper {
   width: 100%;
   margin-top: 1rem;
 
   @apply w-full flex items-center;
 
-  .iconBox {
+  .icon-box {
     width: 2rem;
-    margin-right: 1rem;
     cursor: move;
     @apply flex items-center flex-none;
   }

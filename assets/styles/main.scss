@@ -29,3 +29,13 @@ body,
 .list-leave-active {
   position: absolute;
 }
+
+.ck-blurred,
+.ck-focused {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ck-powered-by {
+  display: none !important;
+}
