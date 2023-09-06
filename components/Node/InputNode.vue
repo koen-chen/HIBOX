@@ -1,12 +1,13 @@
 <template>
   <NodeWrapper>
     <el-input
-      :model-value="props.modelValue"
+      v-model="value"
       @input="(val: string | number) => emit('update:modelValue', val)"
       placeholder="Please enter a placeholder for this input"
       :type="inputType"
       :rows="props.rows"
       :autosize="props.autosize"
+
     />
   </NodeWrapper>
 </template>
@@ -28,6 +29,8 @@ const props = withDefaults(defineProps<{
   readonly: false,
   autosize: false
 })
+
+const value = ref(props.modelValue)
 
 const inputType = computed(() => {
   return props.textarea ? 'textarea' : 'text'

@@ -4,23 +4,23 @@
 
 @font-face {
   font-family: "Radikal-Regular";
-  src: url(./fonts/Radikal-Regular.otf);
+  src: url(/fonts/Radikal-Regular.otf);
 }
 
 @font-face {
   font-family: "Radikal-Bold";
-  src: url(./fonts/Radikal-Bold.otf);
+  src: url(/fonts/Radikal-Bold.otf);
 }
 
 @font-face {
   font-family: "Radikal-Light";
-  src: url(./fonts/Radikal-Light.otf);
+  src: url(/fonts/Radikal-Light.otf);
 }
 
 html,
 body {
   font-size: 14px;
-  font-family: "Radikal-Regular", sans-serif !important;
+  font-family: "Radikal-Regular", sans-serif;
   background-color: #fff;
 }
 

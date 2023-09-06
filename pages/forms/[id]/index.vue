@@ -101,11 +101,10 @@ const addSection = async () => {
 
 <style lang="scss">
 .label {
-  font-family: 'Montserrat';
-  font-weight: 600;
-  font-size: 1.714rem;
-  line-height: 1.33;
-  letter-spacing: .2px;
+  font-family: 'Radikal-Bold';
+  font-weight: 900;
+  font-size: 1.8rem;
+  line-height: 1.4;
   color: $textColor;
   display: flex;
 }

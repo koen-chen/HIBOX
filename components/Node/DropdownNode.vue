@@ -56,7 +56,7 @@
 import { nanoid } from 'nanoid'
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
+  'update:modelValue': [value: Object]
 }>()
 
 const props = withDefaults(defineProps<{
@@ -103,6 +103,9 @@ const removeOtherOption = () => {
   otherOption.value = false
 }
 
+watch(optionList, () => {
+  emit('update:modelValue', optionList.value)
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>

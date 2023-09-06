@@ -2,7 +2,6 @@
   <div class="section-node">
     <div class="section-content">
       <div class="w-full">
-        {{ sectionItem.id }}
         <el-input v-model="sectionItem.name" class="border-input" />
         <el-input v-model="sectionItem.description" placeholder="Description (optional)" class="border-input" type="textarea"
           autosize />

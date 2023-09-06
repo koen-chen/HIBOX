@@ -43,11 +43,13 @@
 
     <el-row>
        <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
+       nodevalue: {{  nodeValue }}
     </el-row>
 
     <el-divider class="mt-10" />
 
     <div class="flex items-center justify-end">
+
       <div>
         <span class="mr-2">
           {{ $t('Required') }}
@@ -121,6 +123,7 @@ const nodeValue = ref('')
 const required = ref(false)
 
 const chooseType = (item: { key: number, type: keyof typeof NodeList, name: string }) => {
+  nodeValue.value = ''
   node.value = NodeList[item.type]
 }
 
@@ -130,8 +133,6 @@ const handleDelete = () => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .action-icon {
   margin: 0 15px;
   size: 1.4rem;

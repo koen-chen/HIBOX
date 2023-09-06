@@ -31,8 +31,8 @@ const props = withDefaults(defineProps<{
 
 <style lang="scss" scoped>
 .title {
-  font-family: 'Montserrat';
-  font-weight: 800;
+  font-family: 'Radikal-Bold';
+  font-weight: 900;
   font-size: 1.8rem;
   color: $textColor;
 
