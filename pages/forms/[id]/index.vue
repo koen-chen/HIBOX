@@ -26,7 +26,7 @@
 
       <el-divider class="py-5"></el-divider>
 
-      <div class="affix-container">
+      <div class="affix-container h-screen">
         <el-row :gutter="24">
           <el-col :span="6" class="label">
             <div class="mb-6">{{ $t('Edit Sections') }}</div>
@@ -39,6 +39,7 @@
               </div>
             </el-affix>
           </el-col>
+
           <el-col :span="18">
             <SectionList v-if="currentForm" :form="currentForm" />
             <div ref="bottomEl"></div>

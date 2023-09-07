@@ -15,7 +15,7 @@
         enter-active-class="animate__animated animate__fadeIn"
         leave-active-class="animate__animated animate__fadeOut animate__faster"
       >
-        <div v-if="forms?.length == 0">
+        <div v-if="formList?.length == 0">
           <i18n-t keypath="Click {link} to start a blank form" scope="global">
             <template #link>
               <el-button type="primary" :loading="addLoading" @click="addForm" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
@@ -34,7 +34,7 @@
             <template #header>
               <div class="flex items-center justify-between">
                 <div class="grow w-full">
-                  <div class="form-title">{{ item.id }} - {{ item.name }}</div>
+                  <div class="form-title">{{ item.name }}</div>
                   <div class="form-desc">{{ item.description }}</div>
                 </div>
 

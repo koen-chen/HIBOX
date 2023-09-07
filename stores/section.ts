@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { SectionType, SectionUpdateType } from "~/types"
+import { SectionType, SectionInsertType, SectionUpdateType } from "~/types"
 
 export const useSectionStore = defineStore('section', () => {
   const supabase = useSupabase().value
@@ -26,7 +26,7 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
-  const addSection = async (info: SectionUpdateType): Promise<SectionType | null> => {
+  const addSection = async (info: SectionInsertType): Promise<SectionType | null> => {
     const { data, error } = await supabase
       .from('section')
       .insert(info)
@@ -34,9 +34,11 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       currentSection.value = data[0]
+
       if (sectionList.value !== null) {
         sectionList.value.push(data[0])
       }
+
       return currentSection.value
     } else {
       return null
@@ -52,6 +54,17 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       currentSection.value = data[0]
+
+      if (sectionList.value) {
+        sectionList.value = sectionList.value.map(item => {
+          if (item.id == data[0].id) {
+            return data[0]
+          } else {
+            return item
+          }
+        })
+      }
+
       return currentSection.value
     } else {
       return null
@@ -63,6 +76,12 @@ export const useSectionStore = defineStore('section', () => {
       .from('section')
       .update({ state: 'Delete' })
       .eq('id', id)
+
+    if (!error) {
+      currentSection.value = null
+      
+      sectionList.value = sectionList.value && sectionList.value.filter(item => item.id !== id)
+    }
   }
 
   const updateOrder = async (formId: number, info: number[]): Promise<void> => {

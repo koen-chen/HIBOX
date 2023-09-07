@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { QuestionType, QuestionUpdateType } from "~/types"
+import { QuestionType, QuestionInsertType, QuestionUpdateType } from "~/types"
 
 export const useQuestionStore = defineStore('question', () => {
   const supabase = useSupabase().value
@@ -22,7 +22,7 @@ export const useQuestionStore = defineStore('question', () => {
     return []
   }
 
-  const addQuestion = async (info: QuestionUpdateType): Promise<QuestionType | null> => {
+  const addQuestion = async (info: QuestionInsertType): Promise<QuestionType | null> => {
     const { data, error } = await supabase
       .from('question')
       .insert(info)

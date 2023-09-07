@@ -37,14 +37,14 @@
     </div>
 
     <div class="add-option-wrapper">
-      <el-button text @click="addOption" style="color: #7a8182">
-        {{ $t('Add option') }}
+      <el-button text @click="addOption" style="color: #7a8182; textDecoration: underline">
+        {{ $t('Add Option') }}
       </el-button>
 
-      <div v-if="!otherOption && needOtherOption">
+      <div v-if="!otherOption && props.needOtherOption">
         <span>{{ $t('or') }}</span>
 
-        <el-button text @click="addOtherOption" style="textDecoration: underline">
+        <el-button text @click="addOtherOption" style="color: #7a8182; textDecoration: underline">
           {{ $t("Add Other") }}
         </el-button>
       </div>
@@ -73,7 +73,6 @@ type Option = {
   id: string
 }
 
-const needOtherOption = ref(props.needOtherOption)
 const otherOption = ref(false)
 const optionList = ref<Option[]>([
   { label: "Option 1", id: nanoid(5) },
@@ -110,11 +109,8 @@ watch(optionList, () => {
 
 <style lang="scss" scoped>
 .add-option-wrapper {
-  width: 100%;
   margin-top: 2rem;
-  margin-left: 2.8rem;
   padding-bottom: 0.8rem;
-  border-bottom: solid 1px #dbe3e4;
 
   @apply flex items-center;
 }

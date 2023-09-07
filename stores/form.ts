@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { FormType, FormUpdateType } from '~/types'
+import { FormType, FormInsertType, FormUpdateType } from '~/types'
 import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
@@ -38,7 +38,7 @@ export const useFormStore = defineStore('form', () => {
     return null
   }
 
-  const addForm = async (info: FormUpdateType): Promise<FormType | null> => {
+  const addForm = async (info: FormInsertType): Promise<FormType | null> => {
     const { data, error } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
@@ -46,9 +46,11 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = data[0]
-      if (formList.value !== null) {
+
+      if (formList.value) {
         formList.value.unshift(data[0])
       }
+
       sectionStore.$reset()
       return currentForm.value
     }
@@ -65,6 +67,17 @@ export const useFormStore = defineStore('form', () => {
 
     if (!error) {
       currentForm.value = data[0]
+
+      if (formList.value) {
+        formList.value = formList.value.map(item => {
+          if (item.id == data[0].id) {
+            return data[0]
+          } else {
+            return item
+          }
+        })
+      }
+
       return currentForm.value
     }
 

@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <div v-for="item in orderQuestionList" :key="item.id">
-      question id: {{  item.id }}
-
+  <div class="w-full">
+    <div v-for="item in orderQuestionList" :key="item.id" class="section-fragement">
       <Question />
     </div>
   </div>
@@ -29,6 +27,12 @@ const orderQuestionList = computed(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.section-fragement {
+  background-color: $maskColor;
+  border-bottom: 1px solid $primaryHoverColor;
+  border-top: 1px solid $primaryHoverColor;
 
+  @apply w-full p-4 mb-4;
+}
 </style>

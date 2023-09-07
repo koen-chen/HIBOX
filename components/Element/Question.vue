@@ -6,13 +6,14 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="16">
+    <el-row :gutter="24">
       <el-col :span="16">
         <el-input size="large" :placeholder="$t('Enter question label')"></el-input>
       </el-col>
 
       <el-col :span="8">
         <el-select
+          class="w-full"
           :placeholder="$t('Choose question type')"
           size="large"
           v-model="typeInfo"
@@ -42,7 +43,6 @@
 
     <el-row>
        <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
-       nodevalue: {{  nodeValue }}
     </el-row>
 
     <el-divider class="mt-10" />
@@ -128,7 +128,7 @@ const ModulesTypeList = [
   }
 ]
 
-const typeInfo = ref()
+const typeInfo = ref(null)
 const node = shallowRef()
 const nodeValue = ref('')
 const required = ref(false)
