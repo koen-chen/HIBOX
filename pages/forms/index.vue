@@ -75,7 +75,7 @@ const addLoading = ref(false)
 const listLoading = ref(false)
 const itemLoading = ref(false)
 
-useWatchNull(formList, listLoading, async () => {
+useWatchNull(formList.value, listLoading, async () => {
   await formStore.listForm()
 })
 

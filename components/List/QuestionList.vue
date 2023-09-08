@@ -27,11 +27,13 @@ interface Props {
 
 const props = defineProps<Props>()
 const questionStore = useQuestionStore()
+const { questionOrder } = storeToRefs(questionStore)
+
 const sortableBoxRef = ref<HTMLElement | null>(null)
 
 const orderQuestionList = computed(() => {
   if (props.sectionData !== null) {
-    return useOrder(props.sectionData.question_order, props.questionList)
+    return useOrder(questionOrder.value, props.questionList)
   } else {
     return []
   }

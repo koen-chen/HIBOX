@@ -6,6 +6,13 @@ type Json = number[]
 type Database = MergeDeep<DatabaseGenerated, {
   public: {
     Tables: {
+      question: {
+        Row: {
+          section?: {
+            question_order: Json
+          }
+        }
+      },
       section: {
         Row: {
           question_order: Json

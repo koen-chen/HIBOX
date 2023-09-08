@@ -14,10 +14,9 @@ export const useAccountStore = defineStore('account', () => {
 
     if (!error) {
       account.value = data.user
-      return account.value
     }
 
-    return null
+    return account.value
   }
 
   const logout = async (): Promise<void> => {

@@ -35,14 +35,14 @@ const choosedSectionId = ref<number | null>(null)
 const listLoading = ref(false)
 
 const orderSectionList = computed(() => {
-  if (sectionList.value !== null && props.form !== null) {
+  if (props.form !== null) {
     return useOrder(props.form.section_order, sectionList.value)
   } else {
     return []
   }
 })
 
-useWatchNull(sectionList, listLoading, async () => {
+useWatchNull(props.form, listLoading, async () => {
   await sectionStore.listSection(props.form.id)
   await questionStore.listQuestion(props.form.id)
 })

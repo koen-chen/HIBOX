@@ -10,12 +10,14 @@
 
         <div>
           <el-tooltip :content="$t('Collapse Section')" placement="top" effect="light">
-            <span @click="() => hanldeCollapse()">
+            <span @click.stop="() => hanldeCollapse()">
               <Icon name="mdi:unfold-less-horizontal" class="cursor-pointer" />
             </span>
           </el-tooltip>
           <el-tooltip :content="$t('Delete Section')" placement="top" effect="light">
-            <Icon name="mdi:trash-can-outline" class="ml-3 cursor-pointer" />
+            <span @click.stop="() => hanldeDelete()">
+              <Icon name="mdi:trash-can-outline" class="ml-3 cursor-pointer" />
+            </span>
           </el-tooltip>
         </div>
       </div>
@@ -112,7 +114,9 @@ const hanldeCollapse = () => {
   collapse.value = !collapse.value
 }
 
-
+const hanldeDelete = () => {
+  sectionStore.deleteSection(props.sectionData.id, props.formId)
+}
 </script>
 
 <style lang="scss" scoped>
