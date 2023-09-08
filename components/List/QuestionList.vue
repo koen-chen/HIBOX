@@ -1,28 +1,53 @@
 <template>
-  <div class="w-full">
-    <div v-for="item in orderQuestionList" :key="item.id" class="section-fragement">
-      <Question />
+  <div class="w-full" ref="sortableBoxRef" >
+    <div v-for="(item, index) in orderQuestionList" :key="item.id" class="section-fragement">
+      <Question>
+        <template #drag>
+          <div class="flex items-center justify-center mb-5">
+            <div class="drag-handler">
+              <Icon name="mdi:drag-horizontal" />
+            </div>
+
+            <div class="section-order">Question {{ index + 1 }}</div>
+          </div>
+        </template>
+      </Question>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { SectionType, QuestionType } from '~/types'
+import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
 interface Props {
-  formId: number,
-  sectionItem: SectionType,
+  sectionData: SectionType,
   questionList: QuestionType[] | []
 }
 
 const props = defineProps<Props>()
 const questionStore = useQuestionStore()
+const sortableBoxRef = ref<HTMLElement | null>(null)
 
 const orderQuestionList = computed(() => {
-  if (props.sectionItem !== null) {
-    return useOrder(props.sectionItem.question_order, props.questionList)
+  if (props.sectionData !== null) {
+    return useOrder(props.sectionData.question_order, props.questionList)
   } else {
     return []
+  }
+})
+
+useSortable(sortableBoxRef, orderQuestionList.value, {
+  animation: 150,
+  handle: '.drag-handler',
+  onUpdate: (e: any) => {
+    moveArrayElement(orderQuestionList.value, e.oldIndex, e.newIndex)
+
+    nextTick(() => {
+      const orders = orderQuestionList.value.map(item => item.id)
+      props.sectionData.question_order = orders
+      questionStore.updateOrder(props.sectionData.id, orders)
+    })
   }
 })
 </script>

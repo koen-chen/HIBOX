@@ -7,7 +7,7 @@
         :focused="choosedSectionId == item.id"
         @click="choosedSectionId = item.id"
       >
-        <template #section-drag>
+        <template #drag>
           <div class="flex items-center">
             <div class="drag-handler">
               <Icon name="mdi:drag-horizontal" />
@@ -53,15 +53,12 @@ useSortable(sortableBoxRef, orderSectionList.value, {
   animation: 150,
   handle: '.drag-handler',
   onUpdate: (e: any) => {
-
-
     moveArrayElement(orderSectionList.value, e.oldIndex, e.newIndex)
 
     nextTick(() => {
-
       const element = orderSectionList.value[e.newIndex]
-      console.log(element)
       choosedSectionId.value = element.id
+
       const orders = orderSectionList.value.map(item => item.id)
       sectionStore.updateOrder(props.form.id, orders)
     })

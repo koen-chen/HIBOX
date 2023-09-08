@@ -30,9 +30,11 @@ export const useQuestionStore = defineStore('question', () => {
 
     if (!error) {
       currentQuestion.value = data[0]
+
       if (questionList.value !== null) {
         questionList.value.push(data[0])
       }
+
       return currentQuestion.value
     }
 
@@ -48,6 +50,17 @@ export const useQuestionStore = defineStore('question', () => {
 
     if (!error) {
       currentQuestion.value = data[0]
+
+      if (questionList.value) {
+        questionList.value = questionList.value.map(item => {
+          if (item.id == data[0].id) {
+            return data[0]
+          } else {
+            return item
+          }
+        })
+      }
+
       return currentQuestion.value
     }
 
@@ -59,6 +72,20 @@ export const useQuestionStore = defineStore('question', () => {
       .from('question')
       .update({ state: 'Delete' })
       .eq('id', id)
+
+    if (!error) {
+      currentQuestion.value = null
+
+      questionList.value = questionList.value && questionList.value.filter(item => item.id !== id)
+    }
+  }
+
+  const updateOrder = async (sectionId: number, info: number[]): Promise<void> => {
+    await supabase
+      .from('section')
+      .update({ 'question_order': info })
+      .eq('id', sectionId)
+      .select()
   }
 
   return {
@@ -67,6 +94,7 @@ export const useQuestionStore = defineStore('question', () => {
     listQuestion,
     addQuestion,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+    updateOrder
   }
 })

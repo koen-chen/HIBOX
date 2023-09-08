@@ -5,7 +5,7 @@
     <div class="w-full" :class="[`node-${props.sectionData.id}`]">
       <div class="section-head">
         <div class="grow">
-          <slot name="section-drag" />
+          <slot name="drag" />
         </div>
 
         <div>
@@ -29,8 +29,7 @@
 
         <QuestionList
           v-if="filterQuestionList"
-          :formId="props.formId"
-          :sectionItem="props.sectionData"
+          :sectionData="props.sectionData"
           :questionList="filterQuestionList"
         />
       </div>

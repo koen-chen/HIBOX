@@ -1,10 +1,6 @@
 <template>
   <div class="w-full">
-    <el-row>
-      <el-col class="element-move text-center mb-5 cursor-pointer">
-        <Icon name="mdi:drag-horizontal" />
-      </el-col>
-    </el-row>
+    <slot name="drag" />
 
     <el-row :gutter="24">
       <el-col :span="16">

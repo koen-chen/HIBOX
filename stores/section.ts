@@ -79,13 +79,13 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       currentSection.value = null
-      
+
       sectionList.value = sectionList.value && sectionList.value.filter(item => item.id !== id)
     }
   }
 
   const updateOrder = async (formId: number, info: number[]): Promise<void> => {
-    const { data, error } = await supabase
+    await supabase
       .from('form')
       .update({ 'section_order': info })
       .eq('id', formId)
