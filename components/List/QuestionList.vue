@@ -30,8 +30,7 @@ const orderQuestionList = computed(() => {
 <style lang="scss" scoped>
 .section-fragement {
   background-color: $maskColor;
-  border-bottom: 1px solid $primaryHoverColor;
-  border-top: 1px solid $primaryHoverColor;
+  border: 1px solid $primaryHoverColor;
 
   @apply w-full p-4 mb-4;
 }

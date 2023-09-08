@@ -1,41 +1,21 @@
 <template>
-  <div>
-    <div class="section-list" ref="sortableBoxRef" v-loading="listLoading">
-      <TransitionGroup name="list">
-        <div v-for="(item, index) in orderSectionList"
-          :key="item.id"
-          class="section-box relative overflow-hidden"
-          :class="{ 'focus': choosedSectionId === item.id }"
-          @click="choosedSectionId = item.id"
-        >
-          <div class="section-head relative z-30">
-            <div class="flex-grow flex items-center">
-              <div class="drag-handler">
-                <Icon name="mdi:drag-horizontal" />
-              </div>
-              <div class="section-order">Section {{ index + 1 }} of {{ orderSectionList.length }}</div>
+  <div class="section-list" ref="sortableBoxRef" v-loading="listLoading">
+    <div v-for="(item, index) in orderSectionList" :key="item.id">
+      <Section
+        :sectionData="item"
+        :formId="form.id"
+        :focused="choosedSectionId == item.id"
+        @click="choosedSectionId = item.id"
+      >
+        <template #section-drag>
+          <div class="flex items-center">
+            <div class="drag-handler">
+              <Icon name="mdi:drag-horizontal" />
             </div>
-
-            <div>
-              <el-tooltip :content="$t('Collapse Section')" placement="top" effect="light">
-                <span @click="() => hanldeSectionCollapse(item.id)">
-                  <Icon name="mdi:unfold-less-horizontal" class="cursor-pointer" />
-                </span>
-              </el-tooltip>
-              <el-tooltip :content="$t('Delete Section')" placement="top" effect="light">
-                <Icon name="mdi:trash-can-outline" class="ml-3 cursor-pointer" />
-              </el-tooltip>
-            </div>
+            <div class="section-order">Section {{ index + 1 }} of {{ orderSectionList.length }}</div>
           </div>
-
-          <Section
-            v-show="item.collapse !== true"
-            :sectionItem="item"
-            :formId="form.id"
-            :choosedSectionId="choosedSectionId"
-          />
-        </div>
-      </TransitionGroup>
+        </template>
+      </Section>
     </div>
   </div>
 </template>
@@ -69,54 +49,29 @@ useWatchNull(sectionList, listLoading, async () => {
 
 onClickOutside(sortableBoxRef, () => choosedSectionId.value = null)
 
-useSortable(sortableBoxRef, orderSectionList.value,  {
-    animation: 150,
-    handle: '.drag-handler',
-    onUpdate: (e: any) => {
-      moveArrayElement(orderSectionList.value, e.oldIndex, e.newIndex)
+useSortable(sortableBoxRef, orderSectionList.value, {
+  animation: 150,
+  handle: '.drag-handler',
+  onUpdate: (e: any) => {
 
-      nextTick(() => {
-        const orders = orderSectionList.value.map(item => item.id)
-        sectionStore.updateOrder(props.form.id, orders)
-      })
-    }
-  })
 
-const hanldeSectionCollapse = (sectionId: number) => {
-  if (sectionList.value) {
-    sectionList.value = sectionList.value.map(item => {
-      if (item.id == sectionId) {
-        item.collapse = !Boolean(item.collapse)
-      }
-      return item
+    moveArrayElement(orderSectionList.value, e.oldIndex, e.newIndex)
+
+    nextTick(() => {
+
+      const element = orderSectionList.value[e.newIndex]
+      console.log(element)
+      choosedSectionId.value = element.id
+      const orders = orderSectionList.value.map(item => item.id)
+      sectionStore.updateOrder(props.form.id, orders)
     })
   }
-}
+})
 </script>
 
 <style lang="scss">
 .section-list {
   min-height: 100px;
-}
-
-.section-box {
-  &.focus {
-
-    .section-head,
-    .section-content {
-      border-color: $primaryActiveColor;
-    }
-  }
-
-  @apply pb-8
-}
-
-.section-head {
-  background-color: $primaryHoverColor;
-  border: 1px solid $primaryHoverColor;
-  border-radius: 6px 6px 0 0;
-
-  @apply flex items-center justify-between p-4;
 }
 
 .section-order {

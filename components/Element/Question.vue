@@ -48,7 +48,6 @@
     <el-divider class="mt-10" />
 
     <div class="flex items-center justify-end">
-
       <div>
         <span class="mr-2">
           {{ $t('Required') }}

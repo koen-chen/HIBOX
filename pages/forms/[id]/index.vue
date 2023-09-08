@@ -4,15 +4,15 @@
       {{ formModal.name }}
     </Header>
 
-    <el-divider></el-divider>
+    <div ><el-divider /></div>
 
     <div class="mt-8">
-      <el-row :gutter="24">
+      <el-row :gutter="24" class="pr-24">
         <el-col :span="6" class="label">
           {{ $t('Basic Info') }}
         </el-col>
 
-        <el-col :span="18">
+        <el-col :span="18" >
           <el-form label-position="top" :model="formModal">
             <el-form-item prop="name" :label="$t('Name').toUpperCase()" :rules="[{ required: true, message: $t('Please input name') }]">
               <el-input v-model="formModal.name" @blur="() => updateBasicInfo('name')" size="large" />
@@ -24,9 +24,9 @@
         </el-col>
       </el-row>
 
-      <el-divider class="py-5"></el-divider>
+      <div class="py-10"><el-divider /></div>
 
-      <div class="affix-container h-screen">
+      <div class="affix-container h-screen ">
         <el-row :gutter="24">
           <el-col :span="6" class="label">
             <div class="mb-6">{{ $t('Edit Sections') }}</div>

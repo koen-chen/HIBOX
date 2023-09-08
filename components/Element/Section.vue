@@ -1,20 +1,62 @@
 <template>
-  <div class="section-node">
-    <div class="section-fragement  no-el-border mb-4">
-      <el-input v-model="formModal.name" @blur="() => updateBasicInfo('name')" class="border-input" />
-      <el-input v-model="formModal.description" @blur="() => updateBasicInfo('description')"
-        placeholder="Description (optional)" class="border-input" type="textarea" autosize />
+  <div
+    :class="['section-node', { 'node-focused': props.focused }]"
+  >
+    <div class="w-full" :class="[`node-${props.sectionData.id}`]">
+      <div class="section-head">
+        <div class="grow">
+          <slot name="section-drag" />
+        </div>
+
+        <div>
+          <el-tooltip :content="$t('Collapse Section')" placement="top" effect="light">
+            <span @click="() => hanldeCollapse()">
+              <Icon name="mdi:unfold-less-horizontal" class="cursor-pointer" />
+            </span>
+          </el-tooltip>
+          <el-tooltip :content="$t('Delete Section')" placement="top" effect="light">
+            <Icon name="mdi:trash-can-outline" class="ml-3 cursor-pointer" />
+          </el-tooltip>
+        </div>
+      </div>
+
+      <div v-show="!collapse" class="section-body" >
+        <div class="mb-4 p-4 no-el-border">
+          <el-input v-model="formModal.name" @blur="() => updateBasicInfo('name')" class="border-input" />
+          <el-input v-model="formModal.description" @blur="() => updateBasicInfo('description')"
+            placeholder="Description (optional)" class="border-input" type="textarea" autosize />
+        </div>
+
+        <QuestionList
+          v-if="filterQuestionList"
+          :formId="props.formId"
+          :sectionItem="props.sectionData"
+          :questionList="filterQuestionList"
+        />
+      </div>
     </div>
 
-
-    <QuestionList v-if="filterQuestionList" :formId="props.formId" :sectionItem="sectionItem"
-      :questionList="filterQuestionList" />
-
-
-    <div class="section-fragement" v-if="choosedSectionId == sectionItem.id">
-      <el-button @click="() => addQuestion(sectionItem.id)" :icon="Plus" :loading="addLoading">
-        {{ $t('Add Question') }}
-      </el-button>
+    <div class="h-full w-24 min-h-full">
+      <el-affix :target="`.node-${props.sectionData.id}`" :offset="100" :z-index="20">
+        <div class="question-actions" v-if="props.focused">
+          <div class="p-2">
+            <el-tooltip
+              content="Add Question"
+              placement="right"
+            >
+              <el-button size="small" :icon="Plus" circle @click="() => addQuestion(props.sectionData.id)" />
+            </el-tooltip>
+          </div>
+          <div class="p-2">
+            <el-tooltip
+              content="Add Question"
+              placement="right"
+            >
+              <el-button size="small" :icon="Plus" circle @click="() => addQuestion(props.sectionData.id)" />
+            </el-tooltip>
+          </div>
+        </div>
+      </el-affix>
     </div>
   </div>
 </template>
@@ -24,9 +66,9 @@ import { SectionType } from '~/types'
 import { Plus } from '@element-plus/icons-vue'
 
 interface Props {
-  sectionItem: SectionType,
+  sectionData: SectionType,
   formId: number,
-  choosedSectionId?: number
+  focused: boolean
 }
 
 const props = defineProps<Props>()
@@ -34,15 +76,16 @@ const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
 const { questionList } = storeToRefs(questionStore)
 
+const collapse = ref(false)
+
 const filterQuestionList = computed(() => {
-  return questionList.value?.filter(item => item.section_id == props.sectionItem.id)
+  return questionList.value?.filter(item => item.section_id == props.sectionData.id)
 })
 
 const formModal = ref({
-  name: props.sectionItem.name,
-  description: props.sectionItem.description
+  name: props.sectionData.name,
+  description: props.sectionData.description
 })
-
 
 const addLoading = ref(false)
 const addQuestion = async (sectionId: number) => {
@@ -61,41 +104,61 @@ const addQuestion = async (sectionId: number) => {
 }
 
 const updateBasicInfo = (key: 'name' | 'description') => {
-  sectionStore.updateSection(props.sectionItem.id, {
+  sectionStore.updateSection(props.sectionData.id, {
     [key]: formModal.value[key]
   })
 }
+
+const hanldeCollapse = () => {
+  collapse.value = !collapse.value
+}
+
+
 </script>
 
 <style lang="scss" scoped>
 .section-node {
-  width: 100%;
-  border: 1px solid $primaryHoverColor;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-
-  &.focus {
-
-    .section-head,
-    .section-content {
-      border-color: $primaryActiveColor;
-    }
-  }
-
-  @apply flex flex-col items-start justify-center;
+  @apply w-full flex pb-10;
 
   .border-input {
     border-bottom: 1px solid $borderColor;
 
     @apply mb-3;
   }
+
+  &.node-focused {
+    .section-head,
+    .section-body {
+      border-color: $primaryActiveColor;
+    }
+  }
+}
+
+.section-head {
+  background-color: $primaryHoverColor;
+  border: 1px solid $primaryHoverColor;
+
+  @apply flex items-center justify-between p-4 relative z-30 grow;
+}
+
+.section-body {
+  border: 1px solid $primaryHoverColor;
+  border-top: 0;
+
+  @apply p-4;
 }
 
 .section-fragement {
   background-color: $maskColor;
-  border-bottom: 1px solid $primaryHoverColor;
-  border-top: 1px solid $primaryHoverColor;
+  border: 1px solid $primaryHoverColor;
 
   @apply w-full p-4;
+}
+
+.question-actions {
+  background-color: #fff;
+  border: 1px solid $primaryHoverColor;
+
+  @apply flex flex-col items-center justify-between ml-4 p-2;
 }
 </style>
