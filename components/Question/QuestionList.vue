@@ -1,7 +1,7 @@
 <template>
   <div class="w-full" ref="sortableBoxRef" >
     <div v-for="(item, index) in orderQuestionList" :key="item.id" class="section-fragement">
-      <Question>
+      <QuestionRecord>
         <template #drag>
           <div class="flex items-center justify-center mb-5">
             <div class="drag-handler">
@@ -11,7 +11,7 @@
             <div class="section-order">Question {{ index + 1 }}</div>
           </div>
         </template>
-      </Question>
+      </QuestionRecord>
     </div>
   </div>
 </template>

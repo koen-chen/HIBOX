@@ -1,7 +1,7 @@
 <template>
   <div class="section-list" ref="sortableBoxRef" v-loading="listLoading">
     <div v-for="(item, index) in orderSectionList" :key="item.id">
-      <Section
+      <SectionRecord
         :sectionData="item"
         :formId="form.id"
         :focused="choosedSectionId == item.id"
@@ -15,7 +15,7 @@
             <div class="section-order">Section {{ index + 1 }} of {{ orderSectionList.length }}</div>
           </div>
         </template>
-      </Section>
+      </SectionRecord>
     </div>
   </div>
 </template>
