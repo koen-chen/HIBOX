@@ -66,22 +66,19 @@
 import { SectionType } from '~/types'
 import { Plus } from '@element-plus/icons-vue'
 
-interface Props {
+const props = defineProps<{
   sectionData: SectionType,
   formId: number,
   focused: boolean
-}
+}>()
 
-const props = defineProps<Props>()
 const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
 const { questionList } = storeToRefs(questionStore)
 
 const collapse = ref(false)
 
-const filterQuestionList = computed(() => {
-  return questionList.value?.filter(item => item.section_id == props.sectionData.id)
-})
+const filterQuestionList = computed(() => questionList.value?.filter(item => item.section_id == props.sectionData.id))
 
 const formModal = ref({
   name: props.sectionData.name,
@@ -115,7 +112,7 @@ const hanldeCollapse = () => {
 }
 
 const hanldeDelete = () => {
-  sectionStore.deleteSection(props.sectionData.id, props.formId)
+  sectionStore.deleteSection(props.sectionData.id)
 }
 </script>
 

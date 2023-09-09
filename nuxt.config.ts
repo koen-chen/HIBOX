@@ -31,8 +31,13 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     'nuxt-icon',
     '@vueuse/nuxt',
-    '@vueuse/motion/nuxt'
+    '@vueuse/motion/nuxt',
+    'nuxt-lodash'
   ],
+
+  lodash: {
+    prefix: "_"
+  },
 
   i18n: {
     locales: [

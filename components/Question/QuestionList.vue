@@ -20,12 +20,11 @@
 import { SectionType, QuestionType } from '~/types'
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
-interface Props {
+const props = defineProps<{
   sectionData: SectionType,
-  questionList: QuestionType[] | []
-}
+  questionList: QuestionType[]
+}>()
 
-const props = defineProps<Props>()
 const questionStore = useQuestionStore()
 const { questionOrder } = storeToRefs(questionStore)
 
@@ -33,7 +32,7 @@ const sortableBoxRef = ref<HTMLElement | null>(null)
 
 const orderQuestionList = computed(() => {
   if (props.sectionData !== null) {
-    return useOrder(questionOrder.value, props.questionList)
+    return useOrder(questionOrder.value[props.sectionData.id], props.questionList)
   } else {
     return []
   }
@@ -47,7 +46,6 @@ useSortable(sortableBoxRef, orderQuestionList.value, {
 
     nextTick(() => {
       const orders = orderQuestionList.value.map(item => item.id)
-      props.sectionData.question_order = orders
       questionStore.updateOrder(props.sectionData.id, orders)
     })
   }

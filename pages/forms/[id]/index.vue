@@ -1,10 +1,10 @@
 <template>
   <div class="py-6">
     <Header backUrl="/forms">
-      {{ formModal.name }}
+      {{ currentForm.name }}
     </Header>
 
-    <div ><el-divider /></div>
+    <div><el-divider /></div>
 
     <div class="mt-8">
       <el-row :gutter="24" class="pr-24">
@@ -13,12 +13,12 @@
         </el-col>
 
         <el-col :span="18" >
-          <el-form label-position="top" :model="formModal">
+          <el-form label-position="top" :model="currentForm">
             <el-form-item prop="name" :label="$t('Name').toUpperCase()" :rules="[{ required: true, message: $t('Please input name') }]">
-              <el-input v-model="formModal.name" @blur="() => updateBasicInfo('name')" size="large" />
+              <el-input v-model="currentForm.name" @blur="() => updateBasicInfo('name')" size="large" />
             </el-form-item>
             <el-form-item prop="description" :label="$t('Description').toUpperCase()" class="mt-8">
-              <el-input v-model="formModal.description" @blur="() => updateBasicInfo('description')" type="textarea" rows="4" />
+              <el-input v-model="currentForm.description" @blur="() => updateBasicInfo('description')" type="textarea" rows="4" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -41,7 +41,7 @@
           </el-col>
 
           <el-col :span="18">
-            <SectionList v-if="currentForm" :form="currentForm" />
+            <SectionList />
             <div ref="bottomEl"></div>
           </el-col>
         </el-row>
@@ -52,34 +52,22 @@
 
 <script setup lang="ts">
 const route = useRoute()
-
 const formStore = useFormStore()
 const { currentForm } = storeToRefs(formStore)
 const sectionStore = useSectionStore()
 
 const addLoading = ref(false)
 const bottomEl = ref<HTMLDivElement>()
-
 const formId = Number(route.params.id)
-const formModal = ref({
-  name: currentForm.value?.name,
-  description: currentForm.value?.description
-})
 
-onMounted(async () => {
-  if (currentForm.value == null) {
-    const form = await formStore.getForm(formId)
-
-    if (form) {
-      formModal.value.name = form.name
-      formModal.value.description = form.description
-    }
-  }
-})
+watch(() => route.params.id, async (newId) => {
+  formStore.$reset()
+  await formStore.getForm(Number(newId))
+}, { immediate: true })
 
 const updateBasicInfo = (key: 'name' | 'description') => {
   formStore.updateForm(formId, {
-    [key]: formModal.value[key]
+    [key]: currentForm.value[key]
   })
 }
 
@@ -88,7 +76,7 @@ const addSection = async () => {
 
   await sectionStore.addSection({
     name: 'Untitled Section',
-    form_id: Number(route.params.id)
+    form_id: formId
   })
 
   nextTick(() => {

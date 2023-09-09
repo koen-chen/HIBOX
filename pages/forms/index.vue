@@ -75,8 +75,10 @@ const addLoading = ref(false)
 const listLoading = ref(false)
 const itemLoading = ref(false)
 
-useWatchNull(formList.value, listLoading, async () => {
+onMounted(async () => {
+  listLoading.value = true
   await formStore.listForm()
+  listLoading.value = false
 })
 
 const handleCommand = (cmd: string, id: number) => {

@@ -6,39 +6,16 @@ export const useSectionStore = defineStore('section', () => {
   const questionStore = useQuestionStore()
 
   const sectionList = ref<SectionType[]>([])
-  const currentSection = ref<SectionType | null>(null)
   const sectionOrder = ref<number[]>([])
 
-  function $reset() {
+  const $reset = () => {
     sectionList.value = []
     sectionOrder.value = []
+
     questionStore.$reset()
   }
 
-  const listSection = async (formId: number): Promise<SectionType[]> => {
-    const { data, error } = await supabase
-      .from('section')
-      .select(`
-        *,
-        form (
-          section_order
-        )
-      `)
-      .eq('form_id', formId)
-      .neq('state', 'Delete')
-
-    if (!error) {
-      sectionList.value = data
-
-      if (data.length > 0) {
-        sectionOrder.value = data[0].form.section_order
-      }
-    }
-
-    return sectionList.value
-  }
-
-  const addSection = async (info: SectionInsertType): Promise<SectionType | null> => {
+  const addSection = async (info: SectionInsertType): Promise<SectionType> => {
     const { data, error } = await supabase
       .from('section')
       .insert(info)
@@ -46,19 +23,14 @@ export const useSectionStore = defineStore('section', () => {
       .single()
 
     if (!error) {
-      currentSection.value = data
-
-      const order = await getOrder(info.form_id)
-      await updateOrder(info.form_id, [...order, data.id])
+      await updateOrder(info.form_id, [...sectionOrder.value, data.id])
       sectionList.value.push(data)
-
-      return data
     }
 
-    return currentSection.value
+    return data
   }
 
-  const updateSection = async (id: number, info: SectionUpdateType): Promise<SectionType | null> => {
+  const updateSection = async (id: number, info: SectionUpdateType): Promise<SectionType> => {
     const { data, error } = await supabase
       .from('section')
       .update(info)
@@ -67,8 +39,6 @@ export const useSectionStore = defineStore('section', () => {
       .single()
 
     if (!error) {
-      currentSection.value = data
-
       sectionList.value = sectionList.value.map(item => {
         if (item.id == data.id) {
           return data
@@ -78,7 +48,7 @@ export const useSectionStore = defineStore('section', () => {
       })
     }
 
-    return currentSection.value
+    return data
   }
 
   const deleteSection = async (id: number): Promise<void> => {
@@ -90,10 +60,7 @@ export const useSectionStore = defineStore('section', () => {
       .single()
 
     if (!error) {
-      currentSection.value = null
-
-      const order = await getOrder(data.section_id)
-      sectionOrder.value = order.filter(item => item == id)
+      sectionOrder.value = sectionOrder.value.filter(item => item != id)
       await updateOrder(data.form_id, sectionOrder.value)
 
       await questionStore.deleteQuestionBy({ section_id: id })
@@ -112,28 +79,12 @@ export const useSectionStore = defineStore('section', () => {
     const { data, error } = await query.select()
 
     if (!error && data.length > 0) {
-      const order = await getOrder(data[0].form_id)
       data.forEach((record) => {
-        sectionOrder.value = order.filter(item => item == record.id)
+        sectionOrder.value = sectionOrder.value.filter(item => item == record.id)
       })
 
       await updateOrder(data[0].form_id, sectionOrder.value)
     }
-  }
-
-  const getOrder = async (formId: number): Promise<number[]> => {
-    const { data, error } = await supabase
-      .from('from')
-      .select('section_order')
-      .eq('id', formId)
-      .limit(1)
-      .single()
-
-    if (!error) {
-      sectionOrder.value = data.section_order
-    }
-
-    return sectionOrder.value
   }
 
   const updateOrder = async (formId: number, info: number[]): Promise<number[]> => {
@@ -154,13 +105,10 @@ export const useSectionStore = defineStore('section', () => {
     $reset,
     sectionOrder,
     sectionList,
-    currentSection,
-    listSection,
     addSection,
     updateSection,
     deleteSection,
     deleteSectionBy,
-    getOrder,
     updateOrder
   }
 })

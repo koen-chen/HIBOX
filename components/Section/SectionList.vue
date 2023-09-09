@@ -1,11 +1,11 @@
 <template>
-  <div class="section-list" ref="sortableBoxRef" v-loading="listLoading">
-    <div v-for="(item, index) in orderSectionList" :key="item.id">
+  <div class="section-list" ref="sortableBoxRef">
+    <div v-for="(record, index) in orderSectionList" :key="record.id">
       <SectionRecord
-        :sectionData="item"
-        :formId="form.id"
-        :focused="choosedSectionId == item.id"
-        @click="choosedSectionId = item.id"
+        :formId="currentForm.id"
+        :sectionData="record"
+        :focused="choosedSectionId == record.id"
+        @click="choosedSectionId = record.id"
       >
         <template #drag>
           <div class="flex items-center">
@@ -21,31 +21,19 @@
 </template>
 
 <script setup lang="ts">
-import { FormType } from '~/types'
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 
-const props = defineProps<{ form: FormType }>()
+const formStore = useFormStore()
+const { currentForm } = storeToRefs(formStore)
+
 const sectionStore = useSectionStore()
-const { sectionList } = storeToRefs(sectionStore)
-const questionStore = useQuestionStore()
+const { sectionList, sectionOrder } = storeToRefs(sectionStore)
+
 
 const sortableBoxRef = ref<HTMLElement | null>(null)
 const choosedSectionId = ref<number | null>(null)
 
-const listLoading = ref(false)
-
-const orderSectionList = computed(() => {
-  if (props.form !== null) {
-    return useOrder(props.form.section_order, sectionList.value)
-  } else {
-    return []
-  }
-})
-
-useWatchNull(props.form, listLoading, async () => {
-  await sectionStore.listSection(props.form.id)
-  await questionStore.listQuestion(props.form.id)
-})
+const orderSectionList = computed(() => useOrder(sectionOrder.value, sectionList.value))
 
 onClickOutside(sortableBoxRef, () => choosedSectionId.value = null)
 
@@ -60,7 +48,7 @@ useSortable(sortableBoxRef, orderSectionList.value, {
       choosedSectionId.value = element.id
 
       const orders = orderSectionList.value.map(item => item.id)
-      sectionStore.updateOrder(props.form.id, orders)
+      sectionStore.updateOrder(currentForm.value.id, orders)
     })
   }
 })

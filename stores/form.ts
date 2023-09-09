@@ -1,14 +1,33 @@
 import { defineStore } from 'pinia'
-import { FormType, FormInsertType, FormUpdateType } from '~/types'
+import { FormType, FormInsertType, FormUpdateType, SectionType } from '~/types'
 import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
   const supabase = useSupabase().value
   const sectionStore = useSectionStore()
+  const questionStore = useQuestionStore()
 
+  const initFormValue = {
+    id: 0,
+    name: '',
+    description: '',
+    section_order: [],
+    public: false,
+    state: '',
+    created_at: '',
+  }
+
+  const currentForm = ref<FormType>(initFormValue)
   const formList = ref<FormType[]>([])
-  const currentForm = ref<FormType | null>(null)
+
   const publicFormList = computed(() => formList.value.filter(item => item.public == true))
+
+  const $reset = () => {
+    currentForm.value = initFormValue
+    formList.value = []
+
+    sectionStore.$reset()
+  }
 
   const listForm = async (): Promise<FormType[]> => {
     const { data, error } = await supabase
@@ -24,21 +43,35 @@ export const useFormStore = defineStore('form', () => {
     return formList.value
   }
 
-  const getForm = async (id: number): Promise<FormType | null> => {
-    const { data: formData, error } = await supabase
+  const getForm = async (id: number): Promise<FormType> => {
+    const { data, error } = await supabase
       .from('form')
-      .select()
+      .select(`
+        *,
+        section (*),
+        question (*)
+      `)
       .eq('id', id)
       .single()
 
     if (!error) {
-      currentForm.value = formData
+      currentForm.value = _Pick(data, 'id', 'name', 'description', 'public', 'section_order', 'state', 'created_at')
+
+      sectionStore.sectionOrder = data.section_order
+      sectionStore.sectionList = data.section
+
+      data.section.forEach((item: SectionType) => {
+        questionStore.questionOrder[item.id] = item.question_order
+      })
+
+      console.log(questionStore.questionOrder)
+      questionStore.questionList = data.question
     }
 
     return currentForm.value
   }
 
-  const addForm = async (info: FormInsertType): Promise<FormType | null> => {
+  const addForm = async (info: FormInsertType): Promise<FormType> => {
     const { data, error } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
@@ -58,7 +91,7 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const updateForm = async (id: number, info: FormUpdateType): Promise<FormType | null> => {
+  const updateForm = async (id: number, info: FormUpdateType): Promise<FormType> => {
     const { data, error } = await supabase
       .from('form')
       .update(info)
@@ -92,7 +125,7 @@ export const useFormStore = defineStore('form', () => {
       .single()
 
     if (!error) {
-      currentForm.value = null
+      currentForm.value = initFormValue
 
       await sectionStore.deleteSectionBy({ form_id: id })
 
@@ -101,6 +134,7 @@ export const useFormStore = defineStore('form', () => {
   }
 
   return {
+    $reset,
     formList,
     publicFormList,
     currentForm,
