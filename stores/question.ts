@@ -4,11 +4,11 @@ import { QuestionType, QuestionInsertType, QuestionUpdateType } from "~/types"
 export const useQuestionStore = defineStore('question', () => {
   const supabase = useSupabase().value
 
-  const questionList = ref<QuestionType[]>([])
+  const questionList = ref<{ [key: number]: QuestionType[]}>({})
   const questionOrder = ref<{ [key: number]: number[] }>({})
 
   const $reset = () => {
-    questionList.value = []
+    questionList.value = {}
     questionOrder.value = {}
   }
 
@@ -20,9 +20,9 @@ export const useQuestionStore = defineStore('question', () => {
       .single()
 
     if (!error) {
-      const order = questionOrder.value[info.section_id]
-      await updateOrder(info.section_id, [...order, data.id])
-      questionList.value.push(data)
+      questionOrder.value[info.section_id].push(data.id)
+      await updateOrder(info.section_id, questionOrder.value[info.section_id])
+      questionList.value[info.section_id].push(data)
     }
 
     return data
@@ -37,7 +37,7 @@ export const useQuestionStore = defineStore('question', () => {
       .single()
 
     if (!error) {
-      questionList.value = questionList.value.map(item => {
+      questionList.value = questionList.value[data.section_id].map(item => {
         if (item.id == data.id) {
           return data
         } else {
@@ -61,7 +61,7 @@ export const useQuestionStore = defineStore('question', () => {
       const order = questionOrder.value[data.section_id].filter(item => item == id)
       await updateOrder(data.section_id, order)
 
-      questionList.value = questionList.value && questionList.value.filter(item => item.id !== id)
+      questionList.value[data.section_id] = questionList.value[data.section_id].filter(item => item.id !== id)
     }
   }
 

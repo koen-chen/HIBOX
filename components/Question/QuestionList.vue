@@ -1,14 +1,14 @@
 <template>
-  <div class="w-full" ref="sortableBoxRef" >
-    <div v-for="(item, index) in orderQuestionList" :key="item.id" class="section-fragement">
-      <QuestionRecord>
+  <div class="w-full" ref="sortableQuestionRef">
+    <div v-for="(item, index) in list" :key="item.id" :data-id="item.id" class="section-fragement">
+      <QuestionRecord :collapse="collapse">
         <template #drag>
           <div class="flex items-center justify-center mb-5">
-            <div class="drag-handler">
+            <div class="drag-question">
               <Icon name="mdi:drag-horizontal" />
             </div>
 
-            <div class="section-order">Question {{ index + 1 }}</div>
+            <div class="section-order">Question {{ item.id }} {{ index + 1 }}</div>
           </div>
         </template>
       </QuestionRecord>
@@ -17,46 +17,35 @@
 </template>
 
 <script setup lang="ts">
-import { SectionType, QuestionType } from '~/types'
-import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
+import { SectionType } from '~/types'
+import { useDraggable } from 'vue-draggable-plus'
 
 const props = defineProps<{
   sectionData: SectionType,
-  questionList: QuestionType[]
 }>()
 
 const questionStore = useQuestionStore()
-const { questionOrder } = storeToRefs(questionStore)
+const { questionList } = storeToRefs(questionStore)
+const list = ref(questionList.value[props.sectionData.id])
+const sortableQuestionRef = ref()
+const collapse = ref(false)
 
-const sortableBoxRef = ref<HTMLElement | null>(null)
-
-const orderQuestionList = computed(() => {
-  if (props.sectionData !== null) {
-    return useOrder(questionOrder.value[props.sectionData.id], props.questionList)
-  } else {
-    return []
-  }
-})
-
-useSortable(sortableBoxRef, orderQuestionList.value, {
+useDraggable(sortableQuestionRef, list, {
   animation: 150,
-  handle: '.drag-handler',
-  onUpdate: (e: any) => {
-    moveArrayElement(orderQuestionList.value, e.oldIndex, e.newIndex)
-
-    nextTick(() => {
-      const orders = orderQuestionList.value.map(item => item.id)
-      questionStore.updateOrder(props.sectionData.id, orders)
-    })
+  group: 'question',
+  onSort() {
+    const orders = list.value.map(item => item.id)
+    questionStore.updateOrder(props.sectionData.id, orders)
   }
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .section-fragement {
   background-color: $maskColor;
   border: 1px solid $primaryHoverColor;
 
   @apply w-full p-4 mb-4;
 }
+
 </style>

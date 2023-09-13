@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { FormType, FormInsertType, FormUpdateType, SectionType } from '~/types'
+import { FormType, FormInsertType, FormUpdateType, SectionType, QuestionType } from '~/types'
 import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
@@ -58,14 +58,12 @@ export const useFormStore = defineStore('form', () => {
       currentForm.value = _Pick(data, 'id', 'name', 'description', 'public', 'section_order', 'state', 'created_at')
 
       sectionStore.sectionOrder = data.section_order
-      sectionStore.sectionList = data.section
+      sectionStore.sectionList = useOrder(data.section_order, data.section)
 
       data.section.forEach((item: SectionType) => {
         questionStore.questionOrder[item.id] = item.question_order
+        questionStore.questionList[item.id] = useOrder(item.question_order, data.question.filter((q: QuestionType) => q.section_id == item.id))
       })
-
-      console.log(questionStore.questionOrder)
-      questionStore.questionList = data.question
     }
 
     return currentForm.value

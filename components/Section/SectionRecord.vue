@@ -30,9 +30,7 @@
         </div>
 
         <QuestionList
-          v-if="filterQuestionList"
           :sectionData="props.sectionData"
-          :questionList="filterQuestionList"
         />
       </div>
     </div>
@@ -66,19 +64,18 @@
 import { SectionType } from '~/types'
 import { Plus } from '@element-plus/icons-vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   sectionData: SectionType,
   formId: number,
-  focused: boolean
-}>()
+  focused: boolean,
+  globalCollapse: boolean
+}>(), {
+  globalCollapse: false
+})
 
 const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
-const { questionList } = storeToRefs(questionStore)
-
 const collapse = ref(false)
-
-const filterQuestionList = computed(() => questionList.value?.filter(item => item.section_id == props.sectionData.id))
 
 const formModal = ref({
   name: props.sectionData.name,

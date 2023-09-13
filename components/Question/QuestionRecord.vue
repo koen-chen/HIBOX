@@ -2,71 +2,73 @@
   <div class="w-full">
     <slot name="drag" />
 
-    <el-row :gutter="24">
-      <el-col :span="16">
-        <el-input size="large" :placeholder="$t('Enter question label')"></el-input>
-      </el-col>
+    <div v-if="!props.collapse">
+      <el-row :gutter="24">
+        <el-col :span="16">
+          <el-input size="large" :placeholder="$t('Enter question label')"></el-input>
+        </el-col>
 
-      <el-col :span="8">
-        <el-select
-          class="w-full"
-          :placeholder="$t('Choose question type')"
-          size="large"
-          v-model="typeInfo"
-          value-key="name"
-          @change="chooseType"
-        >
-          <el-option-group key="basic" :label="$t('Basic')">
-            <el-option v-for="item in BasicTypeList" :key="item.type" :label="item.name" :value="item">
-              <div class="flex items-center py-2">
-                <Icon :name="item.icon" />
-                <div class="ml-5">{{ item.name }}</div>
-              </div>
-            </el-option>
-          </el-option-group>
+        <el-col :span="8">
+          <el-select
+            class="w-full"
+            :placeholder="$t('Choose question type')"
+            size="large"
+            v-model="typeInfo"
+            value-key="name"
+            @change="chooseType"
+          >
+            <el-option-group key="basic" :label="$t('Basic')">
+              <el-option v-for="item in BasicTypeList" :key="item.type" :label="item.name" :value="item">
+                <div class="flex items-center py-2">
+                  <Icon :name="item.icon" />
+                  <div class="ml-5">{{ item.name }}</div>
+                </div>
+              </el-option>
+            </el-option-group>
 
-          <el-option-group key="modules" :label="$t('Modules')">
-            <el-option v-for="item in ModulesTypeList" :key="item.type" :label="item.name" :value="item">
-              <div class="flex items-center  py-2">
-                <Icon :name="item.icon" />
-                <div class="ml-5">{{ item.name }}</div>
-              </div>
-            </el-option>
-          </el-option-group>
-        </el-select>
-      </el-col>
-    </el-row>
+            <el-option-group key="modules" :label="$t('Modules')">
+              <el-option v-for="item in ModulesTypeList" :key="item.type" :label="item.name" :value="item">
+                <div class="flex items-center  py-2">
+                  <Icon :name="item.icon" />
+                  <div class="ml-5">{{ item.name }}</div>
+                </div>
+              </el-option>
+            </el-option-group>
+          </el-select>
+        </el-col>
+      </el-row>
 
-    <el-row>
-       <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
-    </el-row>
+      <el-row>
+        <component :is="node" v-model="nodeValue" v-bind="typeInfo" />
+      </el-row>
 
-    <el-divider class="mt-10" />
+      <el-divider class="mt-10" />
 
-    <div class="flex items-center justify-end">
-      <div>
-        <span class="mr-2">
-          {{ $t('Required') }}
-        </span>
-        <el-switch
-          v-model="required"
-          size="large"
-          inline-prompt
-          :active-icon="Check"
-          :inactive-icon="Close"
-          @change="(val: boolean) => required = val"
-          />
-      </div>
-
-      <div class="flex items-center">
-        <el-divider direction="vertical" style="margin: 0 30px; height: 1.9em" />
-
+      <div class="flex items-center justify-end">
         <div>
-          <Icon
-            class="action-icon"
-            name="mdi:trash-can"
-            @click="handleDelete"
-          />
+          <span class="mr-2">
+            {{ $t('Required') }}
+          </span>
+          <el-switch
+            v-model="required"
+            size="large"
+            inline-prompt
+            :active-icon="Check"
+            :inactive-icon="Close"
+            @change="(val: boolean) => required = val"
+            />
+        </div>
+
+        <div class="flex items-center">
+          <el-divider direction="vertical" style="margin: 0 30px; height: 1.9em" />
+
+          <div>
+            <Icon
+              class="action-icon"
+              name="mdi:trash-can"
+              @click="handleDelete"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -77,6 +79,12 @@
 import dayjs from 'dayjs'
 import { Check, Close } from '@element-plus/icons-vue'
 import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode } from '#components'
+
+const props = withDefaults(defineProps<{
+  collapse: boolean
+}>(), {
+  collapse: false
+})
 
 const NodeList = {
   'Input': InputNode,

@@ -7,7 +7,7 @@
     <div><el-divider /></div>
 
     <div class="mt-8">
-      <el-row :gutter="24" class="pr-24">
+      <el-row :gutter="24">
         <el-col :span="6" class="label">
           {{ $t('Basic Info') }}
         </el-col>
@@ -60,10 +60,10 @@ const addLoading = ref(false)
 const bottomEl = ref<HTMLDivElement>()
 const formId = Number(route.params.id)
 
-watch(() => route.params.id, async (newId) => {
+watchEffect(async () => {
   formStore.$reset()
-  await formStore.getForm(Number(newId))
-}, { immediate: true })
+  await formStore.getForm(formId)
+})
 
 const updateBasicInfo = (key: 'name' | 'description') => {
   formStore.updateForm(formId, {
