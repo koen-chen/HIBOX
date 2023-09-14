@@ -7,12 +7,6 @@
       </el-button>
     </div>
 
-    <div class="grow">
-      <div class="title">
-        <slot />
-      </div>
-    </div>
-
     <div class="flex-none">
       <slot name="actions" />
     </div>
@@ -28,14 +22,3 @@ const props = withDefaults(defineProps<{
   backUrl: '/'
 })
 </script>
-
-<style lang="scss" scoped>
-.title {
-  font-family: 'Radikal-Bold';
-  font-weight: 900;
-  font-size: 1.8rem;
-  color: $textColor;
-
-  @apply w-full text-center
-}
-</style>

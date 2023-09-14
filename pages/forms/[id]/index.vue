@@ -1,8 +1,6 @@
 <template>
   <div class="py-6">
-    <Header backUrl="/forms">
-      {{ currentForm.name }}
-    </Header>
+    <Header backUrl="/forms"></Header>
 
     <div><el-divider /></div>
 
@@ -12,15 +10,13 @@
           {{ $t('Basic Info') }}
         </el-col>
 
-        <el-col :span="18" >
-          <el-form label-position="top" :model="currentForm">
-            <el-form-item prop="name" :label="$t('Name').toUpperCase()" :rules="[{ required: true, message: $t('Please input name') }]">
-              <el-input v-model="currentForm.name" @blur="() => updateBasicInfo('name')" size="large" />
-            </el-form-item>
-            <el-form-item prop="description" :label="$t('Description').toUpperCase()" class="mt-8">
-              <el-input v-model="currentForm.description" @blur="() => updateBasicInfo('description')" type="textarea" rows="4" />
-            </el-form-item>
-          </el-form>
+        <el-col :span="18">
+          <div class="mb-1">{{ $t('Name').toUpperCase() }}</div>
+          <el-input v-model="name" size="large" maxlength="50" />
+
+          <div class="mt-8 mb-1">{{ $t('Description').toUpperCase() }}</div>
+          <el-input v-model="description" type="textarea" rows="4" />
+
         </el-col>
       </el-row>
 
@@ -53,21 +49,40 @@
 <script setup lang="ts">
 const route = useRoute()
 const formStore = useFormStore()
-const { currentForm } = storeToRefs(formStore)
 const sectionStore = useSectionStore()
 
 const addLoading = ref(false)
 const bottomEl = ref<HTMLDivElement>()
 const formId = Number(route.params.id)
 
+const name = ref('')
+const description = ref('')
+
 watchEffect(async () => {
   formStore.$reset()
-  await formStore.getForm(formId)
+  const result = await formStore.getForm(formId)
+
+  name.value = result.name
+  description.value = result.description
 })
+
+watchDebounced(name, (newVal, oldVal) => {
+  if (newVal == '') {
+    name.value = 'Untitled Form'
+  }
+
+ if (oldVal !== '') {
+    updateBasicInfo('name')
+ }
+}, { debounce: 500 })
+
+watchDebounced(description, () => {
+  updateBasicInfo('description')
+}, { debounce: 500 })
 
 const updateBasicInfo = (key: 'name' | 'description') => {
   formStore.updateForm(formId, {
-    [key]: currentForm.value[key]
+    [key]: key == 'name' ? name.value : description.value
   })
 }
 

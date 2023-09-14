@@ -6,7 +6,14 @@
           <div class="logo-wrapper">
             <img class="logo" :src="logoSrc" />
           </div>
+
           <Translate dark />
+        </div>
+
+        <div class="title">
+          {{ currentForm.name }}
+
+          <span class="loading-status">{{  updateLoading ? 'Saving...' : '' }}</span>
         </div>
 
         <Account dark v-if="account !== null" />
@@ -25,6 +32,9 @@
 const accountStore = useAccountStore()
 const { account } = storeToRefs(accountStore)
 
+const formStore = useFormStore()
+const { currentForm, updateLoading } = storeToRefs(formStore)
+
 const logoSrc = ref('/logo-w.png')
 </script>
 
@@ -32,7 +42,7 @@ const logoSrc = ref('/logo-w.png')
 <style lang="scss" scoped>
 .header {
   color: $containerBgColor;
-  height: 64px;
+  height: 80px;
   background-color: $primaryColor;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2),
     0 4px 5px 0 rgba(0, 0, 0, .14),
@@ -42,11 +52,26 @@ const logoSrc = ref('/logo-w.png')
 }
 
 .logo-wrapper {
-  height: 100%;
+  height: 70%;
+  margin-right: 10px;
 }
 
 .logo {
   display: block;
   height: 100%;
+}
+
+.title {
+  font-family: 'Radikal-Bold';
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: #fff;
+
+  @apply w-full text-center
+}
+
+.loading-status {
+  font-size: 0.8rem;
+  margin-left: 20px;
 }
 </style>

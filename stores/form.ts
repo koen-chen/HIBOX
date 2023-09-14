@@ -20,6 +20,9 @@ export const useFormStore = defineStore('form', () => {
   const currentForm = ref<FormType>(initFormValue)
   const formList = ref<FormType[]>([])
 
+  const fetchLoading = ref(false)
+  const updateLoading = ref(false)
+
   const publicFormList = computed(() => formList.value.filter(item => item.public == true))
 
   const $reset = () => {
@@ -29,7 +32,7 @@ export const useFormStore = defineStore('form', () => {
     sectionStore.$reset()
   }
 
-  const listForm = async (): Promise<FormType[]> => {
+  const _listForm = async (): Promise<FormType[]> => {
     const { data, error } = await supabase
       .from('form')
       .select()
@@ -43,7 +46,7 @@ export const useFormStore = defineStore('form', () => {
     return formList.value
   }
 
-  const getForm = async (id: number): Promise<FormType> => {
+  const _getForm = async (id: number): Promise<FormType> => {
     const { data, error } = await supabase
       .from('form')
       .select(`
@@ -69,7 +72,7 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const addForm = async (info: FormInsertType): Promise<FormType> => {
+  const _addForm = async (info: FormInsertType): Promise<FormType> => {
     const { data, error } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
@@ -89,7 +92,7 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const updateForm = async (id: number, info: FormUpdateType): Promise<FormType> => {
+  const _updateForm = async (id: number, info: FormUpdateType): Promise<FormType> => {
     const { data, error } = await supabase
       .from('form')
       .update(info)
@@ -114,7 +117,7 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const deleteForm = async (id: number): Promise<void> => {
+  const _deleteForm = async (id: number): Promise<void> => {
     const { error } = await supabase
       .from('form')
       .update({ state: 'Delete' })
@@ -131,8 +134,16 @@ export const useFormStore = defineStore('form', () => {
     }
   }
 
+  const listForm = loadingDecorator(_listForm, fetchLoading)
+  const getForm = loadingDecorator(_getForm, fetchLoading)
+  const addForm = loadingDecorator(_addForm, updateLoading)
+  const updateForm = loadingDecorator(_updateForm, updateLoading)
+  const deleteForm = loadingDecorator(_deleteForm, updateLoading)
+
   return {
     $reset,
+    fetchLoading,
+    updateLoading,
     formList,
     publicFormList,
     currentForm,

@@ -67,11 +67,8 @@ import { Plus } from '@element-plus/icons-vue'
 const props = withDefaults(defineProps<{
   sectionData: SectionType,
   formId: number,
-  focused: boolean,
-  globalCollapse: boolean
-}>(), {
-  globalCollapse: false
-})
+  focused: boolean
+}>(), {})
 
 const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
