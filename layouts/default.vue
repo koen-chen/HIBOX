@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full">
+  <div class="min-h-screen">
     <div class="header">
       <div class="h-full flex items-center">
         <div class="logo-wrapper">

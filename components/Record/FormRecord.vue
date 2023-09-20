@@ -19,21 +19,23 @@ const props = defineProps<{
 
 const formStore = useFormStore()
 
-watchDebounced(() => props.record.name, (newVal, oldVal) => {
-  if (newVal == '') {
-    props.record.name = 'Untitled Form'
-  }
-
+watchDebounced(() => props.record.name, (_, oldVal) => {
   if (oldVal !== '') {
     updateBasicInfo('name')
   }
 }, { debounce: 500 })
 
-watchDebounced(() => props.record.description, () => {
-  updateBasicInfo('description')
+watchDebounced(() => props.record.description, (_, oldVal) => {
+  if (oldVal !== '') {
+    updateBasicInfo('description')
+  }
 }, { debounce: 500 })
 
 const updateBasicInfo = async (key: 'name' | 'description') => {
+  if (props.record.name == '') {
+    props.record.name = 'Untitled Form'
+  }
+
   await formStore.updateForm(props.record.id, {
     [key]: key == 'name' ? props.record.name : props.record.description
   })

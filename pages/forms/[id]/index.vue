@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-40">
     <el-affix :offset="0">
       <Header backUrl="/forms">
         <div class="title">
@@ -8,7 +8,7 @@
       </Header>
     </el-affix>
 
-    <div class="w-3/6 mx-auto">
+    <div class="w-3/6 mx-auto min-h-screen">
       <FormRecord :record="currentForm" />
 
       <div class="section-list" ref="sortableRef">
@@ -46,8 +46,6 @@ watchEffect(async () => {
   formStore.$reset()
   await formStore.getForm(Number(route.params.id))
 })
-
-
 </script>
 
 <style lang="scss" scoped>

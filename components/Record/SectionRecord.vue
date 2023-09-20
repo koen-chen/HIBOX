@@ -13,7 +13,7 @@
       @click="focusSection"
       ref="focusRef"
     >
-      <div v-if="!isFocused" class="mb-4 p-4 form">
+      <div v-if="!isFocused" class="mb-4 p-4">
         <div class="mb-2 p-3">{{ props.record.name }}</div>
         <div class="p-3">{{ props.record.description }}</div>
       </div>
@@ -36,10 +36,14 @@
     </div>
 
     <div v-if="isFocused" class="mt-4">
-      <el-button-group>
-        <el-button type="primary" size="large" @click="addSection">Insert Section</el-button>
-        <el-button type="primary" size="large" @click="addQuestion">Add Question</el-button>
-      </el-button-group>
+      <NodeCreator
+        :formId="props.record.form_id"
+        :sectionId="props.record.id"
+        :afterElement="{
+          type: 'Section',
+          id: props.record.id
+        }"
+      />
     </div>
   </div>
 </template>
@@ -53,7 +57,6 @@ const props = defineProps<{
 }>()
 
 const sectionStore = useSectionStore()
-const questionStore = useQuestionStore()
 
 const isFocused = ref(false)
 const activeRef = ref()
@@ -68,21 +71,6 @@ function updateBasicInfo(key: 'name' | 'description') {
   sectionStore.updateSection(props.record.id, {
       [key]: key == 'name' ? props.record.name : props.record.description
   })
-}
-
-function addSection() {
-  sectionStore.addSection({
-    name: 'Untitled Section',
-    form_id: props.record.form_id,
-  }, { id: props.record.id, type: 'section'})
-}
-
-function addQuestion() {
-  questionStore.addQuestion({
-    label: 'Question',
-    form_id: props.record.form_id,
-    section_id: props.record.id
-  }, { id: props.record.id, type: 'section' })
 }
 </script>
 
@@ -102,6 +90,4 @@ function addQuestion() {
     cursor: pointer;
   }
 }
-
-
 </style>

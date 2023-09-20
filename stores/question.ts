@@ -44,13 +44,8 @@ export const useQuestionStore = defineStore('question', () => {
       .single()
 
     if (!error) {
-      questionList.value = questionList.value[data.section_id].map(item => {
-        if (item.id == data.id) {
-          return data
-        } else {
-          return item
-        }
-      })
+      const index = questionList.value[data.section_id].findIndex(item => item.id == data.id)
+      questionList.value[data.section_id].splice(index, 1, data)
     }
 
     return data

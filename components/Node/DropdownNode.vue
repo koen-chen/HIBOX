@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import { nanoid } from 'nanoid'
+import { Option } from '~/types';
 
 const emit = defineEmits<{
   'update:modelValue': [value: Object]
@@ -68,16 +69,10 @@ const props = withDefaults(defineProps<{
   needOtherOption: false
 })
 
-type Option = {
-  label: string,
-  id: string
-}
-
 const otherOption = ref(false)
 const optionList = ref<Option[]>([
   { label: "Option 1", id: nanoid(5) },
-  { label: "Option 2", id: nanoid(5) },
-  { label: "Option 3", id: nanoid(5) },
+  { label: "Option 2", id: nanoid(5) }
 ])
 
 const addOption = () => {
