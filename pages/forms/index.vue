@@ -10,11 +10,7 @@
       </Header>
     </el-affix>
 
-    <div class="w-4/5 mx-auto flex items-start  flex-wrap py-10"  v-loading="listLoading">
-      <TransitionGroup
-        enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__fadeOut animate__faster"
-      >
+    <div class="w-4/6 mx-auto flex items-start  flex-wrap py-10"  v-loading="listLoading">
         <div v-if="formList?.length == 0">
           <i18n-t keypath="Click {link} to start a blank form" scope="global">
             <template #link>
@@ -61,7 +57,6 @@
             </div>
           </el-card>
         </template>
-      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -127,7 +122,16 @@ async function handleDelete(id: number) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.title {
+  font-family: 'Radikal-Bold';
+  font-weight: 900;
+  font-size: 1.4rem;
+  @include line-clamp(2);
+
+  @apply w-full text-center;
+}
+
 .form-item {
   width: 250px;
   margin-bottom: 20px;

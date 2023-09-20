@@ -9,11 +9,7 @@
     </el-affix>
 
     <div class="w-3/6 mx-auto">
-      <FormRecord
-        :id="currentForm.id"
-        :name="currentForm.name"
-        :description="currentForm.description"
-      />
+      <FormRecord :record="currentForm" />
 
       <div class="section-list" ref="sortableRef">
         <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id">
@@ -54,8 +50,7 @@ watchEffect(async () => {
 
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
 .label {
   font-family: 'Radikal-Bold';
   font-weight: 900;
