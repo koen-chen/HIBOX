@@ -4,8 +4,6 @@
       <Header backUrl="/forms">
         <div class="title">
           {{ currentForm.name }}
-
-          <!-- <span class="loading-status">{{ formUpdateLoading ? 'Saving...' : '' }}</span> -->
         </div>
       </Header>
     </el-affix>

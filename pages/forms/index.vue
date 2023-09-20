@@ -1,16 +1,16 @@
 <template>
-  <div class="p-4">
-    <Header :back="false">
-      {{ $t('Forms') }}
+  <div>
+    <el-affix :offset="0">
+      <Header :back="false">
+        <div class="title">{{ $t('Forms') }}</div>
 
-      <template #actions>
-        <el-button @click="addForm" :loading="addLoading">New Form</el-button>
-      </template>
-    </Header>
+        <template #actions>
+          <el-button @click="handleAdd" :loading="addLoading">New Form</el-button>
+        </template>
+      </Header>
+    </el-affix>
 
-    <el-divider></el-divider>
-
-    <div class="form-list" v-loading="listLoading">
+    <div class="w-4/5 mx-auto flex items-start  flex-wrap py-10"  v-loading="listLoading">
       <TransitionGroup
         enter-active-class="animate__animated animate__fadeIn"
         leave-active-class="animate__animated animate__fadeOut animate__faster"
@@ -18,10 +18,11 @@
         <div v-if="formList?.length == 0">
           <i18n-t keypath="Click {link} to start a blank form" scope="global">
             <template #link>
-              <el-button type="primary" :loading="addLoading" @click="addForm" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
+              <el-button type="primary" :loading="addLoading" @click="handleAdd" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
             </template>
           </i18n-t>
         </div>
+
         <template v-else>
           <el-card
             v-for="item in formList"
@@ -67,33 +68,35 @@
 
 <script setup lang="ts">
 const formStore = useFormStore()
-const sectionStore = useSectionStore()
-
 const { formList } = storeToRefs(formStore)
 
+const sectionStore = useSectionStore()
+
 const addLoading = ref(false)
+
 const listLoading = ref(false)
+const listForm = loadingDecorator(formStore.listForm, listLoading)
+
 const itemLoading = ref(false)
+const deleteForm = loadingDecorator(formStore.deleteForm, itemLoading)
 
 onMounted(async () => {
-  listLoading.value = true
-  await formStore.listForm()
-  listLoading.value = false
+  await listForm()
 })
 
-const handleCommand = (cmd: string, id: number) => {
+function handleCommand(cmd: string, id: number) {
   switch (cmd) {
     case 'open':
       window.open(`/forms/${id}`)
       break;
 
     case 'remove':
-      deleteForm(id)
+      handleDelete(id)
       break;
   }
 }
 
-const addForm = async () => {
+async function handleAdd() {
   addLoading.value = true
 
   const formData = await formStore.addForm({
@@ -118,20 +121,13 @@ const addForm = async () => {
   addLoading.value = false
 }
 
-const deleteForm = async (id: number) => {
-  itemLoading.value = true
-  await formStore.deleteForm(id)
-  itemLoading.value = false
+
+async function handleDelete(id: number) {
+  await deleteForm(id)
 }
 </script>
 
 <style lang="scss">
-.form-list {
-  min-height: 300px;
-
-  @apply flex items-start  flex-wrap
-}
-
 .form-item {
   width: 250px;
   margin-bottom: 20px;

@@ -8,7 +8,7 @@
         </el-button>
       </div>
 
-      <slot />
+      <div class="flex-grow"><slot /></div>
 
       <div class="flex-none">
         <slot name="actions" />

@@ -16,7 +16,7 @@ export const useSectionStore = defineStore('section', () => {
     questionStore.$reset()
   }
 
-  const addSection = async (info: SectionInsertType, afterElement: { id: number, type: string }): Promise<SectionType> => {
+  const addSection = async (info: SectionInsertType, afterElement?: { id: number, type: string }): Promise<SectionType> => {
     const { data, error } = await supabase
       .from('section')
       .insert(info)
@@ -25,14 +25,16 @@ export const useSectionStore = defineStore('section', () => {
 
     if (!error) {
       let index = sectionOrder.value.length
-
-      if (afterElement.type == 'section') {
-        index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
+      
+      if (afterElement) {
+        if (afterElement.type == 'section') {
+          index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
+        }
       }
 
       sectionList.value.splice(index, 0, data)
       sectionOrder.value.splice(index, 0, data.id)
-      
+
       await updateOrder(info.form_id, [...sectionOrder.value])
     }
 
