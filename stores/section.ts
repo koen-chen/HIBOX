@@ -1,3 +1,4 @@
+import { after } from "lodash"
 import { defineStore } from "pinia"
 import { SectionType, SectionInsertType, SectionUpdateType } from "~/types"
 
@@ -15,7 +16,7 @@ export const useSectionStore = defineStore('section', () => {
     questionStore.$reset()
   }
 
-  const addSection = async (info: SectionInsertType): Promise<SectionType> => {
+  const addSection = async (info: SectionInsertType, afterElement: { id: number, type: string }): Promise<SectionType> => {
     const { data, error } = await supabase
       .from('section')
       .insert(info)
@@ -23,8 +24,16 @@ export const useSectionStore = defineStore('section', () => {
       .single()
 
     if (!error) {
-      await updateOrder(info.form_id, [...sectionOrder.value, data.id])
-      sectionList.value.push(data)
+      let index = sectionOrder.value.length
+
+      if (afterElement.type == 'section') {
+        index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
+      }
+
+      sectionList.value.splice(index, 0, data)
+      sectionOrder.value.splice(index, 0, data.id)
+      
+      await updateOrder(info.form_id, [...sectionOrder.value])
     }
 
     return data
@@ -100,6 +109,7 @@ export const useSectionStore = defineStore('section', () => {
 
     return sectionOrder.value
   }
+
 
   return {
     $reset,

@@ -1,16 +1,20 @@
 <template>
-  <div class="flex items-center">
-    <div v-if="props.back" class="flex-none">
-      <el-button text @click="navigateTo(props.backUrl)">
-        <Icon name="mdi:arrow-left" />
-        <span class="ml-2">{{ $t('Back') }}</span>
-      </el-button>
-    </div>
+  <div class="header py-10">
+    <div class="w-3/5 mx-auto flex items-center justify-center">
+      <div v-if="props.back" class="flex-none">
+        <el-button text @click="navigateTo(props.backUrl)">
+          <Icon name="mdi:arrow-left" />
+          <span class="ml-2">{{ $t('Back') }}</span>
+        </el-button>
+      </div>
 
-    <div class="flex-none">
-      <slot name="actions" />
+      <slot />
+
+      <div class="flex-none">
+        <slot name="actions" />
+      </div>
     </div>
-  </div>
+   </div>
 </template>
 
 <script setup lang="ts">
@@ -22,3 +26,12 @@ const props = withDefaults(defineProps<{
   backUrl: '/'
 })
 </script>
+
+<style lang="scss" scoped>
+.header {
+  position: relative;
+  background: #fff;
+  z-index: 1000;
+  border-bottom: 1px solid $borderColor;
+}
+</style>

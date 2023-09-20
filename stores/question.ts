@@ -12,7 +12,7 @@ export const useQuestionStore = defineStore('question', () => {
     questionOrder.value = {}
   }
 
-  const addQuestion = async (info: QuestionInsertType): Promise<QuestionType> => {
+  const addQuestion = async (info: QuestionInsertType, afterElement: { id: number, type: string }): Promise<QuestionType> => {
     const { data, error } = await supabase
       .from('question')
       .insert(info)
@@ -20,9 +20,16 @@ export const useQuestionStore = defineStore('question', () => {
       .single()
 
     if (!error) {
-      questionOrder.value[info.section_id].push(data.id)
+      if (afterElement.type == 'section') {
+        questionList.value[info.section_id].push(data)
+        questionOrder.value[info.section_id].push(data.id)
+      } else {
+        const index = questionOrder.value[info.section_id].findIndex(id => id == afterElement.id) + 1
+        questionList.value[info.section_id].splice(index, 0, data)
+        questionOrder.value[info.section_id].splice(index, 0, data.id)
+      }
+
       await updateOrder(info.section_id, questionOrder.value[info.section_id])
-      questionList.value[info.section_id].push(data)
     }
 
     return data

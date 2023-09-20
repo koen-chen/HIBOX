@@ -1,46 +1,37 @@
 <template>
-  <div class="py-6">
-    <Header backUrl="/forms"></Header>
+  <div>
+    <el-affix :offset="0">
+      <Header backUrl="/forms">
+        <div class="title">
+          {{ currentForm.name }}
 
-    <div><el-divider /></div>
+          <!-- <span class="loading-status">{{ formUpdateLoading ? 'Saving...' : '' }}</span> -->
+        </div>
+      </Header>
+    </el-affix>
 
-    <div class="mt-8">
-      <el-row :gutter="24">
-        <el-col :span="6" class="label">
-          {{ $t('Basic Info') }}
-        </el-col>
+    <div class="w-3/6 mx-auto">
+      <FormRecord
+        :id="currentForm.id"
+        :name="currentForm.name"
+        :description="currentForm.description"
+      />
 
-        <el-col :span="18">
-          <div class="mb-1">{{ $t('Name').toUpperCase() }}</div>
-          <el-input v-model="name" size="large" maxlength="50" />
+      <div class="section-list" ref="sortableRef">
+        <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id">
+          <SectionRecord
+            :record="sRecord"
+            :order="sIndex + 1"
+          >
+          </SectionRecord>
 
-          <div class="mt-8 mb-1">{{ $t('Description').toUpperCase() }}</div>
-          <el-input v-model="description" type="textarea" rows="4" />
-
-        </el-col>
-      </el-row>
-
-      <div class="py-10"><el-divider /></div>
-
-      <div class="affix-container h-screen ">
-        <el-row :gutter="24">
-          <el-col :span="6" class="label">
-            <div class="mb-6">{{ $t('Edit Sections') }}</div>
-            <el-affix target=".affix-container" :offset="100">
-              <div key="addSectionBtn">
-                <el-button type="primary" size="large" @click="addSection" :loading="addLoading">
-                  <Icon name="mdi:plus-circle" />
-                  <span class="pl-2">{{ $t('Add Section') }}</span>
-                </el-button>
-              </div>
-            </el-affix>
-          </el-col>
-
-          <el-col :span="18">
-            <SectionList />
-            <div ref="bottomEl"></div>
-          </el-col>
-        </el-row>
+          <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
+            <QuestionRecord
+              :record="qRecord"
+              :order="qIndex + 1"
+            ></QuestionRecord>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -49,61 +40,24 @@
 <script setup lang="ts">
 const route = useRoute()
 const formStore = useFormStore()
+const { currentForm } = storeToRefs(formStore)
+
 const sectionStore = useSectionStore()
+const { sectionList } = storeToRefs(sectionStore)
 
-const addLoading = ref(false)
-const bottomEl = ref<HTMLDivElement>()
-const formId = Number(route.params.id)
-
-const name = ref('')
-const description = ref('')
+const questionStore = useQuestionStore()
+const { questionList } = storeToRefs(questionStore)
 
 watchEffect(async () => {
   formStore.$reset()
-  const result = await formStore.getForm(formId)
-
-  name.value = result.name
-  description.value = result.description
+  await formStore.getForm(Number(route.params.id))
 })
 
-watchDebounced(name, (newVal, oldVal) => {
-  if (newVal == '') {
-    name.value = 'Untitled Form'
-  }
 
- if (oldVal !== '') {
-    updateBasicInfo('name')
- }
-}, { debounce: 500 })
-
-watchDebounced(description, () => {
-  updateBasicInfo('description')
-}, { debounce: 500 })
-
-const updateBasicInfo = (key: 'name' | 'description') => {
-  formStore.updateForm(formId, {
-    [key]: key == 'name' ? name.value : description.value
-  })
-}
-
-const addSection = async () => {
-  addLoading.value = true
-
-  await sectionStore.addSection({
-    name: 'Untitled Section',
-    form_id: formId
-  })
-
-  nextTick(() => {
-    addLoading.value = false
-    if (bottomEl.value) {
-      bottomEl.value.scrollIntoView({ behavior: 'smooth' });
-    }
-  })
-}
 </script>
 
 <style lang="scss">
+
 .label {
   font-family: 'Radikal-Bold';
   font-weight: 900;
@@ -111,5 +65,19 @@ const addSection = async () => {
   line-height: 1.4;
   color: $textColor;
   display: flex;
+}
+
+.title {
+  font-family: 'Radikal-Bold';
+  font-weight: 900;
+  font-size: 1.4rem;
+  @include line-clamp(2);
+
+  @apply w-full text-center;
+}
+
+.loading-status {
+  font-size: 0.8rem;
+  margin-left: 20px;
 }
 </style>
