@@ -1,11 +1,12 @@
 <template>
-  <el-button-group>
-    <el-button type="primary" size="large" @click="addSection">Insert Section</el-button>
-    <el-button type="primary" size="large" @click="addQuestion">Add Question</el-button>
+  <el-button-group size="large">
+    <el-button @click="addSection" :icon="Grid">Insert Section</el-button>
+    <el-button @click="addQuestion" :icon="CirclePlusFilled">Add Question</el-button>
   </el-button-group>
 </template>
 
 <script setup lang="ts">
+import { Grid, CirclePlusFilled } from '@element-plus/icons-vue'
 import { NodeType, Option } from '~/types';
 
 const props = defineProps<{

@@ -33,5 +33,6 @@ const props = withDefaults(defineProps<{
   background: #fff;
   z-index: 1000;
   border-bottom: 1px solid $borderColor;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-40">
+  <div class="pb-40 form-wrapper">
     <el-affix :offset="0">
       <Header backUrl="/forms">
         <div class="title">
@@ -8,11 +8,11 @@
       </Header>
     </el-affix>
 
-    <div class="w-3/6 mx-auto min-h-screen">
-      <FormRecord :record="currentForm" />
+    <div class="w-3/6 mx-auto min-h-screen form-content">
+      <FormRecord :record="currentForm" class="section-wrapper" />
 
       <div class="section-list" ref="sortableRef">
-        <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id">
+        <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id" class="section-wrapper">
           <SectionRecord
             :record="sRecord"
             :order="sIndex + 1"
@@ -45,11 +45,22 @@ const { questionList } = storeToRefs(questionStore)
 watchEffect(async () => {
   formStore.$reset()
   const result = await formStore.getForm(Number(route.params.id))
-  console.log('rr', result)
+  if (result.id == 0) {
+    navigateTo('/forms')
+  }
 })
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  background-color: rgb(240, 240, 240)
+}
+
+.section-wrapper {
+  margin: 1rem 0;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
 .label {
   font-weight: 900;
   font-size: 1.8rem;

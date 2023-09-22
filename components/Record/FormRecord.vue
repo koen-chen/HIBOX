@@ -1,11 +1,11 @@
 <template>
-   <div class="flex py-10">
+   <div class="flex p-8">
       <div class="w-full">
         <div class="mb-1">{{ $t('Form Name').toUpperCase() }}</div>
-        <el-input v-model="props.record.name" size="large" maxlength="50" />
+        <el-input v-model="props.record.name" size="large" maxlength="50" @blur="updateBasicInfo('name')" />
 
         <div class="mt-8 mb-1">{{ $t('Form Description').toUpperCase() }}</div>
-        <el-input v-model="props.record.description" type="textarea" rows="4" />
+        <el-input v-model="props.record.description" type="textarea" rows="4" @blur="updateBasicInfo('description')" />
       </div>
     </div>
 </template>
@@ -18,18 +18,6 @@ const props = defineProps<{
 }>()
 
 const formStore = useFormStore()
-
-watchDebounced(() => props.record.name, (_, oldVal) => {
-  if (oldVal !== '') {
-    updateBasicInfo('name')
-  }
-}, { debounce: 500 })
-
-watchDebounced(() => props.record.description, (_, oldVal) => {
-  if (oldVal !== '') {
-    updateBasicInfo('description')
-  }
-}, { debounce: 500 })
 
 const updateBasicInfo = async (key: 'name' | 'description') => {
   if (props.record.name == '') {

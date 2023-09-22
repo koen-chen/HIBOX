@@ -1,16 +1,16 @@
 <template>
   <div
-    class="w-full my-8 question-record"
+    class="w-full question p-4"
     :class="[`record-${props.record.id}`, { 'is-hovered': (isHovered || isFocused) }]"
     ref="activeRef"
   >
     <div
-      class="question-record-body p-4"
+      class="question-body p-8"
       @click="focusSection"
       ref="focusRef"
     >
-      <div class="p-7">
-        <div v-if="!isFocused" class="mb-4">
+      <div >
+        <div v-if="!isFocused">
           <div class="py-2">{{ props.order }}. {{ props.record.label }}</div>
           <div class="mb-2 p-2" v-if="props.record.type">
             <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :readonly="true" :id="props.record.id" />
@@ -273,11 +273,11 @@ function updateQuestionInfo(info: QuestionUpdateType) {
 </script>
 
 <style lang="scss" scoped>
-.question-record-body {
+.question-body {
   border-top: 4px solid transparent;
 }
 .is-hovered {
-  .question-record-body {
+  .question-body {
     border-top: 4px solid $primaryColor;
     background-color: $maskColor;
     cursor: pointer;

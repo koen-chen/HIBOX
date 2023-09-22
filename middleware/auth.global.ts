@@ -3,9 +3,7 @@ import { useAccountStore } from "@/stores/account"
 export default defineNuxtRouteMiddleware(async (to) => {
   const supabase = useSupabase().value
   const accountStore = useAccountStore()
-  const formStore = useFormStore()
   const { account } = storeToRefs(accountStore)
-  const { currentForm } = storeToRefs(formStore)
 
   if (account.value !== null) {
     return
@@ -24,10 +22,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   if (session && (to.path == '/login')) {
-    return navigateTo('/forms')
-  }
-
-  if (currentForm.value.id == 0 && (to.path != '/forms')) {
     return navigateTo('/forms')
   }
 })

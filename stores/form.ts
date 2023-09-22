@@ -44,7 +44,7 @@ export const useFormStore = defineStore('form', () => {
   }
 
   const getForm = async (id: number): Promise<FormType> => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('form')
       .select(`
         *,
@@ -56,7 +56,7 @@ export const useFormStore = defineStore('form', () => {
       .eq('id', id)
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       currentForm.value = _Pick(data, 'id', 'name', 'description', 'public', 'section_order', 'state', 'created_at')
 
       sectionStore.sectionOrder = data.section_order
@@ -72,13 +72,13 @@ export const useFormStore = defineStore('form', () => {
   }
 
   const addForm = async (info: FormInsertType): Promise<FormType> => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('form')
       .insert({ name: info.name, description: info.description })
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       currentForm.value = data
 
       if (formList.value) {
@@ -92,14 +92,14 @@ export const useFormStore = defineStore('form', () => {
   }
 
   const updateForm = async (id: number, info: FormUpdateType): Promise<FormType> => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('form')
       .update(info)
       .eq('id', id)
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       currentForm.value = data
 
       if (formList.value) {
