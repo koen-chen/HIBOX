@@ -44,13 +44,13 @@ const { questionList } = storeToRefs(questionStore)
 
 watchEffect(async () => {
   formStore.$reset()
-  await formStore.getForm(Number(route.params.id))
+  const result = await formStore.getForm(Number(route.params.id))
+  console.log('rr', result)
 })
 </script>
 
 <style lang="scss" scoped>
 .label {
-  font-family: 'Radikal-Bold';
   font-weight: 900;
   font-size: 1.8rem;
   line-height: 1.4;
@@ -59,7 +59,6 @@ watchEffect(async () => {
 }
 
 .title {
-  font-family: 'Radikal-Bold';
   font-weight: 900;
   font-size: 1.4rem;
   @include line-clamp(2);

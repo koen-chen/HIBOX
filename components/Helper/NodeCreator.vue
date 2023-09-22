@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
 import { NodeType, Option } from '~/types';
-import { nanoid } from 'nanoid'
 
 const props = defineProps<{
   formId: number,
@@ -21,10 +20,16 @@ const props = defineProps<{
 const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
 
+const otherOption = ref(false)
 const optionList = ref<Option[]>([
-  { label: "Option 1", id: nanoid(5) },
-  { label: "Option 2", id: nanoid(5) }
+  { label: "Option 1", id: nid() },
+  { label: "Option 2", id: nid() }
 ])
+
+const attributeValue =  {
+  options: optionList.value,
+  needOther: otherOption.value
+}
 
 function addSection() {
   sectionStore.addSection({
@@ -39,7 +44,7 @@ function addQuestion() {
       label: 'Question',
       type: NodeType.Radio,
       required: false,
-      attribute: JSON.stringify(optionList.value),
+      attribute: attributeValue,
       form_id: props.formId,
       section_id: props.sectionId
     }, { id: props.afterElement.id, type: props.afterElement.type })

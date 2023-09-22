@@ -41,7 +41,7 @@ export const useQuestionStore = defineStore('question', () => {
       .update(info)
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       const index = questionList.value[data.section_id].findIndex(item => item.id == data.id)
@@ -57,7 +57,7 @@ export const useQuestionStore = defineStore('question', () => {
       .update({ state: 'Delete' })
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       const order = questionOrder.value[data.section_id].filter(item => item == id)

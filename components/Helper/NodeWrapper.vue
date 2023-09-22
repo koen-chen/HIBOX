@@ -1,13 +1,21 @@
 <template>
    <div class="node-wrapper">
-      <div class="icon-box move cursor-pointer">
-          <Icon name="mdi:drag-horizontal" />
+      <div v-if="props.drag" class="icon-box move cursor-pointer">
+          <Icon name="mdi:drag-vertical" />
       </div>
       <div class="content">
         <slot />
       </div>
     </div>
 </template>
+
+<script setup lang="ts">
+const props = withDefaults(defineProps<{
+  drag?: boolean
+}>(), {
+  drag: true
+})
+</script>
 
 <style lang="scss" scoped>
 .node-wrapper {
@@ -25,7 +33,6 @@
   .content {
     width: 100%;
     padding: 0.8rem 0;
-    border-bottom: 1px solid #dbe3e4;
 
     @apply flex-grow;
   }

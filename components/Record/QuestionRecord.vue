@@ -11,9 +11,9 @@
     >
       <div class="p-7">
         <div v-if="!isFocused" class="mb-4">
-          <div class="py-4">{{ props.order }}. {{ props.record.label }}</div>
-          <div class="mb-2 p-3" v-if="props.record.type">
-            <component :is="node" v-model="nodeValue" v-bind="nodeInfo" readonly />
+          <div class="py-2">{{ props.order }}. {{ props.record.label }}</div>
+          <div class="mb-2 p-2" v-if="props.record.type">
+            <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :readonly="true" :id="props.record.id" />
           </div>
           <div v-else>
             Customize Quesiton
@@ -62,7 +62,7 @@
           </div>
 
           <div>
-            <component :is="node" v-model="nodeValue" v-bind="nodeInfo" />
+            <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :id="props.record.id" />
           </div>
 
           <el-divider class="mt-10" />
@@ -78,7 +78,7 @@
                 inline-prompt
                 :active-icon="Check"
                 :inactive-icon="Close"
-                @change="(val: boolean) => required = val"
+                @change="() => updateQuestionInfo({ required })"
                 />
             </div>
 
@@ -115,7 +115,7 @@
 import dayjs from 'dayjs'
 import { Check, Close } from '@element-plus/icons-vue'
 import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode, NodeCreator } from '#components'
-import { QuestionType, NodeList, NodeType } from '~/types';
+import { QuestionType, NodeList, NodeType, QuestionUpdateType } from '~/types';
 
 const props = defineProps<{
   record: QuestionType,
@@ -125,64 +125,94 @@ const props = defineProps<{
 const NodeList: NodeList = {
   [NodeType.Title]: {
     node: InputNode,
-    info: { textarea: true, readonly: true, autosize: true }
+    config: { textarea: true, readonly: true, autosize: true },
+    attribute: { placeholder: '' }
   },
   [NodeType.Input]: {
     node: InputNode,
-    info: {}
+    config: {},
+    attribute: { placeholder: '' }
   },
   [NodeType.Textarea]: {
     node: InputNode,
-    info: { textarea: true, autosize: true }
+    config: { textarea: true, autosize: true },
+    attribute: { placeholder: '' }
   },
   [NodeType.Radio]: {
     node: DropdownNode,
-    info: { needOtherOption: true, optionIcon: 'mdi:radiobox-blank' }
+    config: { needOtherOption: true, optionIcon: 'mdi:radiobox-blank' },
+    attribute: {
+      options: [
+        { label: "Option 1", id: nid() },
+        { label: "Option 2", id: nid() }
+      ],
+      needOther: false
+    }
   },
   [NodeType.Checkbox]: {
     node: DropdownNode,
-    info: { needOtherOption: true, optionIcon: 'mdi:checkbox-blank-outline' }
+    config: { needOtherOption: true, optionIcon: 'mdi:checkbox-blank-outline' },
+    attribute: {
+      options: [
+        { label: "Option 1", id: nid() },
+        { label: "Option 2", id: nid() }
+      ],
+      needOther: false
+    }
   },
   [NodeType.Dropdown]: {
     node: DropdownNode,
-    info: {}
+    config: { optionIcon: "INDEX" },
+    attribute: {
+      options: [
+        { label: "Option 1", id: nid() },
+        { label: "Option 2", id: nid() }
+      ],
+      needOther: false
+    }
   },
   [NodeType.FileUpload]: {
     node: UploadNode,
-    info: {}
+    config: {},
+    attribute: {}
   },
   [NodeType.Date]: {
     node: DateNode,
-    info: {}
+    config: {},
+    attribute: {}
   },
   [NodeType.Phone]: {
     node: PhoneNode,
-    info: {}
+    config: {},
+    attribute: {}
   },
   [NodeType.Country]: {
     node: CountryNode,
-    info: {}
+    config: {},
+    attribute: {}
   },
   [NodeType.Email]: {
     node: InputNode,
-    info: {
+    config: {
       rules: [
         (val: string) => {
           const pattern = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
           return pattern.test(val)
         }
       ]
-    }
+    },
+    attribute: {}
   },
   [NodeType.DateOfBirth]: {
     node: DateNode,
-    info: {
+    config: {
       rules: [
         (val: string) => {
           return dayjs(val).isBefore(dayjs(), 'year')
         }
       ]
-    }
+    },
+    attribute: {}
   }
 }
 
@@ -210,28 +240,34 @@ const isFocused = ref(false)
 const activeRef = ref()
 const isHovered = useElementHover(activeRef)
 
-const type = ref(NodeType.Radio)
-const node = computed(() => NodeList[type.value].node)
-const nodeInfo = computed(() => NodeList[type.value].info)
-const nodeValue = ref('')
-const required = ref(false)
+const type = ref(props.record.type || '')
+const nodeName = computed(() => NodeList[type.value].node)
+const nodeConfig = computed(() => NodeList[type.value].config)
+const nodeAttribute = ref(props.record.attribute)
+const required = ref(props.record.required)
 
 onClickOutside(activeRef, () => isFocused.value = false)
+
+watch(nodeAttribute, () => {
+  updateQuestionInfo({
+    attribute: nodeAttribute.value
+  })
+})
 
 function focusSection() {
   isFocused.value = true
 }
 
-function chooseType(type: keyof typeof NodeList) {
-  nodeValue.value = ''
+function chooseType(type: string) {
+  nodeAttribute.value = NodeList[type].attribute
   updateQuestionInfo({ type: type })
 }
 
 function handleDelete() {
-  console.log('delete question')
+  questionStore.deleteQuestion(props.record.id)
 }
 
-function updateQuestionInfo(info: Object) {
+function updateQuestionInfo(info: QuestionUpdateType) {
   questionStore.updateQuestion(props.record.id, info)
 }
 </script>

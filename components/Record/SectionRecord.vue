@@ -14,7 +14,7 @@
       ref="focusRef"
     >
       <div v-if="!isFocused" class="mb-4 p-4">
-        <div class="mb-2 p-3">{{ props.record.name }}</div>
+        <div class="p-3 text-2xl">{{ props.record.name }}</div>
         <div class="p-3">{{ props.record.description }}</div>
       </div>
 
@@ -57,7 +57,6 @@ const props = defineProps<{
 }>()
 
 const sectionStore = useSectionStore()
-
 const isFocused = ref(false)
 const activeRef = ref()
 const isHovered = useElementHover(activeRef)

@@ -14,6 +14,7 @@
     "@nuxtjs/google-fonts": "^3.0.2",
     "@nuxtjs/i18n": "8.0.0-rc.3",
     "@nuxtjs/tailwindcss": "^6.8.0",
+    "@types/dompurify": "^3.0.2",
     "@vueuse/core": "^10.4.1",
     "@vueuse/nuxt": "^10.4.1",
     "cz-conventional-changelog": "^3.3.0",
@@ -29,12 +30,11 @@
     }
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-balloon": "^39.0.1",
-    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@element-plus/icons-vue": "^2.1.0",
     "@pinia/nuxt": "^0.4.11",
     "@supabase/supabase-js": "^2.33.1",
     "@types/lodash": "^4.14.198",
+    "@vueup/vue-quill": "^1.2.0",
     "@vueuse/components": "^10.4.1",
     "@vueuse/integrations": "^10.4.1",
     "@vueuse/motion": "^2.0.0",
@@ -42,8 +42,10 @@
     "awesome-phonenumber": "^5.10.0",
     "country-code-lookup": "^0.1.0",
     "dayjs": "^1.11.9",
+    "isomorphic-dompurify": "^1.8.0",
     "nanoid": "^4.0.2",
     "pinia": "^2.1.6",
+    "sanitize-html": "^2.11.0",
     "sortablejs": "^1.15.0",
     "type-fest": "^4.3.1",
     "vue-draggable-plus": "^0.2.6"

@@ -1,47 +1,48 @@
-import { MergeDeep } from 'type-fest'
-import { Database as DatabaseGenerated } from "./supabase"
-export * from './node'
+import { PostgrestError } from '@supabase/supabase-js'
+import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode } from '#components'
 
-type Json = number[]
+export * from './database'
 
-type Database = MergeDeep<DatabaseGenerated, {
-  public: {
-    Tables: {
-      section: {
-        Row: {
-          question_order: Json
-          collapse?: boolean
-          focused?: boolean
-        }
-        Insert: {
-          question_order?: Json
-        }
-      }
-      form: {
-        Row: {
-          section_order: Json
-        }
-        Insert: {
-          section_order?: Json
-        }
-      }
-    }
-  }
-}>
-
-export type FormType = Database['public']['Tables']['form']['Row']
-export type SectionType = Database['public']['Tables']['section']['Row']
-export type QuestionType = Database['public']['Tables']['question']['Row']
-
-export type FormInsertType = Database['public']['Tables']['form']['Insert']
-export type SectionInsertType = Database['public']['Tables']['section']['Insert']
-export type QuestionInsertType = Database['public']['Tables']['question']['Insert']
-
-export type FormUpdateType = Database['public']['Tables']['form']['Update']
-export type SectionUpdateType = Database['public']['Tables']['section']['Update']
-export type QuestionUpdateType = Database['public']['Tables']['question']['Update']
-
+export type attributeJson = { [key: string]: number | string | boolean | attributeJson[] }
 
 export type AccountType = {
   email?: string,
+}
+
+export type DbResultError = PostgrestError
+
+export type AllNode =
+  typeof InputNode |
+  typeof DropdownNode |
+  typeof DateNode |
+  typeof UploadNode |
+  typeof PhoneNode |
+  typeof CountryNode
+
+export enum NodeType {
+  Title = 'Title',
+  Input = 'Input',
+  Textarea = 'Textarea',
+  Radio = 'Radio',
+  Checkbox = 'Checkbox',
+  Dropdown = 'Dropdown',
+  FileUpload = 'FileUpload',
+  Date = 'Date',
+  Phone = 'Phone',
+  Country = 'Country',
+  Email = 'Email',
+  DateOfBirth = 'DateOfBirth'
+}
+
+export interface NodeList {
+  [key: string]: {
+    node: AllNode,
+    config: Object,
+    attribute: attributeJson
+  }
+}
+
+export type Option = {
+  label: string,
+  id: string
 }

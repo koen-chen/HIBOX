@@ -1,36 +1,22 @@
 <template>
-  <div>
-    <ckeditor :editor="BalloonEditor" v-model="editorData" :config="editorConfig" @blur="handleBlur" />
-  </div>
+  <QuillEditor content-type="html" theme="bubble" v-model:content="editorData" @blur="handleBlur"/>
 </template>
 
 <script setup lang="ts">
-import CKEditor from '@ckeditor/ckeditor5-vue';
-import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
 const props = defineProps<{ data: string }>()
-const emit = defineEmits<{ change: [value: String] }>()
-
-const ckeditor = CKEditor.component
+const emit = defineEmits<{ change: [value: string] }>()
 const editorData = ref(props.data)
-const editorConfig = {
-  toolbar: {
-    items: [
-      'undo', 'redo',
-      '|', 'heading',
-      '|', 'bold', 'italic',
-      '|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed',
-      '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
-    ],
-    shouldNotGroupWhenFull: true,
-  },
-  link: {
-    addTargetToExternalLinks: true,
-    defaultProtocol: "https://",
-  }
-};
 
-const handleBlur = (_: any, editor: { getData: () => string; }) => {
-  emit('change', editor.getData())
+function handleBlur() {
+ emit('change', editorData.value)
 }
 </script>
+
+<style lang="scss">
+.ql-editor {
+  padding: 0.75rem !important;
+}
+</style>

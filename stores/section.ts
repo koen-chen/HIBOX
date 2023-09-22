@@ -21,11 +21,11 @@ export const useSectionStore = defineStore('section', () => {
       .from('section')
       .insert(info)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       let index = sectionOrder.value.length
-      
+
       if (afterElement) {
         if (afterElement.type == 'section') {
           index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
@@ -47,7 +47,7 @@ export const useSectionStore = defineStore('section', () => {
       .update(info)
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       sectionList.value = sectionList.value.map(item => {
@@ -68,7 +68,7 @@ export const useSectionStore = defineStore('section', () => {
       .update({ state: 'Delete' })
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       sectionOrder.value = sectionOrder.value.filter(item => item != id)

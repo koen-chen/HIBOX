@@ -1,7 +1,6 @@
 <template>
   <NodeWrapper>
     <el-input
-      class="no-el-border"
       v-model="value"
       @input="handleChange"
       placeholder="Please enter a placeholder for this input"
@@ -34,7 +33,6 @@ const props = withDefaults(defineProps<{
 
 const value = ref(props.modelValue)
 const valid = ref(true)
-
 
 const inputType = computed(() => {
   return props.textarea ? 'textarea' : 'text'

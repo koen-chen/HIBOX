@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { FormType, FormInsertType, FormUpdateType, SectionType, QuestionType } from '~/types'
+import { FormType, FormInsertType, FormUpdateType, SectionType, QuestionType, DbResultError } from '~/types'
 import { useSectionStore } from './section'
 
 export const useFormStore = defineStore('form', () => {
@@ -51,8 +51,10 @@ export const useFormStore = defineStore('form', () => {
         section (*),
         question (*)
       `)
+      .neq('section.state', 'Delete')
+      .neq('question.state', 'Delete')
       .eq('id', id)
-      .single()
+      .maybeSingle()
 
     if (!error) {
       currentForm.value = _Pick(data, 'id', 'name', 'description', 'public', 'section_order', 'state', 'created_at')
@@ -74,7 +76,7 @@ export const useFormStore = defineStore('form', () => {
       .from('form')
       .insert({ name: info.name, description: info.description })
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       currentForm.value = data
@@ -95,7 +97,7 @@ export const useFormStore = defineStore('form', () => {
       .update(info)
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       currentForm.value = data
@@ -120,7 +122,7 @@ export const useFormStore = defineStore('form', () => {
       .update({ state: 'Delete' })
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
     if (!error) {
       currentForm.value = initFormValue

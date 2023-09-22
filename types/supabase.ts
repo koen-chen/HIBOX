@@ -42,7 +42,7 @@ export interface Database {
       question: {
         Row: {
           associate: boolean
-          attribute: string
+          attribute: Json
           created_at: string
           form_id: number
           id: number
@@ -54,7 +54,7 @@ export interface Database {
         }
         Insert: {
           associate?: boolean
-          attribute?: string
+          attribute?: Json
           created_at?: string
           form_id: number
           id?: number
@@ -66,7 +66,7 @@ export interface Database {
         }
         Update: {
           associate?: boolean
-          attribute?: string
+          attribute?: Json
           created_at?: string
           form_id?: number
           id?: number

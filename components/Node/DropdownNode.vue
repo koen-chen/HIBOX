@@ -1,42 +1,71 @@
 <template>
   <div class="w-full px-2 py-1">
     <div class="w-full mb-2">
-      <NodeWrapper v-for="op in optionList" :key="op.id">
-        <div class="flex items-center">
-          <div v-if="props.optionIcon" class="flex-none  w-4 mr-1">
-            <Icon :name="props.optionIcon" color="#7a8182" />
-          </div>
-          <div class="flex-grow break-words">
-            <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
-          </div>
+      <template v-for="(op, index) in optionList" :key="op.id">
+        <NodeWrapper v-if="!props.readonly">
+          <div class="flex items-center">
+            <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
+              <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
+              <Icon v-else :name="props.optionIcon" color="#7a8182" />
+            </div>
+            <div class="flex-grow break-words">
+              <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
+            </div>
 
-          <div class="flex-none w-14" v-if="optionList.length != 1">
-            <el-button link @click="() => removeOption(op)">
-              <Icon name="mdi:close" />
-            </el-button>
+            <div class="flex-none w-14 ml-4" v-if="(optionList.length != 1)">
+              <el-button link @click="() => removeOption(op)">
+                <Icon name="mdi:close" />
+              </el-button>
+            </div>
           </div>
-        </div>
-      </NodeWrapper>
+        </NodeWrapper>
 
-      <NodeWrapper v-if="otherOption">
-        <div class="flex items-center">
-          <div v-if="props.optionIcon" class="flex-none  w-4 mr-1">
-            <Icon :name="props.optionIcon" color="#7a8182" />
+        <NodeWrapper v-else class="node-wrapper" :drag="false">
+          <div class="flex items-center">
+            <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
+              <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
+              <Icon v-else :name="props.optionIcon" color="#7a8182" />
+            </div>
+            <div class="flex-grow break-words">
+              <div class="p-3" v-html="sanitize(op.label)" />
+            </div>
           </div>
-          <div class="flex-grow break-words">
-            <el-input value="Other..." readOnly bordered={false} style="color: #b8c2c2" />
-          </div>
+        </NodeWrapper>
+      </template>
 
-          <div class="flex-none w-14">
-            <el-button  link @click="removeOtherOption">
-              <Icon name="mdi:close" color="#7a8182" />
-            </el-button>
+      <template v-if="otherOption">
+        <NodeWrapper v-if="!props.readonly">
+          <div class="flex items-center">
+            <div v-if="props.optionIcon" class="flex-none w-4 mr-4">
+              <Icon :name="props.optionIcon" color="#7a8182" />
+            </div>
+            <div class="flex-grow break-words">
+              <div class="p-3">Other...</div>
+            </div>
+
+            <div class="flex-none w-14 ml-4">
+              <el-button  link @click="removeOtherOption">
+                <Icon name="mdi:close" color="#7a8182" />
+              </el-button>
+            </div>
           </div>
-        </div>
-      </NodeWrapper>
+        </NodeWrapper>
+
+         <NodeWrapper v-else :drag="false">
+            <div class="flex items-center">
+              <div v-if="props.optionIcon" class="flex-none w-4 mr-4">
+                <Icon :name="props.optionIcon" color="#7a8182" />
+              </div>
+              <div class="flex-grow break-words">
+                <div class="p-3">Other...</div>
+              </div>
+            </div>
+          </NodeWrapper>
+      </template>
+
     </div>
 
-    <div class="add-option-wrapper">
+    <div v-if="!props.readonly" class="add-option-wrapper">
       <el-button text @click="addOption" style="color: #7a8182; textDecoration: underline">
         {{ $t('Add Option') }}
       </el-button>
@@ -53,27 +82,32 @@
 </template>
 
 <script setup lang="ts">
+import { sanitize } from "isomorphic-dompurify";
 import { nanoid } from 'nanoid'
-import { Option } from '~/types';
+import { Option } from '~/types'
 
 const emit = defineEmits<{
   'update:modelValue': [value: Object]
 }>()
 
 const props = withDefaults(defineProps<{
-  modelValue: string | number | undefined
+  id: number | null,
+  modelValue: {
+    needOther: boolean,
+    options: []
+  },
   optionIcon?: string,
-  needOtherOption?: boolean
+  needOtherOption?: boolean,
+  readonly?: boolean
 }>(), {
+  id: null,
   optionIcon: '',
-  needOtherOption: false
+  needOtherOption: false,
+  readonly: false
 })
 
-const otherOption = ref(false)
-const optionList = ref<Option[]>([
-  { label: "Option 1", id: nanoid(5) },
-  { label: "Option 2", id: nanoid(5) }
-])
+const otherOption = ref<boolean>(props.modelValue.needOther)
+const optionList = ref<Option[]>(props.modelValue.options)
 
 const addOption = () => {
   const newValue = { label: "Additional option", id: nanoid(5) }
@@ -98,8 +132,11 @@ const removeOtherOption = () => {
 }
 
 watch(optionList, () => {
-  emit('update:modelValue', optionList.value)
-}, { immediate: true })
+  emit('update:modelValue', {
+    options: optionList.value,
+    needOther: otherOption.value
+  })
+})
 </script>
 
 <style lang="scss" scoped>

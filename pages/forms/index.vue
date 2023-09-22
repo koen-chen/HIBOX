@@ -124,7 +124,6 @@ async function handleDelete(id: number) {
 
 <style lang="scss" scoped>
 .title {
-  font-family: 'Radikal-Bold';
   font-weight: 900;
   font-size: 1.4rem;
   @include line-clamp(2);

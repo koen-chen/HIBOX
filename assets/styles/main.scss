@@ -2,25 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Radikal-Regular";
-  src: url(/fonts/Radikal-Regular.otf);
-}
-
-@font-face {
-  font-family: "Radikal-Bold";
-  src: url(/fonts/Radikal-Bold.otf);
-}
-
-@font-face {
-  font-family: "Radikal-Light";
-  src: url(/fonts/Radikal-Light.otf);
-}
-
 html,
 body {
   font-size: 14px;
-  font-family: "Radikal-Regular", sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   background-color: #fff;
 }
 
@@ -67,6 +52,7 @@ body,
 
 .no-el-border {
   .el-input__wrapper,
+  .el-input__wrapper:hover,
   .el-textarea__inner {
     background-color: transparent;
     box-shadow: none;
