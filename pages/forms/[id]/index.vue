@@ -5,25 +5,31 @@
         <div class="title">
           {{ currentForm.name }}
         </div>
+
+        <template #actions>
+          <div>
+            <el-button :icon="View" text @click="previewForm">Preview</el-button>
+          </div>
+        </template>
       </Header>
     </el-affix>
 
-    <div class="w-3/6 mx-auto min-h-screen form-content">
-      <FormRecord :record="currentForm" class="section-wrapper" />
+    <div class="mx-auto min-h-screen form-content">
+      <FormBuilder :record="currentForm" class="section-wrapper" />
 
       <div class="section-list" ref="sortableRef">
         <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id" class="section-wrapper">
-          <SectionRecord
+          <SectionBuilder
             :record="sRecord"
             :order="sIndex + 1"
           >
-          </SectionRecord>
+          </SectionBuilder>
 
           <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
-            <QuestionRecord
+            <QuestionBuilder
               :record="qRecord"
               :order="qIndex + 1"
-            ></QuestionRecord>
+            ></QuestionBuilder>
           </div>
         </div>
       </div>
@@ -32,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { View } from '@element-plus/icons-vue';
+
 const route = useRoute()
 const formStore = useFormStore()
 const { currentForm } = storeToRefs(formStore)
@@ -42,24 +50,33 @@ const { sectionList } = storeToRefs(sectionStore)
 const questionStore = useQuestionStore()
 const { questionList } = storeToRefs(questionStore)
 
+const formId = Number(route.params.id)
+
 watchEffect(async () => {
   formStore.$reset()
-  const result = await formStore.getForm(Number(route.params.id))
+  const result = await formStore.getForm(formId)
   if (result.id == 0) {
     navigateTo('/forms')
   }
 })
+
+function previewForm() {
+  navigateTo(`/forms/${formId}/preview`)
+}
 </script>
 
 <style lang="scss" scoped>
 .form-wrapper {
   background-color: rgb(240, 240, 240)
 }
-
+.form-content {
+  width: 800px;
+}
 .section-wrapper {
   margin: 1rem 0;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 4px;
 }
 .label {
   font-weight: 900;
@@ -68,7 +85,6 @@ watchEffect(async () => {
   color: $textColor;
   display: flex;
 }
-
 .title {
   font-weight: 900;
   font-size: 1.4rem;

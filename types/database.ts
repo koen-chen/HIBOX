@@ -5,7 +5,7 @@ import { Database as DatabaseGenerated } from "./supabase"
 type numberJson = number[]
 type attributeJson = { [key: string]: number | string | boolean | attributeJson[] }
 
-type Database = MergeDeep<DatabaseGenerated, {
+export type Database = MergeDeep<DatabaseGenerated, {
   public: {
     Tables: {
       section: {

@@ -62,7 +62,6 @@
             </div>
           </NodeWrapper>
       </template>
-
     </div>
 
     <div v-if="!props.readonly" class="add-option-wrapper">

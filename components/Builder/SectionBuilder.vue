@@ -4,15 +4,25 @@
     :class="[`record-${props.record.id}`, { 'is-hovered': (isHovered || isFocused) }]"
     ref="activeRef"
   >
-    <div class="section-head p-4">
-      Section {{ props.order }}
+    <div class="section-head p-4 flex items-center justify-between">
+      <div>Section {{ props.order }}</div>
+      <div class="cursor-pointer">
+        <el-dropdown trigger="click" @command="handleCommand">
+          <el-icon><MoreFilled /></el-icon>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="move">Move Section</el-dropdown-item>
+              <el-dropdown-item command="delete">Delete Section</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     </div>
 
-    <div class="p-4">
+    <div class="px-4 py-2">
       <div
-        class="section-body p-8"
+        class="section-body px-8 py-4"
         @click="focusSection"
-        ref="focusRef"
       >
         <div v-if="!isFocused">
           <div class="py-3 text-2xl">{{ props.record.name }}</div>
@@ -52,6 +62,7 @@
 
 <script setup lang="ts">
 import { SectionType } from '~/types';
+import { MoreFilled } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   record: SectionType,
@@ -73,15 +84,30 @@ function updateBasicInfo(key: 'name' | 'description') {
       [key]: key == 'name' ? props.record.name : props.record.description
   })
 }
+
+function deleteSection() {
+  sectionStore.deleteSection(props.record.id)
+}
+
+function handleCommand(command: string) {
+  if (command == 'delete') {
+    deleteSection()
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .section-head {
   background-color: $primaryHoverColor;
-  opacity: 0.6;
+  opacity: 0.8;
+}
+
+.section-body {
+  border-top: 4px solid transparent;
 }
 .is-hovered {
   .section-body {
+    border-top: 4px solid $primaryColor;
     background-color: $maskColor;
     cursor: pointer;
   }

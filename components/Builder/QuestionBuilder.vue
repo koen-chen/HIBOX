@@ -1,22 +1,19 @@
 <template>
   <div
-    class="w-full question p-4"
+    class="w-full question px-4 py-2"
     :class="[`record-${props.record.id}`, { 'is-hovered': (isHovered || isFocused) }]"
     ref="activeRef"
   >
     <div
-      class="question-body p-8"
+      class="question-body px-8 py-4"
       @click="focusSection"
       ref="focusRef"
     >
       <div >
         <div v-if="!isFocused">
           <div class="py-2">{{ props.order }}. {{ props.record.label }}</div>
-          <div class="mb-2 p-2" v-if="props.record.type">
+          <div class="mb-2 p-2">
             <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :readonly="true" :id="props.record.id" />
-          </div>
-          <div v-else>
-            Customize Quesiton
           </div>
         </div>
 

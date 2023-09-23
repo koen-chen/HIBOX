@@ -12,15 +12,15 @@ export const useQuestionStore = defineStore('question', () => {
     questionOrder.value = {}
   }
 
-  const addQuestion = async (info: QuestionInsertType, afterElement: { id: number, type: string }): Promise<QuestionType> => {
-    const { data, error } = await supabase
+  const addQuestion = async (info: QuestionInsertType, afterElement: { id: number, type: string }): Promise<void> => {
+    const { data } = await supabase
       .from('question')
       .insert(info)
       .select()
-      .single()
+      .maybeSingle()
 
-    if (!error) {
-      if (afterElement.type == 'section') {
+    if (data) {
+      if (afterElement.type == 'Section') {
         questionList.value[info.section_id].push(data)
         questionOrder.value[info.section_id].push(data.id)
       } else {
@@ -31,35 +31,31 @@ export const useQuestionStore = defineStore('question', () => {
 
       await updateOrder(info.section_id, questionOrder.value[info.section_id])
     }
-
-    return data
   }
 
-  const updateQuestion = async (id: number, info: QuestionUpdateType): Promise<QuestionType> => {
-    const { data, error } = await supabase
+  const updateQuestion = async (id: number, info: QuestionUpdateType): Promise<void> => {
+    const { data } = await supabase
       .from('question')
       .update(info)
       .eq('id', id)
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       const index = questionList.value[data.section_id].findIndex(item => item.id == data.id)
       questionList.value[data.section_id].splice(index, 1, data)
     }
-
-    return data
   }
 
   const deleteQuestion = async (id: number): Promise<void> => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('question')
       .update({ state: 'Delete' })
       .eq('id', id)
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       const order = questionOrder.value[data.section_id].filter(item => item == id)
       await updateOrder(data.section_id, order)
 

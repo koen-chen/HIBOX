@@ -1,5 +1,5 @@
 <template>
-  <div class="header py-10">
+  <div class="header py-5">
     <div class="w-3/5 mx-auto flex items-center justify-center">
       <div v-if="props.back" class="flex-none">
         <el-button text @click="navigateTo(props.backUrl)">

@@ -1,6 +1,6 @@
-import { after } from "lodash"
 import { defineStore } from "pinia"
 import { SectionType, SectionInsertType, SectionUpdateType } from "~/types"
+import { usePrevious } from '@vueuse/core'
 
 export const useSectionStore = defineStore('section', () => {
   const supabase = useSupabase().value
@@ -9,6 +9,9 @@ export const useSectionStore = defineStore('section', () => {
   const sectionList = ref<SectionType[]>([])
   const sectionOrder = ref<number[]>([])
 
+  const previousSectionList = usePrevious(sectionList)
+  const previousSectionOrder = usePrevious(sectionOrder)
+
   const $reset = () => {
     sectionList.value = []
     sectionOrder.value = []
@@ -16,18 +19,21 @@ export const useSectionStore = defineStore('section', () => {
     questionStore.$reset()
   }
 
-  const addSection = async (info: SectionInsertType, afterElement?: { id: number, type: string }): Promise<SectionType> => {
-    const { data, error } = await supabase
+  const addSection = async (info: SectionInsertType, afterElement?: { id: number, type: string }): Promise<void> => {
+    const { data } = await supabase
       .from('section')
       .insert(info)
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
+      questionStore.questionList[data.id] = []
+      questionStore.questionOrder[data.id] = []
+
       let index = sectionOrder.value.length
 
       if (afterElement) {
-        if (afterElement.type == 'section') {
+        if (afterElement.type == 'Section') {
           index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
         }
       }
@@ -37,19 +43,17 @@ export const useSectionStore = defineStore('section', () => {
 
       await updateOrder(info.form_id, [...sectionOrder.value])
     }
-
-    return data
   }
 
-  const updateSection = async (id: number, info: SectionUpdateType): Promise<SectionType> => {
-    const { data, error } = await supabase
+  const updateSection = async (id: number, info: SectionUpdateType): Promise<void> => {
+    const { data } = await supabase
       .from('section')
       .update(info)
       .eq('id', id)
       .select()
       .maybeSingle()
 
-    if (!error) {
+    if (data) {
       sectionList.value = sectionList.value.map(item => {
         if (item.id == data.id) {
           return data
@@ -58,25 +62,26 @@ export const useSectionStore = defineStore('section', () => {
         }
       })
     }
-
-    return data
   }
 
   const deleteSection = async (id: number): Promise<void> => {
-    const { data, error } = await supabase
+    sectionList.value = sectionList.value.filter(item => item.id !== id)
+    sectionOrder.value = sectionOrder.value.filter(item => item != id)
+
+    const { data } = await supabase
       .from('section')
       .update({ state: 'Delete' })
       .eq('id', id)
       .select()
       .maybeSingle()
 
-    if (!error) {
-      sectionOrder.value = sectionOrder.value.filter(item => item != id)
+    if (data) {
       await updateOrder(data.form_id, sectionOrder.value)
 
       await questionStore.deleteQuestionBy({ section_id: id })
-
-      sectionList.value = sectionList.value.filter(item => item.id !== id)
+    } else {
+      previousSectionList.value && (sectionList.value = [...previousSectionList.value])
+      previousSectionOrder.value && (sectionOrder.value = [...previousSectionOrder.value])
     }
   }
 
