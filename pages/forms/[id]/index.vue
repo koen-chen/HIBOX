@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-40 form-wrapper">
+  <div class="pb-40 edit-wrapper">
     <el-affix :offset="0">
       <Header backUrl="/forms">
         <div class="title">
@@ -14,7 +14,7 @@
       </Header>
     </el-affix>
 
-    <div class="mx-auto min-h-screen form-content">
+    <div class="mx-auto min-h-screen edit-content">
       <FormBuilder :record="currentForm" class="section-wrapper" />
 
       <div class="section-list" ref="sortableRef">
@@ -66,10 +66,10 @@ function previewForm() {
 </script>
 
 <style lang="scss" scoped>
-.form-wrapper {
+.edit-wrapper {
   background-color: rgb(240, 240, 240)
 }
-.form-content {
+.edit-content {
   width: 800px;
 }
 .section-wrapper {
