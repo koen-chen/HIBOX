@@ -6,7 +6,7 @@
   >
     <div
       class="question-body px-8 py-4"
-      @click="focusSection"
+      @click="focusQuestion"
       ref="focusRef"
     >
       <div >
@@ -209,10 +209,12 @@ const ModulesTypeList = [
 ]
 
 const questionStore = useQuestionStore()
+const { latestQuestionId } = storeToRefs(questionStore)
 
 const isFocused = ref(false)
 const activeRef = ref()
 const isHovered = useElementHover(activeRef)
+const focusRef = ref()
 
 const type = ref(props.record.type || '')
 const nodeName = computed(() => NodeList[type.value].node)
@@ -222,13 +224,21 @@ const required = ref(props.record.required)
 
 onClickOutside(activeRef, () => isFocused.value = false)
 
+watchPostEffect(() => {
+  isHovered.value = false
+  if (latestQuestionId.value == props.record.id) {
+    focusRef.value.click()
+    focusRef.value.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }
+})
+
 watch(nodeAttribute, () => {
   updateQuestionInfo({
     attribute: nodeAttribute.value
   })
 })
 
-function focusSection() {
+function focusQuestion() {
   isFocused.value = true
 }
 

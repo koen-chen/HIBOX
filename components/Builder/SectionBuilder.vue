@@ -23,6 +23,7 @@
       <div
         class="section-body px-8 py-4"
         @click="focusSection"
+        ref="focusRef"
       >
         <div v-if="!isFocused">
           <div class="py-3 text-2xl">{{ props.record.name }}</div>
@@ -70,14 +71,25 @@ const props = defineProps<{
 }>()
 
 const sectionStore = useSectionStore()
+const { latestSectionId } = storeToRefs(sectionStore)
 const isFocused = ref(false)
 const activeRef = ref()
 const isHovered = useElementHover(activeRef)
+const focusRef = ref()
+
 onClickOutside(activeRef, () => isFocused.value = false)
 
 function focusSection() {
   isFocused.value = true
 }
+
+watchPostEffect(() => {
+  isHovered.value = false
+  if (latestSectionId.value == props.record.id) {
+    focusRef.value.click()
+    focusRef.value.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }
+})
 
 function updateBasicInfo(key: 'name' | 'description') {
   sectionStore.updateSection(props.record.id, {

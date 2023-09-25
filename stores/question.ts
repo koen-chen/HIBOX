@@ -6,6 +6,7 @@ export const useQuestionStore = defineStore('question', () => {
 
   const questionList = ref<{ [key: number]: QuestionType[]}>({})
   const questionOrder = ref<{ [key: number]: number[] }>({})
+  const latestQuestionId = ref<number | null>(null)
 
   const $reset = () => {
     questionList.value = {}
@@ -29,6 +30,7 @@ export const useQuestionStore = defineStore('question', () => {
         questionOrder.value[info.section_id].splice(index, 0, data.id)
       }
 
+      latestQuestionId.value = data.id
       await updateOrder(info.section_id, questionOrder.value[info.section_id])
     }
   }
@@ -97,6 +99,7 @@ export const useQuestionStore = defineStore('question', () => {
 
   return {
     $reset,
+    latestQuestionId,
     questionOrder,
     questionList,
     addQuestion,

@@ -11,6 +11,7 @@ export const useSectionStore = defineStore('section', () => {
 
   const previousSectionList = usePrevious(sectionList)
   const previousSectionOrder = usePrevious(sectionOrder)
+  const latestSectionId = ref<number | null>(null)
 
   const $reset = () => {
     sectionList.value = []
@@ -41,6 +42,7 @@ export const useSectionStore = defineStore('section', () => {
       sectionList.value.splice(index, 0, data)
       sectionOrder.value.splice(index, 0, data.id)
 
+      latestSectionId.value = data.id
       await updateOrder(info.form_id, [...sectionOrder.value])
     }
   }
@@ -120,6 +122,7 @@ export const useSectionStore = defineStore('section', () => {
 
   return {
     $reset,
+    latestSectionId,
     sectionOrder,
     sectionList,
     addSection,
