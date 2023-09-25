@@ -1,6 +1,6 @@
 <template>
-  <NodeWrapper>
-    <el-input v-model="numberValue" placeholder="Please input placeholder">
+  <NodeWrapper :drag="false">
+    <el-input placeholder="Please input placeholder">
       <template #prepend>
         <el-select v-model="regionCodeValue" placeholder="Default code" style="width: 150px; background: #fff">
           <el-option v-for="op in regionCodeList" :value="'+' + op" :label="'+' + op" />
@@ -16,5 +16,4 @@ import { getSupportedCallingCodes } from 'awesome-phonenumber'
 const regionCodeList = getSupportedCallingCodes()
 const regionCodeValue = ref('')
 
-const numberValue = ref('')
 </script>

@@ -26,6 +26,7 @@
           <div class="mt-20">
             <el-button v-if="activeSection != 0" size="large" @click="handleSectionBack">Back</el-button>
             <el-button v-if="activeSection != (sectionList.length - 1)" size="large" type="primary" @click="handleSectionNext">Next</el-button>
+            <el-button v-if="activeSection == (sectionList.length - 1)" size="large" type="primary" @click="handleFormSubmit">Submit</el-button>
           </div>
         </div>
       </template>
@@ -66,6 +67,10 @@ function handleSectionNext() {
 function handleSectionBack() {
   activeSection.value = activeSection.value - 1
 }
+
+function handleFormSubmit() {
+
+}
 </script>
 
 <style lang="scss" scoped>
@@ -97,7 +102,7 @@ function handleSectionBack() {
 }
 
 .section-info {
-  @apply mb-8;
+  @apply mb-10;
 }
 .section-title {
   color: $primaryColor;

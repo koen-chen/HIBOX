@@ -19,7 +19,7 @@
 
         <div v-if="isFocused">
           <div class="flex items-center justify-between">
-            <div>
+            <div class="flex-grow mr-5">
               <el-input
                 size="large"
                 v-model="props.record.label"
@@ -109,7 +109,6 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { Check, Close } from '@element-plus/icons-vue'
 import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode, NodeCreator } from '#components'
 import { QuestionType, NodeList, NodeType, QuestionUpdateType } from '~/types';
@@ -122,18 +121,14 @@ const props = defineProps<{
 const NodeList: NodeList = {
   [NodeType.Title]: {
     node: InputNode,
-    config: { textarea: true, readonly: true, autosize: true },
-    attribute: { placeholder: '' }
+    config: { textarea: true },
   },
   [NodeType.Input]: {
-    node: InputNode,
-    config: {},
-    attribute: { placeholder: '' }
+    node: InputNode
   },
   [NodeType.Textarea]: {
     node: InputNode,
-    config: { textarea: true, autosize: true },
-    attribute: { placeholder: '' }
+    config: { textarea: true },
   },
   [NodeType.Radio]: {
     node: DropdownNode,
@@ -169,47 +164,29 @@ const NodeList: NodeList = {
     }
   },
   [NodeType.FileUpload]: {
-    node: UploadNode,
-    config: {},
-    attribute: {}
+    node: UploadNode
   },
   [NodeType.Date]: {
-    node: DateNode,
-    config: {},
-    attribute: {}
+    node: DateNode
   },
   [NodeType.Phone]: {
-    node: PhoneNode,
-    config: {},
-    attribute: {}
+    node: PhoneNode
   },
   [NodeType.Country]: {
-    node: CountryNode,
-    config: {},
-    attribute: {}
+    node: CountryNode
   },
   [NodeType.Email]: {
     node: InputNode,
-    config: {
-      rules: [
-        (val: string) => {
-          const pattern = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
-          return pattern.test(val)
-        }
-      ]
-    },
-    attribute: {}
+    attribute: {
+      rules: ['emailChecker']
+    }
   },
   [NodeType.DateOfBirth]: {
     node: DateNode,
-    config: {
-      rules: [
-        (val: string) => {
-          return dayjs(val).isBefore(dayjs(), 'year')
-        }
-      ]
-    },
-    attribute: {}
+    attribute: {
+      birthday: true,
+      rules: ['dateOfBirthChecker']
+    }
   }
 }
 
@@ -256,7 +233,7 @@ function focusSection() {
 }
 
 function chooseType(type: string) {
-  nodeAttribute.value = NodeList[type].attribute
+  nodeAttribute.value = NodeList[type].attribute || {}
   updateQuestionInfo({ type: type })
 }
 

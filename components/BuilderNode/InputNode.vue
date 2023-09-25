@@ -1,52 +1,27 @@
 <template>
-  <NodeWrapper>
+  <NodeWrapper :drag="false">
     <el-input
-      v-model="value"
-      @input="handleChange"
-      placeholder="Please enter a placeholder for this input"
-      :type="inputType"
-      :rows="props.rows"
-      :autosize="props.autosize"
+      :placeholder="placeholder"
+      :disabled="true"
+      size="large"
     />
   </NodeWrapper>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
-}>()
-
 const props = withDefaults(defineProps<{
-  modelValue: string | number | undefined
-  textarea?: boolean
-  rows?: number,
-  readonly?: boolean,
-  autosize?: Object | boolean,
-  rules?: { (val: string | number): boolean }[] | null
+  textarea?: boolean,
+  readonly?: boolean
 }>(),{
   textarea: false,
-  rows: 1,
-  readonly: false,
-  autosize: false,
-  rules: null
+  readonly: false
 })
-
-const value = ref(props.modelValue)
-const valid = ref(true)
 
 const inputType = computed(() => {
   return props.textarea ? 'textarea' : 'text'
 })
 
-const handleChange = (val: string | number) => {
-  if (props.rules) {
-    valid.value = props.rules.some(fn => fn(val))
-  }
-
-  if (valid.value) {
-    emit('update:modelValue', val)
-  } else {
-    console.log('not valid')
-  }
-}
+const placeholder = computed(() => {
+  return props.textarea? 'Enter your long answer' : 'Enter your short answer'
+})
 </script>

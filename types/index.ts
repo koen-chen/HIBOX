@@ -3,7 +3,7 @@ import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode }
 
 export * from './database'
 
-export type attributeJson = { [key: string]: number | string | boolean | attributeJson[] }
+type attributeJson = { [key: string]: number | string | boolean | number[] | string[] | boolean[] | Object[] }
 
 export type AccountType = {
   email?: string,
@@ -37,8 +37,8 @@ export enum NodeType {
 export interface NodeList {
   [key: string]: {
     node: AllNode,
-    config: Object,
-    attribute: attributeJson
+    config?: Object,
+    attribute?: attributeJson
   }
 }
 

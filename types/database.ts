@@ -1,9 +1,8 @@
 import { MergeDeep } from 'type-fest'
 import { Database as DatabaseGenerated } from "./supabase"
 
-
 type numberJson = number[]
-type attributeJson = { [key: string]: number | string | boolean | attributeJson[] }
+type attributeJson = { [key: string]: number | string | boolean | number[] | string[] | boolean[] | Object[] }
 
 export type Database = MergeDeep<DatabaseGenerated, {
   public: {
