@@ -119,10 +119,6 @@ const props = defineProps<{
 }>()
 
 const NodeList: NodeList = {
-  [NodeType.Title]: {
-    node: InputNode,
-    config: { textarea: true },
-  },
   [NodeType.Input]: {
     node: InputNode
   },
@@ -191,8 +187,7 @@ const NodeList: NodeList = {
 }
 
 const BasicTypeList = [
-  { type: NodeType.Title, name: "Title & Description", icon: "mdi:format-size" },
-  { type: NodeType.Input, name: "Short text", icon: "mdi:text-short" },
+  { type: NodeType.Input, name: "Short answer", icon: "mdi:text-short" },
   { type: NodeType.Textarea, name: "Paragraph", icon: "mdi:text" },
   { type: NodeType.Radio, name: "Radio", icon: "mdi:radiobox-marked" },
   { type: NodeType.Checkbox, name: "Checkbox", icon: "mdi:checkbox-marked" },
@@ -228,7 +223,7 @@ watchPostEffect(() => {
   isHovered.value = false
   if (latestQuestionId.value == props.record.id) {
     focusRef.value.click()
-    focusRef.value.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    focusRef.value.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 })
 

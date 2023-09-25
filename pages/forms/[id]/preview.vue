@@ -19,8 +19,8 @@
             <div class="section-desc">{{ sRecord.description }}</div>
           </div>
 
-          <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
-            <QuestionPresenter :record="qRecord" :order="qIndex + 1" />
+          <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id" >
+            <QuestionPresenter :record="qRecord" :order="qIndex + 1" class="pb-10" />
           </div>
 
           <div class="mt-20">
@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { NodeType } from '~/types';
+
 definePageMeta({
   layout: "preview",
 });

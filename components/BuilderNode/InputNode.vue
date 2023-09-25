@@ -10,15 +10,9 @@
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  textarea?: boolean,
-  readonly?: boolean
+  textarea?: boolean
 }>(),{
-  textarea: false,
-  readonly: false
-})
-
-const inputType = computed(() => {
-  return props.textarea ? 'textarea' : 'text'
+  textarea: false
 })
 
 const placeholder = computed(() => {

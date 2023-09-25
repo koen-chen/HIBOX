@@ -20,7 +20,6 @@ export type AllNode =
   typeof CountryNode
 
 export enum NodeType {
-  Title = 'Title',
   Input = 'Input',
   Textarea = 'Textarea',
   Radio = 'Radio',
