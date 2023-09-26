@@ -6,6 +6,9 @@ export const useQuestionStore = defineStore('question', () => {
 
   const questionList = ref<{ [key: number]: QuestionType[]}>({})
   const questionOrder = ref<{ [key: number]: number[] }>({})
+
+  const previousQuestionList = usePrevious(questionList)
+  const previousQuestionOrder = usePrevious(questionOrder)
   const latestQuestionId = ref<number | null>(null)
 
   const $reset = () => {

@@ -1,6 +1,6 @@
 <template>
    <div class="node-wrapper">
-      <div v-if="props.drag" class="icon-box move cursor-pointer">
+      <div v-if="props.drag" class="drag-handle icon-box move cursor-pointer">
         <Icon name="mdi:drag-vertical" />
       </div>
       <div class="content">

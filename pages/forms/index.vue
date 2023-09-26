@@ -10,54 +10,56 @@
       </Header>
     </el-affix>
 
-    <div class="w-4/6 mx-auto flex items-start  flex-wrap py-10"  v-loading="listLoading">
-        <div v-if="formList?.length == 0">
-          <i18n-t keypath="Click {link} to start a blank form" scope="global">
-            <template #link>
-              <el-button type="primary" :loading="addLoading" @click="handleAdd" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
-            </template>
-          </i18n-t>
-        </div>
+    <PageSkeleton :loading="listLoading">
+      <div class="w-4/6 mx-auto flex items-start  flex-wrap py-10" >
+          <div v-if="formList.length == 0">
+            <i18n-t keypath="Click {link} to start a blank form" scope="global">
+              <template #link>
+                <el-button type="primary" :loading="addLoading" @click="handleAdd" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
+              </template>
+            </i18n-t>
+          </div>
 
-        <template v-else>
-          <el-card
-            v-for="item in formList"
-            :key="item.id"
-            class="form-item"
-            body-class="form-item-body"
-            @click="navigateTo(`/forms/${item.id}`)"
-            v-loading="itemLoading"
-          >
-            <template #header>
-              <div class="flex items-center justify-between">
-                <div class="grow w-full">
-                  <div class="form-title">{{ item.name }}</div>
-                  <div class="form-desc">{{ item.description }}</div>
-                </div>
-
-                <el-dropdown trigger="click" @command="(cmd: string) => handleCommand(cmd, item.id)">
-                  <div class="ml-4" @click.stop>
-                    <Icon name="mdi:dots-vertical" size="18px" />
+          <template v-else>
+            <el-card
+              v-for="item in formList"
+              :key="item.id"
+              class="form-item"
+              body-class="form-item-body"
+              @click="navigateTo(`/forms/${item.id}`)"
+              v-loading="itemLoading"
+            >
+              <template #header>
+                <div class="flex items-center justify-between">
+                  <div class="grow w-full">
+                    <div class="form-title">{{ item.name }}</div>
+                    <div class="form-desc">{{ item.description }}</div>
                   </div>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item command="open" >
-                        <div class="flex items-center"><Icon name='mdi:open-in-new' /><span class="pl-2">{{ $t('Open') }}</span></div>
-                      </el-dropdown-item>
-                      <el-dropdown-item command="remove">
-                        <div class="flex items-center"><Icon name='mdi:trash-can-outline' /><span  class="pl-2">{{ $t('Delete') }}</span></div>
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
+
+                  <el-dropdown trigger="click" @command="(cmd: string) => handleCommand(cmd, item.id)">
+                    <div class="ml-4" @click.stop>
+                      <Icon name="mdi:dots-vertical" size="18px" />
+                    </div>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item command="open" >
+                          <div class="flex items-center"><Icon name='mdi:open-in-new' /><span class="pl-2">{{ $t('Open') }}</span></div>
+                        </el-dropdown-item>
+                        <el-dropdown-item command="remove">
+                          <div class="flex items-center"><Icon name='mdi:trash-can-outline' /><span  class="pl-2">{{ $t('Delete') }}</span></div>
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+                </div>
+              </template>
+              <div class="flex justify-center items-center h-full w-full">
+                <img src="/default-1.png" class="image" />
               </div>
-            </template>
-            <div class="flex justify-center items-center h-full w-full">
-              <img src="/default-1.png" class="image" />
-            </div>
-          </el-card>
-        </template>
-    </div>
+            </el-card>
+          </template>
+      </div>
+    </PageSkeleton>
   </div>
 </template>
 

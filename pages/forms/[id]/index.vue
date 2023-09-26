@@ -26,12 +26,7 @@
             >
             </SectionBuilder>
 
-            <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
-              <QuestionBuilder
-                :record="qRecord"
-                :order="qIndex + 1"
-              ></QuestionBuilder>
-            </div>
+            <QuestionListBuilder :list="questionList[sRecord.id]" :sectionId="sRecord.id" />
           </div>
         </div>
       </PageSkeleton>

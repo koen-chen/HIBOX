@@ -4,11 +4,17 @@
     :class="[`record-${props.record.id}`, { 'is-hovered': (isHovered || isFocused) }]"
     ref="activeRef"
   >
+
     <div
       class="question-body px-8 py-4"
       @click="focusQuestion"
       ref="focusRef"
     >
+      <div class="text-center">
+        <span class="qDrag-handle" >
+          <Icon name="mdi:drag-horizontal" />
+        </span>
+      </div>
       <div >
         <div v-if="!isFocused">
           <div class="py-2">{{ props.order }}. {{ props.record.label }}</div>
@@ -92,7 +98,7 @@
             </div>
           </div>
         </div>
-       </div>
+      </div>
     </div>
 
     <div v-if="isFocused" class="mt-4">
@@ -249,6 +255,7 @@ function handleDelete() {
 function updateQuestionInfo(info: QuestionUpdateType) {
   questionStore.updateQuestion(props.record.id, info)
 }
+
 </script>
 
 <style lang="scss" scoped>

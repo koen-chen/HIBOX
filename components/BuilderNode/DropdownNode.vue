@@ -1,37 +1,44 @@
 <template>
   <div class="w-full px-2 py-1">
     <div class="w-full mb-2">
-      <template v-for="(op, index) in optionList" :key="op.id">
-        <NodeWrapper v-if="!props.readonly">
-          <div class="flex items-center">
-            <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
-              <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
-              <Icon v-else :name="props.optionIcon" color="#7a8182" />
-            </div>
-            <div class="flex-grow break-words">
-              <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
-            </div>
+      <VueDraggable
+        :animation="150"
+        ghostClass="ghost-option"
+        handle=".drag-handle"
+        v-model="optionList"
+      >
+        <template v-for="(op, index) in optionList" :key="op.id">
+          <NodeWrapper v-if="!props.readonly">
+            <div class="flex items-center">
+              <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
+                <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
+                <Icon v-else :name="props.optionIcon" color="#7a8182" />
+              </div>
+              <div class="flex-grow break-words">
+                <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
+              </div>
 
-            <div class="flex-none w-14 ml-4" v-if="(optionList.length != 1)">
-              <el-button link @click="() => removeOption(op)">
-                <Icon name="mdi:close" />
-              </el-button>
+              <div class="flex-none w-14 ml-4" v-if="(optionList.length != 1)">
+                <el-button link @click="() => removeOption(op)">
+                  <Icon name="mdi:close" />
+                </el-button>
+              </div>
             </div>
-          </div>
-        </NodeWrapper>
+          </NodeWrapper>
 
-        <NodeWrapper v-else class="node-wrapper" :drag="false">
-          <div class="flex items-center">
-            <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
-              <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
-              <Icon v-else :name="props.optionIcon" color="#7a8182" />
+          <NodeWrapper v-else class="node-wrapper" :drag="false">
+            <div class="flex items-center">
+              <div v-if="props.optionIcon" class="flex-none w-4 mx-1">
+                <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
+                <Icon v-else :name="props.optionIcon" color="#7a8182" />
+              </div>
+              <div class="flex-grow break-words">
+                <div class="p-3" v-html="sanitize(op.label)" />
+              </div>
             </div>
-            <div class="flex-grow break-words">
-              <div class="p-3" v-html="sanitize(op.label)" />
-            </div>
-          </div>
-        </NodeWrapper>
-      </template>
+          </NodeWrapper>
+        </template>
+      </VueDraggable>
 
       <template v-if="otherOption">
         <NodeWrapper v-if="!props.readonly">
@@ -81,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+import { VueDraggable } from 'vue-draggable-plus'
 import { sanitize } from "isomorphic-dompurify";
 import { nanoid } from 'nanoid'
 import { Option } from '~/types'
@@ -144,5 +152,9 @@ watch(optionList, () => {
   padding-bottom: 0.8rem;
 
   @apply flex items-center;
+}
+.ghost-option {
+  opacity: 0.5;
+  background: $primaryHoverColor;
 }
 </style>
