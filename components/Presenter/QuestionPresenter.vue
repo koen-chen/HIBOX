@@ -39,29 +39,40 @@
     </div>
 
     <div v-if="props.record.type == NodeType.Dropdown">
-      <el-select v-model="selectValue" size="large">
-        <el-option v-for="(op, index) in attribute['options']" :key="index" :label="op['label']" />
+      <el-select v-model="selectValue" size="large" :style="{ width: '100%' }">
+        <el-option v-for="(op, index) in attribute['options']" :key="index" :label="op['label']" :value="op['id']" />
       </el-select>
     </div>
 
     <div v-if="props.record.type == NodeType.FileUpload">
-      {{ props.record.attribute }}
       <el-upload
         v-model:file-list="fileListValue"
         :accept="acceptFileType"
         :before-upload="beforeUpload"
+        drag
       >
-        <el-button type="primary">Click to upload</el-button>
+        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        <div class="el-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
         <template #tip>
-          <div class="el-upload__tip">
-            jpg/png files with a size less than 500kb
+          <div class="el-upload__tip ">
+            <div class="mb-2">
+              <span class="text-black">Supported formats: </span>
+              {{ acceptFileType }}
+            </div>
+
+            <div>
+              <span class="text-black">Maximum upload file size:</span>
+              {{ attribute['fileSize'] }}
+            </div>
           </div>
         </template>
       </el-upload>
     </div>
 
     <div v-if="props.record.type == NodeType.Date">
-      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" :size="size" />
+      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
     </div>
 
     <div v-if="props.record.type == NodeType.Phone">
@@ -75,7 +86,7 @@
     </div>
 
     <div v-if="props.record.type == NodeType.DateOfBirth">
-      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" :size="size" />
+      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
     </div>
 
     <div v-if="props.record.type == NodeType.Email">
@@ -85,9 +96,10 @@
 </template>
 
 <script setup lang="ts">
-import { QuestionType, NodeType } from '~/types';
+import { QuestionType, NodeType } from '~/types'
 import { getSupportedCallingCodes } from 'awesome-phonenumber'
-import { UploadRawFile } from 'element-plus';
+import { UploadRawFile } from 'element-plus'
+import { UploadFilled } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   record: QuestionType,
@@ -111,15 +123,14 @@ const supportFileType: { [key: string]: string } = {
   Image: ".jpg, .png, .gif, .heic, .jpeg, .tiff, .tif",
   Video: ".mp4, .wmv, .mpeg, .mov, .mpg",
   Audio: ".m4a, .mid, .mp3, .wav, .wma",
-};
+}
 
-const acceptFileType = (attribute['fileType'] as string[]).length > 0
-  ? (attribute['fileType'] as string[])
-    .map((item: string) => {
+let acceptFileType = '*'
+if ( attribute['fileTypes'] && (attribute['fileTypes'] as string[]).length > 0) {
+  acceptFileType = (attribute['fileTypes'] as string[]).map((item: string) => {
       return supportFileType[item];
-    })
-    .join(",")
-  : "*";
+  }).join(",")
+}
 
 const regionCodeList = getSupportedCallingCodes()
 const phoneValue = ref('')
@@ -129,7 +140,6 @@ function beforeUpload(file: UploadRawFile) {
     if (attribute.fileSize && file.size > (attribute['fileSize'] as number)) {
       return false;
     }
-
 
     return true;
   };

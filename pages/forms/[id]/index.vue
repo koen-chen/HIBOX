@@ -15,24 +15,26 @@
     </el-affix>
 
     <div class="mx-auto min-h-screen edit-content">
-      <FormBuilder :record="currentForm" class="section-wrapper" />
+      <PageSkeleton :loading="loading">
+        <FormBuilder :record="currentForm" class="section-wrapper" />
 
-      <div class="section-list" ref="sortableRef">
-        <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id" class="section-wrapper">
-          <SectionBuilder
-            :record="sRecord"
-            :order="sIndex + 1"
-          >
-          </SectionBuilder>
+        <div class="section-list" ref="sortableRef">
+          <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id" class="section-wrapper">
+            <SectionBuilder
+              :record="sRecord"
+              :order="sIndex + 1"
+            >
+            </SectionBuilder>
 
-          <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
-            <QuestionBuilder
-              :record="qRecord"
-              :order="qIndex + 1"
-            ></QuestionBuilder>
+            <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
+              <QuestionBuilder
+                :record="qRecord"
+                :order="qIndex + 1"
+              ></QuestionBuilder>
+            </div>
           </div>
         </div>
-      </div>
+      </PageSkeleton>
     </div>
   </div>
 </template>
@@ -51,10 +53,13 @@ const questionStore = useQuestionStore()
 const { questionList } = storeToRefs(questionStore)
 
 const formId = Number(route.params.id)
+const loading = ref(false)
+
+const fetchData = loadingDecorator(formStore.getForm, loading)
 
 watchEffect(async () => {
   formStore.$reset()
-  const result = await formStore.getForm(formId)
+  const result = await fetchData(formId)
   if (result.id == 0) {
     navigateTo('/forms')
   }

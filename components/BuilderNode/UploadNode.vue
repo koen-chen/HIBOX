@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<{
   id: number | null,
   modelValue: {
     description: string,
-    fileTypes: [],
+    fileTypes: string[],
     fileCount: number,
     fileSize: number
   },
