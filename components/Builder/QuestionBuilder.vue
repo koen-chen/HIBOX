@@ -103,10 +103,10 @@
     <div v-if="isFocused" class="mt-4">
       <NodeCreator
         :formId="props.record.form_id"
-        :sectionId="props.sectionId"
         :afterElement="{
           type: 'Question',
-          id: props.record.id
+          id: props.record.id,
+          sectionId: props.sectionId
         }"
       />
     </div>
@@ -253,7 +253,7 @@ function handleDelete() {
 }
 
 function updateQuestionInfo(info: QuestionUpdateType) {
-  questionStore.updateQuestion(props.record.id, props.sectionId, info)
+  questionStore.updateQuestion(props.record.id, info)
 }
 
 </script>

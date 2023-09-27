@@ -21,6 +21,8 @@ export const useSectionStore = defineStore('section', () => {
       if (afterElement) {
         if (afterElement.type == 'Section') {
           index = sectionOrder.value.findIndex(id => id == afterElement.id) + 1
+        } else if (afterElement.type == 'Form') {
+          index = 0
         }
       }
 
@@ -28,7 +30,7 @@ export const useSectionStore = defineStore('section', () => {
       sectionOrder.value.splice(index, 0, data.id)
 
       latestSectionId.value = data.id
-      await updateOrder(info.form_id, [...sectionOrder.value])
+      await updateSectionOrder(info.form_id, [...sectionOrder.value])
     }
   }
 
@@ -50,10 +52,10 @@ export const useSectionStore = defineStore('section', () => {
     sectionList.value = sectionList.value.filter(item => item.id !== id)
     sectionOrder.value = sectionOrder.value.filter(item => item != id)
 
-    await updateOrder(formId, sectionOrder.value)
+    await updateSectionOrder(formId, sectionOrder.value)
   }
 
-  const updateOrder = async (formId: number, info: number[]): Promise<number[]> => {
+  const updateSectionOrder = async (formId: number, info: number[]): Promise<void> => {
     const { error } = await supabase
       .from('form')
       .update({ 'section_order': info })
@@ -63,20 +65,16 @@ export const useSectionStore = defineStore('section', () => {
     if (!error) {
       sectionOrder.value = info
     }
-
-    return sectionOrder.value
   }
-
 
   return {
     latestSectionId,
     addSection,
     updateSection,
     deleteSection,
-    updateOrder
+    updateSectionOrder
   }
 })
-
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useSectionStore, import.meta.hot))

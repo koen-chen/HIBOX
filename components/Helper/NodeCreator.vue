@@ -11,10 +11,10 @@ import { NodeType, Option } from '~/types';
 
 const props = defineProps<{
   formId: number,
-  sectionId?: number,
   afterElement: {
+    type: string,
     id: number,
-    type: string
+    sectionId?: number,
   }
 }>()
 
@@ -38,24 +38,16 @@ function addSection() {
   loadingDecorator(sectionStore.addSection, sectionLoading)({
     name: 'Untitled Section',
     form_id: props.formId,
-  }, { id: props.afterElement.id, type: props.afterElement.type })
+  }, props.afterElement)
 }
 
 function addQuestion() {
-  if (props.sectionId) {
-   loadingDecorator(questionStore.addQuestion, questionLoading)(
-      props.sectionId, {
-        label: 'Question',
-        type: NodeType.Radio,
-        required: false,
-        attribute: attributeValue,
-        form_id: props.formId,
-
-      }, {
-        id: props.afterElement.id,
-        type: props.afterElement.type
-      }
-    )
-  }
+  loadingDecorator(questionStore.addQuestion, questionLoading)({
+    label: 'Question',
+    type: NodeType.Radio,
+    required: false,
+    attribute: attributeValue,
+    form_id: props.formId,
+  }, props.afterElement)
 }
 </script>

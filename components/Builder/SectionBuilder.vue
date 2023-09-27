@@ -50,10 +50,10 @@
       <div v-if="isFocused" class="mt-4">
         <NodeCreator
           :formId="props.record.form_id"
-          :sectionId="props.record.id"
           :afterElement="{
             type: 'Section',
-            id: props.record.id
+            id: props.record.id,
+            sectionId: props.record.id
           }"
         />
       </div>

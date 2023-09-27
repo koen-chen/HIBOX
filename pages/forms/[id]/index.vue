@@ -67,7 +67,6 @@ const formId = Number(route.params.id)
 const loading = ref(false)
 
 const fetchData = loadingDecorator(formStore.getForm, loading)
-
 watchEffect(async () => {
   formStore.$reset()
   const result = await fetchData(formId)
@@ -82,8 +81,7 @@ function previewForm() {
 
 function handleQuestionSort(list: SectionType[] | QuestionType[], parentId: number) {
   const tempOrders = list.map(item => item.id)
-  console.log(parentId, tempOrders)
-  questionStore.updateOrder(parentId, tempOrders)
+  questionStore.updateQuestionOrder(parentId, tempOrders)
 }
 </script>
 

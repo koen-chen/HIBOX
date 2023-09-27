@@ -20,6 +20,16 @@
         <div class="mt-8 mb-1">{{ $t('Form Description') }}</div>
         <el-input v-model="props.record.description" type="textarea" rows="4" @blur="updateBasicInfo('description')" />
       </div>
+
+      <div v-if="isFocused" class="mt-4">
+        <NodeCreator
+          :formId="props.record.id"
+          :afterElement="{
+            type: 'Form',
+            id: props.record.id
+          }"
+        />
+      </div>
     </div>
   </div>
 </template>
