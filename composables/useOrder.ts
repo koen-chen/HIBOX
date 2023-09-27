@@ -1,7 +1,7 @@
-export function useOrder<Type extends { id: number }>(order: number[] | undefined, data: Array<Type>): Type[] {
+export function useOrder<Type extends { id: number }>(order: number[], data: Array<Type>): Type[] {
   const orderData: Type[] = []
 
-  if ((order && order.length > 0) && data.length > 0) {
+  if ((order.length > 0) && (data.length > 0)) {
     order.forEach((id: number) => {
       const temp = data.find((item) => {
         if (item.id == id) {
@@ -16,6 +16,6 @@ export function useOrder<Type extends { id: number }>(order: number[] | undefine
 
     return orderData
   } else {
-    return data
+    return []
   }
 }

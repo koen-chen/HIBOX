@@ -14,23 +14,28 @@
     v-model="nodeList"
     @sort="handleSort"
   >
-    <slot :list="nodeList" />
+    <slot :list="nodeList" :parentId="props.parentId" />
    </VueDraggable>
 </template>
 
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
-import { SectionType, QuestionType } from '~/types';
+import { QuestionType } from '~/types';
 
 const props = defineProps<{
   parentId: number,
-  list: SectionType[] | QuestionType[],
+  order: number[],
+  list: QuestionType[],
   group?: string,
   handle?: string,
   onSort?: Function
 }>()
 
-const nodeList = ref(props.list)
+const nodeList = ref(useOrder(props.order, props.list))
+
+watchEffect(() => {
+  nodeList.value = useOrder(props.order, props.list)
+})
 
 function handleSort() {
   if (typeof props.onSort == 'function') {

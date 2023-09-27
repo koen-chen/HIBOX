@@ -103,7 +103,7 @@
     <div v-if="isFocused" class="mt-4">
       <NodeCreator
         :formId="props.record.form_id"
-        :sectionId="props.record.section_id"
+        :sectionId="props.sectionId"
         :afterElement="{
           type: 'Question',
           id: props.record.id
@@ -120,6 +120,7 @@ import { QuestionType, NodeList, NodeType, QuestionUpdateType } from '~/types';
 
 const props = defineProps<{
   record: QuestionType,
+  sectionId: number,
   order: number
 }>()
 
@@ -248,11 +249,11 @@ function chooseType(type: string) {
 }
 
 function handleDelete() {
-  questionStore.deleteQuestion(props.record.id)
+  questionStore.deleteQuestion(props.record.id, props.sectionId)
 }
 
 function updateQuestionInfo(info: QuestionUpdateType) {
-  questionStore.updateQuestion(props.record.id, info)
+  questionStore.updateQuestion(props.record.id, props.sectionId, info)
 }
 
 </script>

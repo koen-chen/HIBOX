@@ -98,7 +98,7 @@ function updateBasicInfo(key: 'name' | 'description') {
 }
 
 function deleteSection() {
-  sectionStore.deleteSection(props.record.id)
+  sectionStore.deleteSection(props.record.id, props.record.form_id)
 }
 
 function handleCommand(command: string) {

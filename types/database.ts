@@ -30,7 +30,7 @@ export type Database = MergeDeep<DatabaseGenerated, {
           attribute: attributeJson
         }
         Insert: {
-          attribute?: attributeJson
+          attribute?: attributeJson,
         },
         Update: {
           attribute?: attributeJson

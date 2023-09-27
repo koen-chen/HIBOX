@@ -19,7 +19,7 @@
         <FormBuilder :record="currentForm" class="section-wrapper" />
 
         <div class="section-list" ref="sortableRef">
-          <div v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id" class="section-wrapper">
+          <div v-for="(sRecord, sIndex) in orderSectionList" :key="sRecord.id" class="section-wrapper">
             <SectionBuilder
               :record="sRecord"
               :order="sIndex + 1"
@@ -27,16 +27,18 @@
             </SectionBuilder>
 
             <NodeListDraggable
-              :list="questionList[sRecord.id]"
+              :list="questionList"
+              :order="sRecord.question_order"
               :parentId="sRecord.id"
               group="question"
               handle=".qDrag-handle"
               :onSort="handleQuestionSort"
             >
-              <template #default="{ list }">
+              <template #default="{ list, parentId }">
                 <div v-for="(qRecord, qIndex) in list" :key="qRecord.id" >
                   <QuestionBuilder
                     :record="qRecord"
+                    :sectionId="parentId"
                     :order="qIndex + 1"
                   >
                   </QuestionBuilder>
@@ -56,13 +58,10 @@ import { QuestionType, SectionType } from '~/types';
 
 const route = useRoute()
 const formStore = useFormStore()
-const { currentForm } = storeToRefs(formStore)
+const { currentForm, sectionOrder, sectionList, questionList } = storeToRefs(formStore)
 
-const sectionStore = useSectionStore()
-const { sectionList } = storeToRefs(sectionStore)
-
+const orderSectionList = computed(() => useOrder(sectionOrder.value, sectionList.value))
 const questionStore = useQuestionStore()
-const { questionList } = storeToRefs(questionStore)
 
 const formId = Number(route.params.id)
 const loading = ref(false)

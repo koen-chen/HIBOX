@@ -48,8 +48,6 @@ export interface Database {
           id: number
           label: string
           required: boolean
-          section_id: number
-          state: string
           type: string
         }
         Insert: {
@@ -60,8 +58,6 @@ export interface Database {
           id?: number
           label?: string
           required?: boolean
-          section_id: number
-          state?: string
           type?: string
         }
         Update: {
@@ -72,8 +68,6 @@ export interface Database {
           id?: number
           label?: string
           required?: boolean
-          section_id?: number
-          state?: string
           type?: string
         }
         Relationships: [
@@ -81,12 +75,6 @@ export interface Database {
             foreignKeyName: "question_form_id_fkey"
             columns: ["form_id"]
             referencedRelation: "form"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "question_section_id_fkey"
-            columns: ["section_id"]
-            referencedRelation: "section"
             referencedColumns: ["id"]
           }
         ]
@@ -99,7 +87,6 @@ export interface Database {
           id: number
           name: string
           question_order: Json
-          state: string
         }
         Insert: {
           created_at?: string
@@ -108,7 +95,6 @@ export interface Database {
           id?: number
           name?: string
           question_order?: Json
-          state?: string
         }
         Update: {
           created_at?: string
@@ -117,7 +103,6 @@ export interface Database {
           id?: number
           name?: string
           question_order?: Json
-          state?: string
         }
         Relationships: [
           {

@@ -44,14 +44,17 @@ function addSection() {
 function addQuestion() {
   if (props.sectionId) {
    loadingDecorator(questionStore.addQuestion, questionLoading)(
-      {
+      props.sectionId, {
         label: 'Question',
         type: NodeType.Radio,
         required: false,
         attribute: attributeValue,
         form_id: props.formId,
-        section_id: props.sectionId
-      }, { id: props.afterElement.id, type: props.afterElement.type }
+
+      }, {
+        id: props.afterElement.id,
+        type: props.afterElement.type
+      }
     )
   }
 }
