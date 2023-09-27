@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown @command="(command: string) => locale = command">
+  <el-dropdown @command="handleChange">
     <span class="outline-none flex items-center">
       <Icon :class="{ 'text-white' : dark }" name="mdi:translate" size="18px" />
       <Icon :class="{ 'text-white': dark }" name="mdi:chevron-down" size="18px" />
@@ -19,5 +19,12 @@ defineProps<{
   dark: boolean
 }>()
 
-const { locale } = useI18n()
+const { locale } = useI18n({ useScope: 'global' })
+
+locale.value = sessionStorage.getItem('lang') || 'en'
+
+function handleChange(cmd: string) {
+  locale.value = cmd
+  sessionStorage.setItem('lang', cmd)
+}
 </script>

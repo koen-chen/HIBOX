@@ -13,7 +13,7 @@
     <PageSkeleton :loading="listLoading">
       <div class="w-4/6 mx-auto flex items-start  flex-wrap py-10" >
           <div v-if="formList.length == 0">
-            <i18n-t keypath="Click {link} to start a blank form" scope="global">
+            <i18n-t keypath="Click to start a blank form" scope="global">
               <template #link>
                 <el-button type="primary" :loading="addLoading" @click="handleAdd" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
               </template>
