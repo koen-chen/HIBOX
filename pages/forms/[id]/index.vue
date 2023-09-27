@@ -26,7 +26,23 @@
             >
             </SectionBuilder>
 
-            <QuestionListBuilder :list="questionList[sRecord.id]" :sectionId="sRecord.id" />
+            <NodeListDraggable
+              :list="questionList[sRecord.id]"
+              :parentId="sRecord.id"
+              group="question"
+              handle=".qDrag-handle"
+              :onSort="handleQuestionSort"
+            >
+              <template #default="{ list }">
+                <div v-for="(qRecord, qIndex) in list" :key="qRecord.id" >
+                  <QuestionBuilder
+                    :record="qRecord"
+                    :order="qIndex + 1"
+                  >
+                  </QuestionBuilder>
+                </div>
+              </template>
+            </NodeListDraggable>
           </div>
         </div>
       </PageSkeleton>
@@ -36,6 +52,7 @@
 
 <script setup lang="ts">
 import { View } from '@element-plus/icons-vue';
+import { QuestionType, SectionType } from '~/types';
 
 const route = useRoute()
 const formStore = useFormStore()
@@ -62,6 +79,12 @@ watchEffect(async () => {
 
 function previewForm() {
   navigateTo(`/forms/${formId}/preview`)
+}
+
+function handleQuestionSort(list: SectionType[] | QuestionType[], parentId: number) {
+  const tempOrders = list.map(item => item.id)
+  console.log(parentId, tempOrders)
+  questionStore.updateOrder(parentId, tempOrders)
 }
 </script>
 

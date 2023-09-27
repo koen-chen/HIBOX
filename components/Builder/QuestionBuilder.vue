@@ -4,21 +4,20 @@
     :class="[`record-${props.record.id}`, { 'is-hovered': (isHovered || isFocused) }]"
     ref="activeRef"
   >
-
     <div
       class="question-body px-8 py-4"
-      @click="focusQuestion"
+      @click.stop="focusQuestion"
       ref="focusRef"
     >
       <div class="text-center">
-        <span class="qDrag-handle" >
-          <Icon name="mdi:drag-horizontal" />
-        </span>
+        <div class="qDrag-handle p-2 inline-block" >
+          <Icon name="mdi:drag-horizontal" size="22" />
+        </div>
       </div>
       <div >
         <div v-if="!isFocused">
           <div class="py-2">{{ props.order }}. {{ props.record.label }}</div>
-          <div class="mb-2 p-2">
+          <div class="mb-2 p-2 ghost-body">
             <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :readonly="true" :id="props.record.id" />
           </div>
         </div>
@@ -64,7 +63,7 @@
             </div>
           </div>
 
-          <div>
+          <div class="ghost-body">
             <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :id="props.record.id" />
           </div>
 
