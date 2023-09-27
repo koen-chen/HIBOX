@@ -5,7 +5,7 @@
         <div class="title">{{ $t('Forms') }}</div>
 
         <template #actions>
-          <el-button @click="handleAdd" :loading="addLoading">New Form</el-button>
+          <el-button @click="handleAdd" :loading="addLoading">{{ $t('New Form') }}</el-button>
         </template>
       </Header>
     </el-affix>

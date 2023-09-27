@@ -1,1 +1,41 @@
-Login: Login
+Login: 登录
+Logout: 登出
+Blank: 空白
+Start a new form: 开始新表单
+Forms : 表单
+Basic Info: 基本信息
+Form Name: 表单名称
+Form Description: 表单描述
+Please input name: 请输入姓名
+Edit Sections: 编辑区块
+Add Section: 添加区块
+Add Question: 添加问题
+Collapse Section: 折叠区块
+Delete Section: 删除区块
+Open: 打开
+Delete: 删除
+Click {link} to start a blank form: 点击{link}开始一个空白表单
+New Form: 新表单
+Back: 返回
+Enter question label: 输入问题标签
+Choose question type: 选择问题类型
+Basic: 基本
+Modules: 模块
+Required: 必填
+Add Option: 添加选项
+or: 或者
+Add Other: 添加其他
+Allow only specific file types: 仅允许特定文件类型
+Maximum number of files: 最大文件数
+Maximum file size: 最大文件大小
+Preview: 预览
+Oops, create form failure!: 哎呀，创建表单失败！
+Next: 下一步
+Submit: 提交
+Insert Section: 插入区块
+Input birthday: 输入生日
+Input day: 输入日期
+Enter your long answer: 输入您的长回答
+Enter your short answer: 输入您的短回答
+Move Section: 移动区块
+Section: 部分
