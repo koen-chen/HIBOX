@@ -15,7 +15,8 @@ const props = withDefaults(defineProps<{
   textarea: false
 })
 
+const { t } = useI18n()
 const placeholder = computed(() => {
-  return props.textarea? 'Enter your long answer' : 'Enter your short answer'
+  return props.textarea? t('Enter your long answer') : t('Enter your short answer')
 })
 </script>

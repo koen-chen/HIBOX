@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
 const formStore = useFormStore()
 const { formList } = storeToRefs(formStore)
 
@@ -110,14 +111,13 @@ async function handleAdd() {
   } else {
     ElMessage({
       showClose: true,
-      message: 'Oops, create form failure!',
+      message: t('Oops, create form failure!'),
       type: 'error',
     })
   }
 
   addLoading.value = false
 }
-
 
 async function handleDelete(id: number) {
   await deleteForm(id)

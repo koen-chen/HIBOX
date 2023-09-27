@@ -9,13 +9,16 @@
 </template>
 
 <script setup lang="ts">
+
 const props = withDefaults(defineProps<{
   birthday?: boolean
 }>(),{
   birthday: false
 })
 
+const { t } = useI18n()
+
 const placeholder = computed(() => {
-  return props.birthday? 'Enter input birthday' : 'Enter input day'
+  return props.birthday? t('Input birthday') : t('Input day')
 })
 </script>

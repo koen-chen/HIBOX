@@ -1,7 +1,7 @@
 <template>
   <el-button-group size="large">
-    <el-button @click="addSection" :icon="Files" :loading="sectionLoading">Insert Section</el-button>
-    <el-button @click="addQuestion" :icon="CirclePlus" :loading="questionLoading">Add Question</el-button>
+    <el-button @click="addSection" :icon="Files" :loading="sectionLoading">{{ $t('Insert Section') }}</el-button>
+    <el-button @click="addQuestion" :icon="CirclePlus" :loading="questionLoading">{{ $t('Add Question') }}</el-button>
   </el-button-group>
 </template>
 

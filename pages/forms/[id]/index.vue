@@ -8,7 +8,7 @@
 
         <template #actions>
           <div>
-            <el-button :icon="View" text @click="previewForm">Preview</el-button>
+            <el-button :icon="View" text @click="previewForm">{{ $t('Preview') }}</el-button>
           </div>
         </template>
       </Header>

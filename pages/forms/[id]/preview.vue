@@ -19,16 +19,16 @@
               <div class="section-desc">{{ sRecord.description }}</div>
             </div>
 
-            <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qRecord.id">
+            <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qIndex">
               <QuestionPresenter :record="qRecord" :order="qIndex + 1" class="pb-10" />
             </div>
 
             <div class="mt-20">
               <el-button v-if="activeSection != 0" size="large" @click="handleSectionBack">Back</el-button>
               <el-button v-if="activeSection != (sectionList.length - 1)" size="large" type="primary"
-                @click="handleSectionNext">Next</el-button>
+                @click="handleSectionNext">{{ $t('Next') }}</el-button>
               <el-button v-if="activeSection == (sectionList.length - 1)" size="large" type="primary"
-                @click="handleFormSubmit">Submit</el-button>
+                @click="handleFormSubmit">{{ $t('Submit') }}</el-button>
             </div>
           </div>
         </template>
@@ -44,13 +44,7 @@ definePageMeta({
 
 const route = useRoute()
 const formStore = useFormStore()
-const { currentForm } = storeToRefs(formStore)
-
-const sectionStore = useSectionStore()
-const { sectionList } = storeToRefs(sectionStore)
-
-const questionStore = useQuestionStore()
-const { questionList } = storeToRefs(questionStore)
+const { currentForm, sectionList, questionList } = storeToRefs(formStore)
 
 const formId = Number(route.params.id)
 const activeSection = ref(0)

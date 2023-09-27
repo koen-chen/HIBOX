@@ -5,14 +5,14 @@
     ref="activeRef"
   >
     <div class="section-head p-4 flex items-center justify-between">
-      <div>Section {{ props.order }}</div>
+      <div>{{ $t('Section') }} {{ props.order }}</div>
       <div class="cursor-pointer">
         <el-dropdown trigger="click" @command="handleCommand">
           <el-icon><MoreFilled /></el-icon>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="move">Move Section</el-dropdown-item>
-              <el-dropdown-item command="delete">Delete Section</el-dropdown-item>
+              <el-dropdown-item command="move">{{ $t('Move Section') }}</el-dropdown-item>
+              <el-dropdown-item command="delete">{{ $t('Delete Section') }}</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
