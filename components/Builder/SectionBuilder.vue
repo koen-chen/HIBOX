@@ -5,7 +5,7 @@
     ref="activeRef"
   >
     <div class="section-head p-4 flex items-center justify-between">
-      <div>{{ $t('Section') }} {{ props.order }}</div>
+      <div><span>{{ $t('Section') }}</span> {{ props.order }}</div>
       <div class="cursor-pointer">
         <el-dropdown trigger="click" @command="handleCommand">
           <el-icon><MoreFilled /></el-icon>

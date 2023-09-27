@@ -22,11 +22,12 @@ const sectionStore = useSectionStore()
 const questionStore = useQuestionStore()
 const sectionLoading = ref(false)
 const questionLoading = ref(false)
+const { t } = useI18n()
 
 const otherOption = ref(false)
 const optionList = ref<Option[]>([
-  { label: "Option 1", id: nid() },
-  { label: "Option 2", id: nid() }
+  { label: t("Option 1"), id: nid() },
+  { label: t("Option 2"), id: nid() }
 ])
 
 const attributeValue =  {
@@ -36,14 +37,14 @@ const attributeValue =  {
 
 function addSection() {
   loadingDecorator(sectionStore.addSection, sectionLoading)({
-    name: 'Untitled Section',
+    name: t('Untitled Section'),
     form_id: props.formId,
   }, props.afterElement)
 }
 
 function addQuestion() {
   loadingDecorator(questionStore.addQuestion, questionLoading)({
-    label: 'Question',
+    label: t('Question'),
     type: NodeType.Radio,
     required: false,
     attribute: attributeValue,

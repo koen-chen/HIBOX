@@ -58,12 +58,12 @@
         <template #tip>
           <div class="el-upload__tip ">
             <div class="mb-2">
-              <span class="text-black">Supported formats: </span>
+              <span class="text-black">{{ $t('Supported formats') }}: </span>
               {{ acceptFileType }}
             </div>
 
             <div>
-              <span class="text-black">Maximum upload file size:</span>
+              <span class="text-black">{{ $t('Maximum file size') }} :</span>
               {{ attribute['fileSize'] }}
             </div>
           </div>

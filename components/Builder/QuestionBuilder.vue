@@ -124,6 +124,7 @@ const props = defineProps<{
   order: number
 }>()
 
+const { t } = useI18n()
 const NodeList: NodeList = {
   [NodeType.Input]: {
     node: InputNode
@@ -137,8 +138,8 @@ const NodeList: NodeList = {
     config: { needOtherOption: true, optionIcon: 'mdi:radiobox-blank' },
     attribute: {
       options: [
-        { label: "Option 1", id: nid() },
-        { label: "Option 2", id: nid() }
+        { label: t("Option 1"), id: nid() },
+        { label: t("Option 2"), id: nid() }
       ],
       needOther: false
     }
@@ -148,8 +149,8 @@ const NodeList: NodeList = {
     config: { needOtherOption: true, optionIcon: 'mdi:checkbox-blank-outline' },
     attribute: {
       options: [
-        { label: "Option 1", id: nid() },
-        { label: "Option 2", id: nid() }
+        { label: t("Option 1"), id: nid() },
+        { label: t("Option 2"), id: nid() }
       ],
       needOther: false
     }
@@ -159,8 +160,8 @@ const NodeList: NodeList = {
     config: { optionIcon: "INDEX" },
     attribute: {
       options: [
-        { label: "Option 1", id: nid() },
-        { label: "Option 2", id: nid() }
+        { label: t("Option 1"), id: nid() },
+        { label: t("Option 2"), id: nid() }
       ],
       needOther: false
     }
