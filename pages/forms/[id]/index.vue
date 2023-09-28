@@ -39,6 +39,7 @@
                   <QuestionBuilder
                     :record="qRecord"
                     :sectionId="parentId"
+                    :sectionList="orderSectionList"
                     :order="qIndex + 1"
                   >
                   </QuestionBuilder>

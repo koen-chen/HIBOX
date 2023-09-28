@@ -64,35 +64,56 @@
           </div>
 
           <div class="ghost-body">
-            <component :is="nodeName" v-model="nodeAttribute" v-bind="nodeConfig" :id="props.record.id" />
+            <component
+              :is="nodeName"
+              v-model="nodeAttribute"
+              v-bind="nodeConfig"
+              :id="props.record.id"
+              :associate="associate"
+              :associateList="props.sectionList"
+            />
           </div>
 
           <el-divider class="mt-10" />
 
           <div class="flex items-center justify-end">
             <div>
-              <span class="mr-2">
-                {{ $t('Required') }}
-              </span>
-              <el-switch
-                v-model="required"
-                size="large"
-                inline-prompt
-                :active-icon="Check"
-                :inactive-icon="Close"
-                @change="() => updateQuestionInfo({ required })"
-                />
+              <Icon
+                class="action-icon"
+                name="mdi:trash-can"
+                @click="handleDelete"
+              />
             </div>
 
-            <div class="flex items-center">
-              <el-divider direction="vertical" style="margin: 0 30px; height: 1.9em" />
+            <el-divider direction="vertical" style="margin: 0 20px; height: 1.9em" />
 
-              <div>
-                <Icon
-                  class="action-icon"
-                  name="mdi:trash-can"
-                  @click="handleDelete"
-                />
+            <div class="flex items-center justify-between">
+              <div class="mr-4">
+                <span class="mr-2">
+                  {{ $t('Required') }}
+                </span>
+                <el-switch
+                  v-model="required"
+                  size="large"
+                  inline-prompt
+                  :active-icon="Check"
+                  :inactive-icon="Close"
+                  @change="() => updateQuestionInfo({ required })"
+                  />
+              </div>
+
+              <div v-if="type == NodeType.Radio || type == NodeType.Dropdown">
+                <span class="mr-2">
+                  {{ $t('Associate') }}
+                </span>
+                <el-switch
+                  v-model="associate"
+                  size="large"
+                  inline-prompt
+                  :active-icon="Check"
+                  :inactive-icon="Close"
+                  @change="() => updateQuestionInfo({ associate })"
+                  />
               </div>
             </div>
           </div>
@@ -116,15 +137,17 @@
 <script setup lang="ts">
 import { Check, Close } from '@element-plus/icons-vue'
 import { InputNode, DropdownNode, DateNode, UploadNode, PhoneNode, CountryNode, NodeCreator } from '#components'
-import { QuestionType, NodeList, NodeType, QuestionUpdateType } from '~/types';
+import { SectionType, QuestionType, NodeList, NodeType, QuestionUpdateType } from '~/types';
 
 const props = defineProps<{
   record: QuestionType,
   sectionId: number,
+  sectionList: SectionType[]
   order: number
 }>()
 
 const { t } = useI18n()
+
 const NodeList: NodeList = {
   [NodeType.Input]: {
     node: InputNode
@@ -223,6 +246,7 @@ const nodeName = computed(() => NodeList[type.value].node)
 const nodeConfig = computed(() => NodeList[type.value].config)
 const nodeAttribute = ref(props.record.attribute)
 const required = ref(props.record.required)
+const associate = ref(props.record.associate)
 
 onClickOutside(activeRef, () => isFocused.value = false)
 

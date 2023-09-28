@@ -41,7 +41,8 @@ export interface NodeList {
   }
 }
 
-export type Option = {
+export interface Option {
   label: string,
-  id: string
+  id: string,
+  associateId?: string
 }

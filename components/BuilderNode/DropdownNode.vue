@@ -14,8 +14,42 @@
                 <span v-if="props.optionIcon == 'INDEX'">{{ (index + 1) }}.</span>
                 <Icon v-else :name="props.optionIcon" color="#7a8182" />
               </div>
+
               <div class="flex-grow break-words">
                 <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
+              </div>
+
+              <div v-if="props.associate">
+                <el-select
+                  :model-value="op.associateId || 0"
+                  size="large"
+                  :teleported="false"
+                  :filterable="true"
+                  :default-first-option="true"
+                  @change="(val: string) => handleAssociateChange(val, op)"
+                >
+                  <el-option
+                    :key="0"
+                    :value="0"
+                    :label="$t('Go to Next Section')">
+                    <span>{{ $t('Go to Next Section') }}</span>
+                  </el-option>
+                  <el-option
+                    v-for="(item, index) in props.associateList"
+                    :key="item.id"
+                    :label="$t('Go to Section') + ' ' + (index + 1) + ' ('+ item.name + ')'"
+                    :value="item.id"
+                  >
+                    <span>{{ $t('Go to Section') }}</span> {{ index + 1 }} ({{ item.name }})
+                  </el-option>
+
+                  <el-option
+                    :key="-1"
+                    :value="-1"
+                    :label="$t('Submit form')">
+                    <span>{{ $t('Submit form') }}</span>
+                  </el-option>
+                </el-select>
               </div>
 
               <div class="flex-none w-14 ml-4" v-if="(optionList.length != 1)">
@@ -91,7 +125,7 @@
 import { VueDraggable } from 'vue-draggable-plus'
 import { sanitize } from "isomorphic-dompurify";
 import { nanoid } from 'nanoid'
-import { Option } from '~/types'
+import { Option, SectionType } from '~/types'
 
 const emit = defineEmits<{
   'update:modelValue': [value: Object]
@@ -105,38 +139,19 @@ const props = withDefaults(defineProps<{
   },
   optionIcon?: string,
   needOtherOption?: boolean,
-  readonly?: boolean
+  readonly?: boolean,
+  associate?: boolean
+  associateList?: SectionType[]
 }>(), {
   id: null,
   optionIcon: '',
   needOtherOption: false,
-  readonly: false
+  readonly: false,
+  associate: false
 })
 
 const otherOption = ref<boolean>(props.modelValue.needOther)
 const optionList = ref<Option[]>(props.modelValue.options)
-
-const addOption = () => {
-  const newValue = { label: "Additional option", id: nanoid(5) }
-  optionList.value = [...optionList.value, newValue]
-}
-
-const updateOption = (item: Option, label: string) => {
-  const newValue = { id: item.id, label: label };
-  optionList.value = optionList.value.map((v) => (v.id === item.id ? { ...v, ...newValue } : v))
-}
-
-const removeOption = (item: Option) => {
-  optionList.value = optionList.value.filter((v) => v && v.id !== item.id)
-}
-
-const addOtherOption = () => {
-  otherOption.value = true
-};
-
-const removeOtherOption = () => {
-  otherOption.value = false
-}
 
 watch(optionList, () => {
   emit('update:modelValue', {
@@ -144,6 +159,33 @@ watch(optionList, () => {
     needOther: otherOption.value
   })
 })
+
+function addOption() {
+  const newValue = { label: "Additional option", id: nanoid(5) }
+  optionList.value = [...optionList.value, newValue]
+}
+
+function updateOption(item: Option, label: string) {
+  const newValue = { id: item.id, label: label };
+  optionList.value = optionList.value.map((v) => (v.id === item.id ? { ...v, ...newValue } : v))
+}
+
+function removeOption(item: Option) {
+  optionList.value = optionList.value.filter((v) => v && v.id !== item.id)
+}
+
+function addOtherOption() {
+  otherOption.value = true
+};
+
+function removeOtherOption() {
+  otherOption.value = false
+}
+
+function handleAssociateChange(val: string, item: Option) {
+  const newValue = { associateId: val };
+  optionList.value = optionList.value.map((v) => (v.id === item.id ? reactive({ ...v, ...newValue }) : v))
+}
 </script>
 
 <style lang="scss" scoped>
