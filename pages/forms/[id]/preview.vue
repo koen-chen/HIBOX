@@ -12,16 +12,31 @@
           <div class="form-desc">{{ currentForm.description }}</div>
         </div>
 
-        <template v-for="(sRecord, sIndex) in sectionList" :key="sRecord.id">
+        <template v-for="(sRecord, sIndex) in orderSectionList" :key="sRecord.id">
           <div class="section-box" v-if="sIndex == activeSection">
             <div class="section-info">
               <div class="section-title">{{ sRecord.name }}</div>
               <div class="section-desc">{{ sRecord.description }}</div>
             </div>
 
-            <div v-for="(qRecord, qIndex) in questionList[sRecord.id]" :key="qIndex">
-              <QuestionPresenter :record="qRecord" :order="qIndex + 1" class="pb-10" />
-            </div>
+            <NodeListDraggable
+              :list="questionList"
+              :order="sRecord.question_order"
+              :parentId="sRecord.id"
+              group="question"
+              handle=".qDrag-handle"
+              :disabled="true"
+            >
+              <template #default="{ list, parentId }">
+                <div v-for="(qRecord, qIndex) in list" :key="qRecord.id" >
+                  <QuestionPresenter
+                    :record="qRecord"
+                    :order="qIndex + 1"
+                    class="pb-10"
+                  />
+                </div>
+              </template>
+            </NodeListDraggable>
 
             <div class="mt-20">
               <el-button v-if="activeSection != 0" size="large" @click="handleSectionBack">Back</el-button>
@@ -44,7 +59,9 @@ definePageMeta({
 
 const route = useRoute()
 const formStore = useFormStore()
-const { currentForm, sectionList, questionList } = storeToRefs(formStore)
+const { currentForm, sectionOrder, sectionList, questionList } = storeToRefs(formStore)
+
+const orderSectionList = computed(() => useOrder(sectionOrder.value, sectionList.value))
 
 const formId = Number(route.params.id)
 const activeSection = ref(0)

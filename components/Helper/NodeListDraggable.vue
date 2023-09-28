@@ -1,4 +1,5 @@
 <template>
+  <div v-if="!props.disabled">
    <VueDraggable
     :scroll="true"
     direction="vertical"
@@ -16,20 +17,28 @@
   >
     <slot :list="nodeList" :parentId="props.parentId" />
    </VueDraggable>
+  </div>
+
+  <div v-else>
+     <slot :list="nodeList" :parentId="props.parentId" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
 import { QuestionType } from '~/types';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   parentId: number,
   order: number[],
   list: QuestionType[],
   group?: string,
   handle?: string,
   onSort?: Function
-}>()
+  disabled?: boolean
+}>(), {
+  disabled: false
+})
 
 const nodeList = ref(useOrder(props.order, props.list))
 
