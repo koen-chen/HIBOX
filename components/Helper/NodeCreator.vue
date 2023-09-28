@@ -24,15 +24,13 @@ const sectionLoading = ref(false)
 const questionLoading = ref(false)
 const { t } = useI18n()
 
-const otherOption = ref(false)
 const optionList = ref<Option[]>([
-  { label: t("Option 1"), id: nid() },
-  { label: t("Option 2"), id: nid() }
+  { id: nid(), type: 'normal', label: t("Option 1") },
+  { id: nid(), type: 'normal', label: t("Option 2") }
 ])
 
 const attributeValue =  {
   options: optionList.value,
-  needOther: otherOption.value
 }
 
 function addSection() {

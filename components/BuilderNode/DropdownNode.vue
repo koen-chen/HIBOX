@@ -16,41 +16,11 @@
               </div>
 
               <div class="flex-grow break-words">
-                <TextEditor :data="op.label" @change="(data: string) => updateOption(op, data)" />
+                <TextEditor v-if="op.type =='normal'" :data="op.label" @change="(data: string) => updateOption(op, data)" />
+                <div v-else class="p-3">{{ op.label }}</div>
               </div>
 
-              <div v-if="props.associate">
-                <el-select
-                  :model-value="op.associateId || 0"
-                  size="large"
-                  :teleported="false"
-                  :filterable="true"
-                  :default-first-option="true"
-                  @change="(val: string) => handleAssociateChange(val, op)"
-                >
-                  <el-option
-                    :key="0"
-                    :value="0"
-                    :label="$t('Go to Next Section')">
-                    <span>{{ $t('Go to Next Section') }}</span>
-                  </el-option>
-                  <el-option
-                    v-for="(item, index) in props.associateList"
-                    :key="item.id"
-                    :label="$t('Go to Section') + ' ' + (index + 1) + ' ('+ item.name + ')'"
-                    :value="item.id"
-                  >
-                    <span>{{ $t('Go to Section') }}</span> {{ index + 1 }} ({{ item.name }})
-                  </el-option>
-
-                  <el-option
-                    :key="-1"
-                    :value="-1"
-                    :label="$t('Submit form')">
-                    <span>{{ $t('Submit form') }}</span>
-                  </el-option>
-                </el-select>
-              </div>
+              <AssociateNode v-if="props.associate" :option="op" :associateList="props.associateList" :onChange="handleAssociateChange" />
 
               <div class="flex-none w-14 ml-4" v-if="(optionList.length != 1)">
                 <el-button link @click="() => removeOption(op)">
@@ -73,36 +43,6 @@
           </NodeWrapper>
         </template>
       </VueDraggable>
-
-      <template v-if="otherOption">
-        <NodeWrapper v-if="!props.readonly">
-          <div class="flex items-center">
-            <div v-if="props.optionIcon" class="flex-none w-4 mr-4">
-              <Icon :name="props.optionIcon" color="#7a8182" />
-            </div>
-            <div class="flex-grow break-words">
-              <div class="p-3">Other...</div>
-            </div>
-
-            <div class="flex-none w-14 ml-4">
-              <el-button  link @click="removeOtherOption">
-                <Icon name="mdi:close" color="#7a8182" />
-              </el-button>
-            </div>
-          </div>
-        </NodeWrapper>
-
-         <NodeWrapper v-else :drag="false">
-            <div class="flex items-center">
-              <div v-if="props.optionIcon" class="flex-none w-4 mr-4">
-                <Icon :name="props.optionIcon" color="#7a8182" />
-              </div>
-              <div class="flex-grow break-words">
-                <div class="p-3">Other...</div>
-              </div>
-            </div>
-          </NodeWrapper>
-      </template>
     </div>
 
     <div v-if="!props.readonly" class="add-option-wrapper">
@@ -110,7 +50,7 @@
         {{ $t('Add Option') }}
       </el-button>
 
-      <div v-if="!otherOption && props.needOtherOption">
+      <div v-if="!hasOtherOption && props.needOtherOption">
         <span>{{ $t('or') }}</span>
 
         <el-button text @click="addOtherOption" style="color: #7a8182; textDecoration: underline">
@@ -124,7 +64,6 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
 import { sanitize } from "isomorphic-dompurify";
-import { nanoid } from 'nanoid'
 import { Option, SectionType } from '~/types'
 
 const emit = defineEmits<{
@@ -134,8 +73,7 @@ const emit = defineEmits<{
 const props = withDefaults(defineProps<{
   id: number | null,
   modelValue: {
-    needOther: boolean,
-    options: []
+    options: Option[]
   },
   optionIcon?: string,
   needOtherOption?: boolean,
@@ -150,19 +88,25 @@ const props = withDefaults(defineProps<{
   associate: false
 })
 
-const otherOption = ref<boolean>(props.modelValue.needOther)
 const optionList = ref<Option[]>(props.modelValue.options)
+
+const hasOtherOption = computed(() => {
+  return optionList.value.some(item => item.type == 'other')
+})
 
 watch(optionList, () => {
   emit('update:modelValue', {
-    options: optionList.value,
-    needOther: otherOption.value
+    options: optionList.value
   })
-})
+}, { deep: true })
 
 function addOption() {
-  const newValue = { label: "Additional option", id: nanoid(5) }
-  optionList.value = [...optionList.value, newValue]
+  const newValue: Option = { id: nid(), type: 'normal', label: "Additional option" }
+  if (hasOtherOption.value) {
+    optionList.value.splice(optionList.value.length - 1, 0, newValue)
+  } else {
+    optionList.value.push(newValue)
+  }
 }
 
 function updateOption(item: Option, label: string) {
@@ -175,12 +119,9 @@ function removeOption(item: Option) {
 }
 
 function addOtherOption() {
-  otherOption.value = true
+  const newValue: Option = { id: nid(), type: 'other', label: "Other..." }
+  optionList.value = [...optionList.value, newValue]
 };
-
-function removeOtherOption() {
-  otherOption.value = false
-}
 
 function handleAssociateChange(val: string, item: Option) {
   const newValue = { associateId: val };

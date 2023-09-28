@@ -44,5 +44,6 @@ export interface NodeList {
 export interface Option {
   label: string,
   id: string,
+  type: 'normal' | 'other',
   associateId?: string
 }
