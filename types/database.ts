@@ -27,6 +27,7 @@ export type Database = MergeDeep<DatabaseGenerated, {
       },
       question: {
         Row: {
+          value: string | string[] | number | number[] | boolean,
           attribute: attributeJson
         }
         Insert: {

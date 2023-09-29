@@ -1,26 +1,25 @@
 <template>
   <div class="w-full question">
-    <div class="question-info my-4">
-      <div class="question-title">
-        <span class="text-lg pr-2">{{ props.order }}.</span>
-        <span>{{ props.record.label }}</span>
-      </div>
-    </div>
-
     <div v-if="props.record.type == NodeType.Input">
-      <el-input v-model="inputValue" placeholder="Enter your short answer" size="large"></el-input>
+      <el-input v-model="props.record.value" placeholder="Enter your short answer" size="large"></el-input>
     </div>
 
     <div v-if="props.record.type == NodeType.Textarea">
-      <el-input v-model="textareaValue" placeholder="Enter your long answer" type="textarea"
+      <el-input v-model="props.record.value" placeholder="Enter your long answer" type="textarea"
         :autosize="{ minRows: 2, maxRows: 4 }" size="large"></el-input>
     </div>
 
     <div v-if="props.record.type == NodeType.Checkbox">
-      <el-checkbox-group v-model="checkboxValue">
+      <el-checkbox-group v-model="props.record.value">
         <div class="flex flex-col items-start">
-          <el-checkbox v-for="(op, index) in attribute['options']" :key="op['id']" :label="op['id']" size="large"
-            class="my-1 px-4">
+          <el-checkbox
+            v-for="op in attribute['options']"
+            :key="op['id']"
+            :label="op['id']"
+            size="large"
+            class="my-1 px-4"
+            @change="checkboxChange"
+          >
             <div v-html="op['label']"></div>
           </el-checkbox>
         </div>
@@ -28,10 +27,15 @@
     </div>
 
     <div v-if="props.record.type == NodeType.Radio">
-      <el-radio-group v-model="radioValue">
+      <el-radio-group v-model="props.record.value">
         <div class="flex flex-col items-start">
-          <el-radio v-for="(op, index) in attribute['options']" :key="op['id']" :label="op['id']" size="large"
-            class="my-1 px-4">
+          <el-radio v-for="(op, index) in attribute['options']"
+            :key="op['id']"
+            :label="op['id']"
+            :value="op"
+            size="large"
+            class="my-1 px-4"
+          >
             <div v-html="op['label']"></div>
           </el-radio>
         </div>
@@ -39,14 +43,14 @@
     </div>
 
     <div v-if="props.record.type == NodeType.Dropdown">
-      <el-select v-model="selectValue" size="large" :style="{ width: '100%' }">
+      <el-select v-model="props.record.value" size="large" :style="{ width: '100%' }">
         <el-option v-for="(op, index) in attribute['options']" :key="index" :label="op['label']" :value="op['id']" />
       </el-select>
     </div>
 
     <div v-if="props.record.type == NodeType.FileUpload">
       <el-upload
-        v-model:file-list="fileListValue"
+        v-model:file-list="props.record.value"
         :accept="acceptFileType"
         :before-upload="beforeUpload"
         drag
@@ -72,11 +76,11 @@
     </div>
 
     <div v-if="props.record.type == NodeType.Date">
-      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
+      <el-date-picker v-model="props.record.value" type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
     </div>
 
     <div v-if="props.record.type == NodeType.Phone">
-      <el-input placeholder="Please input phone number">
+      <el-input v-model="props.record.value"  placeholder="Please input phone number">
         <template #prepend>
           <el-select v-model="phoneValue" placeholder="Default code" style="width: 150px; background: #fff">
             <el-option v-for="op in regionCodeList" :value="'+' + op" :label="'+' + op" />
@@ -86,17 +90,17 @@
     </div>
 
     <div v-if="props.record.type == NodeType.DateOfBirth">
-      <el-date-picker v-model="dateValue" type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
+      <el-date-picker v-model="props.record.value"  type="date" placeholder="Pick a day" size="large" :style="{ width: '100%' }" />
     </div>
 
     <div v-if="props.record.type == NodeType.Email">
-      <el-input placeholder="Enter your answer" size="large"></el-input>
+      <el-input v-model="props.record.value" placeholder="Enter your answer" size="large"></el-input>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { QuestionType, NodeType } from '~/types'
+import { QuestionType, NodeType, Option } from '~/types'
 import { getSupportedCallingCodes } from 'awesome-phonenumber'
 import { UploadRawFile } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
@@ -106,14 +110,8 @@ const props = defineProps<{
   order: number
 }>()
 
-const attribute = props.record.attribute
 
-const inputValue = ref('')
-const textareaValue = ref('')
-const checkboxValue = ref([])
-const radioValue = ref()
-const selectValue = ref()
-const dateValue = ref()
+const attribute = props.record.attribute
 
 const supportFileType: { [key: string]: string } = {
   Document: ".txt, .doc, .docx, .rtf",
@@ -133,14 +131,18 @@ if ( attribute['fileTypes'] && (attribute['fileTypes'] as string[]).length > 0) 
 }
 
 const regionCodeList = getSupportedCallingCodes()
-const phoneValue = ref('')
-const fileListValue = ref()
 
 function beforeUpload(file: UploadRawFile) {
-    if (attribute.fileSize && file.size > (attribute['fileSize'] as number)) {
-      return false;
-    }
+  if (attribute.fileSize && file.size > (attribute['fileSize'] as number)) {
+    return false;
+  }
 
-    return true;
-  };
+  return true;
+}
+
+function checkboxChange(val: Option) {
+  // if (val.associateId) {
+  //   associateId.value = val.associateId
+  // }
+}
 </script>
