@@ -13,7 +13,11 @@ const props = defineProps<{
 }>()
 
 const nodeList = ref(useOrder(props.order, props.list).map(item => {
-  item.value = ''
+  if (item.type == 'Checkbox') {
+    item.value = []
+  } else {
+    item.value = ''
+  }
   return item
 }))
 

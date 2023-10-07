@@ -161,8 +161,8 @@ const NodeList: NodeList = {
     config: { needOtherOption: true, optionIcon: 'mdi:radiobox-blank' },
     attribute: {
       options: [
-        { label: t("Option 1"), id: nid() },
-        { label: t("Option 2"), id: nid() }
+        { label: t("Option 1"), id: nid(), type: 'normal' },
+        { label: t("Option 2"), id: nid(), type: 'normal' }
       ],
       needOther: false
     }
@@ -172,8 +172,8 @@ const NodeList: NodeList = {
     config: { needOtherOption: true, optionIcon: 'mdi:checkbox-blank-outline' },
     attribute: {
       options: [
-        { label: t("Option 1"), id: nid() },
-        { label: t("Option 2"), id: nid() }
+        { label: t("Option 1"), id: nid(), type: 'normal' },
+        { label: t("Option 2"), id: nid(), type: 'normal' }
       ],
       needOther: false
     }
@@ -183,8 +183,8 @@ const NodeList: NodeList = {
     config: { optionIcon: "INDEX" },
     attribute: {
       options: [
-        { label: t("Option 1"), id: nid() },
-        { label: t("Option 2"), id: nid() }
+        { label: t("Option 1"), id: nid(), type: 'normal' },
+        { label: t("Option 2"), id: nid(), type: 'normal' }
       ],
       needOther: false
     }

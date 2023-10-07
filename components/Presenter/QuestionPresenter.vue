@@ -1,11 +1,11 @@
 <template>
   <div class="w-full question">
     <div v-if="props.record.type == NodeType.Input">
-      <el-input v-model="props.record.value" placeholder="Enter your short answer" size="large"></el-input>
+      <el-input v-model="props.record.value" size="large"></el-input>
     </div>
 
     <div v-if="props.record.type == NodeType.Textarea">
-      <el-input v-model="props.record.value" placeholder="Enter your long answer" type="textarea"
+      <el-input v-model="props.record.value" type="textarea"
         :autosize="{ minRows: 2, maxRows: 4 }" size="large"></el-input>
     </div>
 
@@ -107,7 +107,7 @@ import { UploadFilled } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   record: QuestionType,
-  order: string
+  order: number
 }>()
 
 const attribute = props.record.attribute

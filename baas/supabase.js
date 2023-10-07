@@ -15,7 +15,6 @@ export default (app) => {
 
   const getCurrentUser = async () => {
     const { data: { user } } = await auth.getUser()
-    console.log('user', user)
     return user
   }
 
