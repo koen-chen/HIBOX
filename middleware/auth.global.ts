@@ -1,7 +1,7 @@
 import { useAccountStore } from "@/stores/account"
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const supabase = useSupabase().value
+  const baas = useBaas().value
   const accountStore = useAccountStore()
   const { account } = storeToRefs(accountStore)
 
@@ -9,19 +9,19 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return
   }
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const user = await baas.getCurrentUser()
 
-  if (!session && (to.path !== '/login')) {
+  if (!user && (to.path !== '/login')) {
     return navigateTo('/login')
   }
 
-  if (session) {
+  if (user) {
     accountStore.$patch({
-      account: session.user
+      account: user
     })
   }
 
-  if (session && (to.path == '/login')) {
+  if (user && (to.path == '/login')) {
     return navigateTo('/forms')
   }
 })

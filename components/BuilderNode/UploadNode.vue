@@ -83,7 +83,6 @@ const fileTypes = ref(props.modelValue.fileTypes || [])
 const fileCount = ref(props.modelValue.fileCount || 1)
 const fileSize = ref(props.modelValue.fileSize || 30000000)
 
-
 watch([descriptionValue, fileTypes, fileCount, fileSize], () => {
   emit('update:modelValue', {
     description: descriptionValue.value,

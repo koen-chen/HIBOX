@@ -64,14 +64,14 @@ const { currentForm, sectionOrder, sectionList, questionList } = storeToRefs(for
 const orderSectionList = computed(() => useOrder(sectionOrder.value, sectionList.value))
 const questionStore = useQuestionStore()
 
-const formId = Number(route.params.id)
+const formId = route.params.id
 const loading = ref(false)
 
 const fetchData = loadingDecorator(formStore.getForm, loading)
 watchEffect(async () => {
   formStore.$reset()
   const result = await fetchData(formId)
-  if (result.id == 0) {
+  if (result.id == '') {
     navigateTo('/forms')
   }
 })
@@ -80,7 +80,7 @@ function previewForm() {
   navigateTo(`/forms/${formId}/preview`)
 }
 
-function handleQuestionSort(list: SectionType[] | QuestionType[], parentId: number) {
+function handleQuestionSort(list: SectionType[] | QuestionType[], parentId: string) {
   const tempOrders = list.map(item => item.id)
   questionStore.updateQuestionOrder(parentId, tempOrders)
 }

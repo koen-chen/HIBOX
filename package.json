@@ -30,6 +30,7 @@
     }
   },
   "dependencies": {
+    "@cloudbase/js-sdk": "^1.7.2",
     "@element-plus/icons-vue": "^2.1.0",
     "@pinia/nuxt": "^0.4.11",
     "@supabase/supabase-js": "^2.33.1",

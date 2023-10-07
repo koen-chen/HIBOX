@@ -71,7 +71,7 @@ const emit = defineEmits<{
 }>()
 
 const props = withDefaults(defineProps<{
-  id: number | null,
+  id: string | null,
   modelValue: {
     options: Option[]
   },

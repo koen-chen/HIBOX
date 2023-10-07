@@ -141,7 +141,7 @@ import { SectionType, QuestionType, NodeList, NodeType, QuestionUpdateType } fro
 
 const props = defineProps<{
   record: QuestionType,
-  sectionId: number,
+  sectionId: string,
   sectionList: SectionType[]
   order: number
 }>()

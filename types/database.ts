@@ -1,7 +1,7 @@
 import { MergeDeep } from 'type-fest'
 import { Database as DatabaseGenerated } from "./supabase"
 
-type numberJson = number[]
+type stringJson = string[]
 type attributeJson = { [key: string]: number | string | boolean | number[] | string[] | boolean[] | Object[] }
 
 export type Database = MergeDeep<DatabaseGenerated, {
@@ -9,20 +9,20 @@ export type Database = MergeDeep<DatabaseGenerated, {
     Tables: {
       section: {
         Row: {
-          question_order: numberJson
+          question_order: stringJson
           collapse?: boolean
           focused?: boolean
         }
         Insert: {
-          question_order?: numberJson
+          question_order?: stringJson
         }
       }
       form: {
         Row: {
-          section_order: numberJson
+          section_order: stringJson
         }
         Insert: {
-          section_order?: numberJson
+          section_order?: stringJson
         }
       },
       question: {

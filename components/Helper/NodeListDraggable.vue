@@ -23,8 +23,8 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { QuestionType } from '~/types';
 
 const props = defineProps<{
-  parentId: number,
-  order: number[],
+  parentId: string,
+  order: string[],
   list: QuestionType[],
   group?: string,
   handle?: string,

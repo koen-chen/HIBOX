@@ -10,11 +10,11 @@ import { Files, CirclePlus } from '@element-plus/icons-vue'
 import { NodeType, Option } from '~/types';
 
 const props = defineProps<{
-  formId: number,
+  formId: string,
   afterElement: {
     type: string,
-    id: number,
-    sectionId?: number,
+    id: string,
+    sectionId?: string,
   }
 }>()
 
@@ -35,13 +35,16 @@ const attributeValue =  {
 
 function addSection() {
   loadingDecorator(sectionStore.addSection, sectionLoading)({
+    id: nid(),
     name: t('Untitled Section'),
     form_id: props.formId,
+    question_order: []
   }, props.afterElement)
 }
 
 function addQuestion() {
   loadingDecorator(questionStore.addQuestion, questionLoading)({
+    id: nid(),
     label: t('Question'),
     type: NodeType.Radio,
     required: false,

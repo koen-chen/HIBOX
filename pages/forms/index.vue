@@ -82,7 +82,7 @@ onMounted(async () => {
   await listForm()
 })
 
-function handleCommand(cmd: string, id: number) {
+function handleCommand(cmd: string, id: string) {
   switch (cmd) {
     case 'open':
       window.open(`/forms/${id}`)
@@ -98,6 +98,7 @@ async function handleAdd() {
   addLoading.value = true
 
   const formData = await formStore.addForm({
+    id: nid(),
     name: 'Untitled Form'
   })
 
@@ -105,6 +106,7 @@ async function handleAdd() {
     navigateTo(`/forms/${formData.id}`)
 
     sectionStore.addSection({
+      id: nid(),
       name: 'Untitled Section',
       form_id: formData.id
     })
@@ -119,7 +121,7 @@ async function handleAdd() {
   addLoading.value = false
 }
 
-async function handleDelete(id: number) {
+async function handleDelete(id: string) {
   await deleteForm(id)
 }
 </script>

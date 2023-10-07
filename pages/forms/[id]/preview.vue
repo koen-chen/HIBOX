@@ -90,18 +90,18 @@ const { currentForm, sectionOrder, sectionList, questionList } = storeToRefs(for
 
 const orderSectionList = computed(() => useOrder(sectionOrder.value, sectionList.value))
 
-const formId = Number(route.params.id)
+const formId = route.params.id
 const activeSection = ref(0)
 const loading = ref(false)
 const formRef = ref<FormInstance>()
 const resultList = ref<{
-  [key: number]: QuestionType[]
+  [key: string]: QuestionType[]
 }>({})
 
 const fetchData = loadingDecorator(formStore.getForm, loading)
 watchEffect(async () => {
   const result = await fetchData(formId)
-  if (result.id == 0) {
+  if (result.id == '') {
     navigateTo('/forms')
   }
 })
@@ -110,7 +110,7 @@ function handleSectionBack() {
   activeSection.value = activeSection.value - 1
 }
 
-async function handleSectionNext(formEl: FormInstance | undefined, list: QuestionType[], id: number) {
+async function handleSectionNext(formEl: FormInstance | undefined, list: QuestionType[], id: string) {
   if (!formEl) return
   const result = await checkFormValid(formEl)
   if (result.value == true) {
@@ -119,7 +119,7 @@ async function handleSectionNext(formEl: FormInstance | undefined, list: Questio
   }
 }
 
-async function handleFormSubmit(formEl: FormInstance | undefined, list: QuestionType[], id: number) {
+async function handleFormSubmit(formEl: FormInstance | undefined, list: QuestionType[], id: string) {
   if (!formEl) return
   const result = await checkFormValid(formEl)
   if (result.value == true) {

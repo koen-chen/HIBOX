@@ -2,19 +2,15 @@ import { defineStore, acceptHMRUpdate } from "pinia"
 import { QuestionInsertType, QuestionUpdateType } from "~/types"
 
 export const useQuestionStore = defineStore('question', () => {
-  const supabase = useSupabase().value
+  const baas = useBaas().value
   const formStore = useFormStore()
   const sectionStore = useSectionStore()
   const { questionList, sectionList } = storeToRefs(formStore)
 
-  const latestQuestionId = ref<number | null>(null)
+  const latestQuestionId = ref<string | null>(null)
 
-  const addQuestion = async (info: QuestionInsertType, afterElement: { type: string, id: number, sectionId?: number }): Promise<void> => {
-    const { data } = await supabase
-      .from('question')
-      .insert(info)
-      .select()
-      .maybeSingle()
+  const addQuestion = async (info: QuestionInsertType, afterElement: { type: string, id: string, sectionId?: string }): Promise<void> => {
+    const { data } = await baas.addRecord('question', info)
 
     if (!data) return
 
@@ -23,6 +19,7 @@ export const useQuestionStore = defineStore('question', () => {
 
     if (afterElement.type == 'Form') {
       await sectionStore.addSection({
+        id: nid(),
         form_id: info.form_id,
         name: 'Untitled Section'
       }, {
@@ -52,13 +49,8 @@ export const useQuestionStore = defineStore('question', () => {
     }
   }
 
-  const updateQuestion = async (id: number, info: QuestionUpdateType): Promise<void> => {
-    const { data } = await supabase
-      .from('question')
-      .update(info)
-      .eq('id', id)
-      .select()
-      .maybeSingle()
+  const updateQuestion = async (id: string, info: QuestionUpdateType): Promise<void> => {
+    const { data } = await baas.updateRecord('question', id, info)
 
     if (data) {
       const index = questionList.value.findIndex(item => item.id == data.id)
@@ -66,7 +58,7 @@ export const useQuestionStore = defineStore('question', () => {
     }
   }
 
-  const deleteQuestion = async (id: number, sectionId: number): Promise<void> => {
+  const deleteQuestion = async (id: string, sectionId: string): Promise<void> => {
     const section = sectionList.value.find(item => item.id == sectionId)
 
     if (section) {
@@ -78,12 +70,8 @@ export const useQuestionStore = defineStore('question', () => {
     }
   }
 
-  const updateQuestionOrder = async (sectionId: number, info: number[]): Promise<void> => {
-    await supabase
-      .from('section')
-      .update({ 'question_order': info })
-      .eq('id', sectionId)
-      .select()
+  const updateQuestionOrder = async (sectionId: string, info: string[]): Promise<void> => {
+    await baas.updateOrder('section', sectionId, { 'question_order': info })
   }
 
   return {

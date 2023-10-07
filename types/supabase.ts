@@ -13,7 +13,7 @@ export interface Database {
         Row: {
           created_at: string
           description: string
-          id: number
+          id: string
           name: string
           public: boolean
           section_order: Json
@@ -22,7 +22,7 @@ export interface Database {
         Insert: {
           created_at?: string
           description?: string
-          id?: number
+          id: string
           name?: string
           public?: boolean
           section_order?: Json
@@ -31,7 +31,7 @@ export interface Database {
         Update: {
           created_at?: string
           description?: string
-          id?: number
+          id?: string
           name?: string
           public?: boolean
           section_order?: Json
@@ -44,8 +44,8 @@ export interface Database {
           associate: boolean
           attribute: Json
           created_at: string
-          form_id: number
-          id: number
+          form_id: string
+          id: string
           label: string
           required: boolean
           type: string
@@ -54,8 +54,8 @@ export interface Database {
           associate?: boolean
           attribute?: Json
           created_at?: string
-          form_id: number
-          id?: number
+          form_id: string
+          id: string
           label?: string
           required?: boolean
           type?: string
@@ -64,8 +64,8 @@ export interface Database {
           associate?: boolean
           attribute?: Json
           created_at?: string
-          form_id?: number
-          id?: number
+          form_id?: string
+          id?: string
           label?: string
           required?: boolean
           type?: string
@@ -83,24 +83,24 @@ export interface Database {
         Row: {
           created_at: string
           description: string
-          form_id: number
-          id: number
+          form_id: string
+          id: string
           name: string
           question_order: Json
         }
         Insert: {
           created_at?: string
           description?: string
-          form_id: number
-          id?: number
+          form_id: string
+          id: string
           name?: string
           question_order?: Json
         }
         Update: {
           created_at?: string
           description?: string
-          form_id?: number
-          id?: number
+          form_id?: string
+          id?: string
           name?: string
           question_order?: Json
         }

@@ -8,7 +8,7 @@
 import { QuestionType } from '~/types';
 
 const props = defineProps<{
-  order: number[],
+  order: string[],
   list: QuestionType[]
 }>()
 

@@ -107,9 +107,8 @@ import { UploadFilled } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   record: QuestionType,
-  order: number
+  order: string
 }>()
-
 
 const attribute = props.record.attribute
 
@@ -141,8 +140,5 @@ function beforeUpload(file: UploadRawFile) {
 }
 
 function checkboxChange(val: Option) {
-  // if (val.associateId) {
-  //   associateId.value = val.associateId
-  // }
 }
 </script>

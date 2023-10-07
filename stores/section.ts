@@ -2,18 +2,14 @@ import { defineStore, acceptHMRUpdate } from "pinia"
 import { SectionInsertType, SectionUpdateType } from "~/types"
 
 export const useSectionStore = defineStore('section', () => {
-  const supabase = useSupabase().value
+  const baas = useBaas().value
   const formStore = useFormStore()
   const { sectionOrder, sectionList } = storeToRefs(formStore)
 
-  const latestSectionId = ref<number | null>(null)
+  const latestSectionId = ref<string | null>(null)
 
-  const addSection = async (info: SectionInsertType, afterElement?: { id: number, type: string }): Promise<void> => {
-    const { data } = await supabase
-      .from('section')
-      .insert(info)
-      .select()
-      .maybeSingle()
+  const addSection = async (info: SectionInsertType, afterElement?: { id: string, type: string }): Promise<void> => {
+    const { data } = await baas.addRecord('section', info)
 
     if (data) {
       let index = sectionOrder.value.length
@@ -34,13 +30,8 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
-  const updateSection = async (id: number, info: SectionUpdateType): Promise<void> => {
-    const { data } = await supabase
-      .from('section')
-      .update(info)
-      .eq('id', id)
-      .select()
-      .maybeSingle()
+  const updateSection = async (id: string, info: SectionUpdateType): Promise<void> => {
+    const { data } = await baas.updateRecord('section', id, info)
 
     if (data) {
       const index = sectionList.value.findIndex(item => item.id == data.id)
@@ -48,19 +39,15 @@ export const useSectionStore = defineStore('section', () => {
     }
   }
 
-  const deleteSection = async (id: number, formId: number): Promise<void> => {
+  const deleteSection = async (id: string, formId: string): Promise<void> => {
     sectionList.value = sectionList.value.filter(item => item.id !== id)
     sectionOrder.value = sectionOrder.value.filter(item => item != id)
 
     await updateSectionOrder(formId, sectionOrder.value)
   }
 
-  const updateSectionOrder = async (formId: number, info: number[]): Promise<void> => {
-    const { error } = await supabase
-      .from('form')
-      .update({ 'section_order': info })
-      .eq('id', formId)
-      .select()
+  const updateSectionOrder = async (formId: string, info: string[]): Promise<void> => {
+    const { error } = await baas.updateOrder('form', formId, { 'section_order': info })
 
     if (!error) {
       sectionOrder.value = info

@@ -2,10 +2,10 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { FormType, FormInsertType, FormUpdateType, SectionType, QuestionType } from '~/types'
 
 export const useFormStore = defineStore('form', () => {
-  const supabase = useSupabase().value
+  const baas = useBaas().value
 
   const initFormValue = {
-    id: 0,
+    id: '',
     name: '',
     description: '',
     section_order: [],
@@ -20,7 +20,7 @@ export const useFormStore = defineStore('form', () => {
   const sectionList = ref<SectionType[]>([])
   const questionList = ref<QuestionType[]>([])
 
-  const sectionOrder = ref<number[]>([])
+  const sectionOrder = ref<string[]>([])
 
   const $reset = () => {
     currentForm.value = initFormValue
@@ -30,11 +30,9 @@ export const useFormStore = defineStore('form', () => {
   }
 
   const listForm = async (): Promise<FormType[]> => {
-    const { data, error } = await supabase
-      .from('form')
-      .select()
-      .neq('state', 'Delete')
-      .order('id', { ascending: false })
+    const { data, error } = await baas.listRecord('form', {
+      'neg': ['state', 'Delete']
+    })
 
     if (!error) {
       formList.value = data
@@ -43,33 +41,28 @@ export const useFormStore = defineStore('form', () => {
     return formList.value
   }
 
-  const getForm = async (id: number): Promise<FormType> => {
-    const { data } = await supabase
-      .from('form')
-      .select(`
-        *,
-        section (*),
-        question (*)
-      `)
-      .eq('id', id)
-      .maybeSingle()
+  const getForm = async (id: string): Promise<FormType> => {
+    const { data } = await baas.getRecord('form', id)
+    const { data: sectionResult } = await baas.listRecord('section', {
+      'eg': ['form_id', id]
+    })
+
+    const { data: questionResult } = await baas.listRecord('question', {
+      'eg': ['form_id', id]
+    })
 
     if (data) {
       currentForm.value = _Pick(data, 'id', 'name', 'description', 'public', 'section_order', 'state', 'created_at')
       sectionOrder.value = data.section_order
-      sectionList.value = data.section
-      questionList.value = data.question
+      sectionList.value = sectionResult
+      questionList.value = questionResult
     }
 
     return currentForm.value
   }
 
   const addForm = async (info: FormInsertType): Promise<FormType> => {
-    const { data } = await supabase
-      .from('form')
-      .insert({ name: info.name, description: info.description })
-      .select()
-      .maybeSingle()
+    const { data } = await baas.addRecord('form', info)
 
     if (data) {
       currentForm.value = data
@@ -82,13 +75,8 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const updateForm = async (id: number, info: FormUpdateType): Promise<FormType> => {
-    const { data } = await supabase
-      .from('form')
-      .update(info)
-      .eq('id', id)
-      .select()
-      .maybeSingle()
+  const updateForm = async (id: string, info: FormUpdateType): Promise<FormType> => {
+    const { data } = await baas.updateRecord('form', id, info)
 
     if (data) {
       currentForm.value = data
@@ -100,13 +88,8 @@ export const useFormStore = defineStore('form', () => {
     return currentForm.value
   }
 
-  const deleteForm = async (id: number): Promise<void> => {
-    const { error } = await supabase
-      .from('form')
-      .update({ state: 'Delete' })
-      .eq('id', id)
-      .select()
-      .maybeSingle()
+  const deleteForm = async (id: string): Promise<void> => {
+    const { error } = await baas.deleteRecord('form', id)
 
     if (!error) {
       currentForm.value = initFormValue
