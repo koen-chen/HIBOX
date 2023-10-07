@@ -5,7 +5,7 @@
         <p class="title primary-title">嗨盒子! </p>
         <p class="desc">轻松创建和共享在线表单和调查问卷。</p>
 
-        <el-button class="mt-20" size="large" type="primary" @click="navigateTo('/forms')">开始使用</el-button>
+        <el-button class="mt-20" size="large" type="primary" @click="navigateTo('/login')">开始使用</el-button>
       </div>
 
       <div class="img-box"><img src="/demo3.jpg" /></div>

@@ -42,6 +42,6 @@ const logout = async () => {
   await accountStore.logout()
   loading.close()
 
-  navigateTo('/login')
+  navigateTo('/')
 }
 </script>
