@@ -1,4 +1,6 @@
-<img src="public/logo.png" align="center" height="50px" />
+<p>
+  <img src="public/logo.png" align="center" width="50%" />
+</p>
 
 <br>
 
