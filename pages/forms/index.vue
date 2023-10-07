@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-affix :offset="0">
-      <Header :back="false">
+      <Header  backUrl="/">
         <div class="title">{{ $t('Forms') }}</div>
 
         <template #actions>
