@@ -1,15 +1,16 @@
-# <img src="public/logo.png" align="center" height="50px" />
+<img src="public/logo.png" align="center" height="50px" />
 
 <br>
 
 ## Hibox 是一个基于 Vue、Nuxtjs、Pinia 和 TypeScript 构建的表单系统，旨在模仿 Google Form，并提供方便定制化开发的解决方案。
 
+
 ### 它允许用户创建、共享、收集和分析调查问卷和表格，提供丰富的定制选项，适应多种项目的需求。
 
-<center>
+<figure class="half">
   <img src="public/demo2.jpg" align="center" height="200" />
   <img src="public/demo3.jpg" align="center" height="200" />
-</center>
+</figure>
 
 <br>
 <br>
