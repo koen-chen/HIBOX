@@ -1,25 +1,22 @@
+# HIBOX 嗨盒子
+
 <p>
-  <img src="public/logo.png" align="center" width="50%" />
+  <a href="https://hibox.work">
+    <img src="public/logo.png" align="center" height="100" />
+  </a>
 </p>
 
-<br>
+HIBOX 是一个基于 Vue、Pinia 和 TypeScript 构建的表单系统，旨在模仿 Google Form，并提供方便定制化开发的解决方案。
+它允许用户创建、共享、收集和分析调查问卷和表格，提供丰富的定制选项，适应多种项目的需求。
 
-## Hibox 是一个基于 Vue、Nuxtjs、Pinia 和 TypeScript 构建的表单系统，旨在模仿 Google Form，并提供方便定制化开发的解决方案。
+<h3>
+  <img src="public/demo2.jpg" align="center" height="300" />
+  <img src="public/demo3.jpg" align="center" height="300" />
+</h3>
 
+## 主要特点和优势：
 
-### 它允许用户创建、共享、收集和分析调查问卷和表格，提供丰富的定制选项，适应多种项目的需求。
-
-<figure class="half">
-  <img src="public/demo2.jpg" align="center" height="200" />
-  <img src="public/demo3.jpg" align="center" height="200" />
-</figure>
-
-<br>
-<br>
-
-#### 主要特点和优势：
-
-* 模仿 Google Form设计： Hibox 设计灵感源自 Google Form，提供直观、易用的界面和功能，使用户能够快速上手并创建自定义表单。
+* 模仿 Google Form设计： HIBOX 设计灵感源自 Google Form，提供直观、易用的界面和功能，使用户能够快速上手并创建自定义表单。
 
 * 基于 Vue 和 Nuxtjs： 利用 Vue 和 Nuxtjs 的强大功能和生态系统，构建响应式、高性能、SEO友好的单页面应用，实现无缝的用户体验。
 
@@ -34,7 +31,7 @@
 
 * 响应式设计： 设计具有响应式特性，确保在各种屏幕尺寸和设备上提供良好的用户体验，包括移动设备和桌面端。
 
-#### Hibox 是为开发人员提供灵活、可定制的表单解决方案，以满足不同项目和用户的特定需求。
+#### HIBOX 是为开发人员提供灵活、可定制的表单解决方案，以满足不同项目和用户的特定需求。
 
 
 
