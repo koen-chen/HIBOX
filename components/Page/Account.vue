@@ -2,6 +2,7 @@
   <el-dropdown @command="handleAccountCommand">
     <span class="outline-none">
       <Icon :class="{ 'text-white': dark }" name="mdi:account-circle" size="32px" />
+      <span class="text-white ml-1 font-bold">Koen</span>
     </span>
 
     <template #dropdown>
