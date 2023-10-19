@@ -21,10 +21,10 @@ defineProps<{
 
 const { locale } = useI18n({ useScope: 'global' })
 
-locale.value = sessionStorage.getItem('lang') || 'zh'
+locale.value = localStorage.getItem('lang') || 'zh'
 
 function handleChange(cmd: string) {
   locale.value = cmd
-  sessionStorage.setItem('lang', cmd)
+  localStorage.setItem('lang', cmd)
 }
 </script>

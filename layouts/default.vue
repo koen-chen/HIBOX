@@ -26,7 +26,7 @@ const { account } = storeToRefs(accountStore)
 
 const { locale } = useI18n({ useScope: 'global' })
 
-locale.value = sessionStorage.getItem('lang') || 'zh'
+locale.value = localStorage.getItem('lang') || 'zh'
 
 const logoSrc = ref('/logo-w.png')
 </script>

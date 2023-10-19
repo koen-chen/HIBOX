@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.5",
+    "@modyfi/vite-plugin-yaml": "^1.0.4",
     "@nuxt/devtools": "latest",
     "@nuxtjs/i18n": "8.0.0-rc.3",
     "@nuxtjs/tailwindcss": "^6.8.0",
@@ -48,6 +49,7 @@
     "sanitize-html": "^2.11.0",
     "sortablejs": "^1.15.0",
     "type-fest": "^4.3.1",
-    "vue-draggable-plus": "^0.2.6"
+    "vue-draggable-plus": "^0.2.6",
+    "vue-i18n": "9"
   }
 }

@@ -1,3 +1,5 @@
+import ViteYaml from '@modyfi/vite-plugin-yaml';
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -18,7 +20,13 @@ export default defineNuxtConfig({
   ],
 
   imports: {
-    dirs: ['stores']
+    dirs: ['stores'],
+    presets: [
+      {
+        from: 'vue-i18n',
+        imports: ['useI18n']
+      }
+    ]
   },
 
   components: [
@@ -28,9 +36,7 @@ export default defineNuxtConfig({
   modules: [
     '@element-plus/nuxt',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@nuxtjs/google-fonts',
     'nuxt-icon',
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt',
@@ -39,21 +45,6 @@ export default defineNuxtConfig({
 
   lodash: {
     prefix: "_"
-  },
-
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        file: 'en.yaml'
-      },
-      {
-        code: 'zh',
-        file: 'zh.yaml'
-      }
-    ],
-    langDir: 'locales',
-    defaultLocale: 'en'
   },
 
   elementPlus: {
@@ -75,6 +66,9 @@ export default defineNuxtConfig({
         },
       },
     },
+    plugins: [
+      ViteYaml()
+    ]
   },
 
   typescript: {
