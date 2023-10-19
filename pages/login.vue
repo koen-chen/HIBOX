@@ -47,7 +47,6 @@ const signIn = async () => {
 
 <style lang="scss" scoped>
 .form-title {
-  font-family: 'Playfair Display';
   font-weight: 900;
   font-size: 4rem;
   line-height: 4rem;

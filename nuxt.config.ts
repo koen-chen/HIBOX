@@ -60,12 +60,6 @@ export default defineNuxtConfig({
     importStyle: 'scss'
   },
 
-  googleFonts: {
-    families: {
-      "Playfair+Display": [400, 900]
-    }
-  },
-
   pinia: {
     autoImports: [
       "defineStore",
