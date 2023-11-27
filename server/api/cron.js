@@ -5,7 +5,9 @@ export default defineEventHandler((event) => {
   }
 
   async function getUser () {
-    const baas = useBaas().value
+    const config = useRuntimeConfig(event)
+    const app = createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+    const baas = supabaseApp(app)
     return await baas.getCurrentUser()
   }
 

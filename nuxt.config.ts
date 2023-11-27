@@ -6,11 +6,13 @@ export default defineNuxtConfig({
   ssr: false,
 
   runtimeConfig: {
+    SUPABASE_URL: '',
+    SUPABASE_KEY: '',
     public: {
-      SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_KEY: process.env.SUPABASE_KEY,
-      CLOUDBASE_ID: process.env.CLOUDBASE_ID,
-      BAAS_TYPE: process.env.BAAS_TYPE
+      SUPABASE_URL: '',
+      SUPABASE_KEY: '',
+      CLOUDBASE_ID: '',
+      BAAS_TYPE: ''
     }
   },
 
