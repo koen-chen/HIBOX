@@ -1,3 +1,5 @@
+import { createClient } from '@supabase/supabase-js'
+
 export default defineEventHandler((event) => {
   if (getRequestHeader(event, 'Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
     setResponseStatus(event, 401)
@@ -7,8 +9,9 @@ export default defineEventHandler((event) => {
   async function getUser () {
     const config = useRuntimeConfig(event)
     const app = createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
-    const baas = supabaseApp(app)
-    return await baas.getCurrentUser()
+    const auth = app.auth
+    const { data: { user } } = await auth.getUser()
+    return user
   }
 
   const user = getUser()
