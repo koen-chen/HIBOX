@@ -1,6 +1,7 @@
-export default function handler(req, res) {
-  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
-    return res.status(401).end('Unauthorized');
+export default defineEventHandler((event) => {
+  if (getRequestHeader(event, 'Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+    setResponseStatus(event, 401)
+    return 'Unauthorized'
   }
 
   async function getUser () {
@@ -12,5 +13,5 @@ export default function handler(req, res) {
 
   const name = user ? 'Koen' : 'World'
 
-  res.end(`Hello ${name} !`);
-}
+  return `Hello ${name} !`
+})
