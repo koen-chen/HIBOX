@@ -12,7 +12,7 @@
 
     <PageSkeleton :loading="listLoading">
       <div class="w-4/6 mx-auto flex items-start  flex-wrap py-10" >
-          <div v-if="formList.length == 0">
+          <div v-if="publicFormList.length == 0">
             <i18n-t keypath="Click to start a blank form" scope="global">
               <template #link>
                 <el-button type="primary" :loading="addLoading" @click="handleAdd" link style="vertical-align: text-bottom; text-decoration: underline">{{ $t('New Form') }}</el-button>
@@ -22,7 +22,7 @@
 
           <template v-else>
             <el-card
-              v-for="item in formList"
+              v-for="item in publicFormList"
               :key="item.id"
               class="form-item"
               body-class="form-item-body"
@@ -67,6 +67,9 @@
 const { t } = useI18n()
 const formStore = useFormStore()
 const { formList } = storeToRefs(formStore)
+const publicFormList = computed(() => {
+  return formList.value.filter(item => item.state != 'Delete')
+})
 
 const sectionStore = useSectionStore()
 

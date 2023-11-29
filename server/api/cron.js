@@ -17,6 +17,6 @@ export default defineEventHandler((event) => {
   const user = getUser()
 
   const name = user ? 'Koen' : 'World'
-
+  
   return `Hello ${name} !`
 })
